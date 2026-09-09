@@ -351,10 +351,9 @@ To update the portfolio, edit the relevant files:
 Software Engineer — Full-Stack, AI Systems, and Mobile
 
 - **Location:** New Delhi, India
-- **Email:** [ashishkumardev09@gmail.com](mailto:ashishkumardev09@gmail.com)
-- **Phone:** [+91 7678453413](tel:+917678453413)
+- **Email:** [ashishkumar.dev16@gmail.com](mailto:ashishkumar.dev16@gmail.com)
 - **GitHub:** [@adashish09](https://github.com/adashish09)
-- **LinkedIn:** [ashish-kumar-dev](https://linkedin.com/in/ashish-kumar-dev)
+- **LinkedIn:** [Ashish Kumar](https://linkedin.com/in/ashish-kumar-ad0016)
 
 ## License
 
