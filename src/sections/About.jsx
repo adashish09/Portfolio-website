@@ -21,31 +21,35 @@ const stats = [
 const principles = [
   {
     index: "01",
-    icon: <AutoAwesome sx={{ color: 'var(--primary-glow)', fontSize: 20 }} />,
+    color: '#00f2fe',
+    icon: <AutoAwesome sx={{ color: '#00f2fe', fontSize: 18 }} />,
     title: 'Pragmatic AI & LLMs',
     tag: 'RAG & Ollama',
-    desc: 'Engineering contextual RAG pipelines and lightweight local inference (Ollama Llama 3.1:8B) delivering measurable utility over generic wrappers.'
+    desc: 'Engineering contextual RAG pipelines and lightweight local inference delivering measurable utility over generic wrappers.'
   },
   {
     index: "02",
-    icon: <Speed sx={{ color: 'var(--secondary-glow)', fontSize: 20 }} />,
+    color: '#4facfe',
+    icon: <Speed sx={{ color: '#4facfe', fontSize: 18 }} />,
     title: 'Offline-First Resilience',
     tag: 'Architecture',
-    desc: 'Architecting local state caching, background sync, and lifecycle reconciliation to guarantee seamless reliability regardless of network conditions.'
+    desc: 'Architecting local state caching, background sync, and lifecycle reconciliation for seamless offline reliability.'
   },
   {
     index: "03",
-    icon: <Security sx={{ color: 'var(--accent-purple)', fontSize: 20 }} />,
+    color: '#a855f7',
+    icon: <Security sx={{ color: '#a855f7', fontSize: 18 }} />,
     title: 'System-Level Thinking',
     tag: 'Linux & NIDS',
-    desc: 'Investigating Linux internals, network socket inspection, raw packet capture, and rule-based anomaly detection engines.'
+    desc: 'Investigating Linux internals, raw packet inspection, socket streams, and rule-based anomaly detection engines.'
   },
   {
     index: "04",
-    icon: <Code sx={{ color: '#10b981', fontSize: 20 }} />,
-    title: 'Robust Core Fundamentals',
+    color: '#10b981',
+    icon: <Code sx={{ color: '#10b981', fontSize: 18 }} />,
+    title: 'Core Fundamentals',
     tag: 'DSA & Systems',
-    desc: 'Grounding systems in algorithmic efficiency, clean object-oriented patterns, and relational DBMS integrity across Java, Python, and C++.'
+    desc: 'Grounding systems in algorithmic efficiency, clean object-oriented patterns, and relational DBMS integrity.'
   }
 ];
 
@@ -184,8 +188,7 @@ const About = () => {
             sx={{
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
-              gap: 3,
-              alignItems: 'stretch'
+              gap: 3
             }}
           >
             {principles.map((p, idx) => (
@@ -195,78 +198,117 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                style={{ display: 'flex', height: '100%' }}
+                style={{ width: '100%', display: 'flex' }}
               >
                 <Box
-                  className="glass-container card-hover-lift"
+                  className="card-hover-lift"
                   sx={{
-                    p: 3,
+                    p: 2.8,
                     width: '100%',
-                    height: '100%',
-                    minHeight: { xs: 'auto', sm: '280px' },
+                    height: { xs: '250px', sm: '250px', md: '260px' },
+                    boxSizing: 'border-box',
                     display: 'flex',
                     flexDirection: 'column',
                     borderRadius: '16px',
-                    border: '1px solid rgba(56, 189, 248, 0.16)',
-                    bgcolor: 'rgba(9, 14, 28, 0.75)',
+                    border: '1px solid rgba(255, 255, 255, 0.09)',
+                    background: 'linear-gradient(155deg, rgba(12, 18, 34, 0.85) 0%, rgba(6, 10, 22, 0.92) 100%)',
+                    backdropFilter: 'blur(16px)',
                     position: 'relative',
                     overflow: 'hidden',
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
                     transition: 'all 0.25s ease',
                     '&:hover': {
-                      borderColor: 'var(--primary-glow)',
+                      borderColor: p.color,
                       transform: 'translateY(-4px)',
-                      boxShadow: '0 12px 30px -10px rgba(0, 242, 254, 0.25)'
+                      boxShadow: `0 14px 32px -8px ${p.color}33`
                     }
                   }}
                 >
-                  {/* Subtle top gradient accent */}
-                  <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--primary-glow), transparent)' }} />
+                  {/* Top Glowing Accent Line */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '2.5px',
+                      background: `linear-gradient(90deg, ${p.color}, transparent 80%)`
+                    }}
+                  />
 
-                  {/* Top Header: Index & Icon */}
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: '0.82rem', fontWeight: 700 }}>
-                      // {p.index}
-                    </Typography>
-                    <Box sx={{ p: 1, borderRadius: '10px', bgcolor: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)', display: 'flex' }}>
+                  {/* Header: Status Index & Icon */}
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '36px', mb: 1.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: p.color, boxShadow: `0 0 8px ${p.color}` }} />
+                      <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: p.color, fontSize: '0.8rem', fontWeight: 700 }}>
+                        CORE // {p.index}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        width: 34,
+                        height: 34,
+                        borderRadius: '10px',
+                        bgcolor: `${p.color}15`,
+                        border: `1px solid ${p.color}40`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
                       {p.icon}
                     </Box>
                   </Box>
 
-                  {/* Title with exact minHeight so descriptions align identically */}
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: 700,
-                      color: '#fff',
-                      fontSize: '1.05rem',
-                      mb: 1.2,
-                      minHeight: '46px',
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    {p.title}
-                  </Typography>
+                  {/* Title: Exactly 42px height container so descriptions align across all cards */}
+                  <Box sx={{ height: '42px', display: 'flex', alignItems: 'center', mb: 1.2 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontWeight: 700,
+                        color: '#fff',
+                        fontSize: '1.02rem',
+                        lineHeight: 1.3,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {p.title}
+                    </Typography>
+                  </Box>
 
-                  {/* Description */}
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.6,
-                      fontSize: '0.86rem',
-                      mb: 2.5,
-                      flexGrow: 1,
-                      minHeight: '84px'
-                    }}
-                  >
-                    {p.desc}
-                  </Typography>
+                  {/* Description: Exactly 68px height container with 3-line clamp */}
+                  <Box sx={{ height: '68px', overflow: 'hidden', mb: 1.5 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.55,
+                        fontSize: '0.84rem',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {p.desc}
+                    </Typography>
+                  </Box>
 
-                  {/* Bottom Tag */}
-                  <Box sx={{ mt: 'auto' }}>
-                    <span className="code-badge" style={{ fontSize: '0.72rem' }}>
+                  {/* Bottom Tag: Fixed height, pinned to bottom */}
+                  <Box sx={{ mt: 'auto', display: 'flex', alignItems: 'center' }}>
+                    <span
+                      className="code-badge"
+                      style={{
+                        fontSize: '0.72rem',
+                        padding: '3px 10px',
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        color: 'var(--text-secondary)'
+                      }}
+                    >
                       {p.tag}
                     </span>
                   </Box>

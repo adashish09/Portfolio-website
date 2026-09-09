@@ -1,235 +1,363 @@
-# Ashish Kumar - Developer Portfolio
+# Ashish Kumar — Developer Portfolio
 
-A modern, futuristic, and fully responsive personal portfolio website built to showcase my work, technical skills, certifications, and software engineering journey.
+[![Live Portfolio](https://img.shields.io/badge/Live%20Portfolio-Visit%20Website-00f2fe?style=for-the-badge)](https://ashish-portfolio-dev.netlify.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-00f2fe.svg?style=for-the-badge)](LICENSE)
 
-This portfolio is designed as an interactive digital resume with immersive UI/UX, animated experiences, responsive layouts, and modern frontend engineering practices.
+A modern, interactive developer portfolio and digital engineering showcase built with React, Vite, and Material UI.
 
----
+🌐 **Live Website:** [ashish-portfolio-dev.netlify.app](https://ashish-portfolio-dev.netlify.app/) The platform combines a responsive portfolio experience with an interactive developer terminal, command palette, animated neural-circuit background, project architecture showcases, and an embedded resume viewer.
 
-## 🚀 Live Demo
+## Table of Contents
 
-Coming Soon
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Featured Projects](#featured-projects)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [Customization](#customization)
+- [Education and Certifications](#education-and-certifications)
+- [Contact](#contact)
+- [License](#license)
 
----
+## Overview
 
-## ✨ Features
+This portfolio is designed as an interactive developer workspace rather than a traditional static resume website.
 
-* Modern futuristic UI/UX
-* Fully responsive design
-* Animated Hero Section
-* Interactive Skills Galaxy
-* Responsive Project Showcase Grid
-* Fullscreen Resume Viewer
-* Certificate Gallery Modal
-* Smooth Animations with Framer Motion
-* Glassmorphism Design
-* Dynamic GitHub Integration
-* Scroll To Top Functionality
-* Responsive Mobile Experience
-* Resume Download Support
-* Functional Contact Form
-* Optimized Performance
+It showcases:
 
----
+- Software engineering experience and technical skills
+- AI and machine-learning projects
+- Mobile and cross-platform applications
+- Linux and network-engineering projects
+- Education and professional certifications
+- GitHub activity and featured repositories
+- Resume and contact information
 
-## 🛠️ Tech Stack
+The interface follows a cybernetic visual style with glassmorphism, neon accents, responsive layouts, and interactive UI elements.
+
+## Features
+
+### Interactive Developer Terminal
+
+The embedded `DeveloperConsole` provides an in-browser terminal experience with command execution, command history, and isolated scrolling.
+
+Supported commands include:
+
+```text
+help
+projects
+skills
+contact
+clear
+sudo
+system
+```
+
+### Command Palette
+
+Open the spotlight-style command palette using `Ctrl + K` on Windows/Linux or `Cmd + K` on macOS.
+
+The command palette supports:
+
+- Real-time search
+- Category filters
+- Keyboard navigation
+- Project discovery
+- Navigation actions
+- Contact actions
+- Quick command execution
+
+### Animated Neural Canvas
+
+The portfolio includes a lightweight HTML5 Canvas background featuring:
+
+- Animated neural-network nodes
+- Connections between nodes
+- Traveling photon data packets
+- Cursor-based magnetic interaction
+- A perspective cyber horizon
+
+### Responsive Design
+
+The interface uses responsive layouts and consistent card geometry across mobile, tablet, and desktop breakpoints.
+
+### Project Architecture Showcase
+
+Featured projects include interactive architecture views that present:
+
+- Project descriptions
+- Technology stacks
+- Engineering challenges
+- System diagrams
+- Production metrics and implementation details
+
+### Resume Viewer
+
+The resume section provides an embedded PDF viewer and support for downloading the resume.
+
+### GitHub Integration
+
+The portfolio includes a GitHub statistics section for showcasing repositories, contribution activity, and developer progress.
+
+## Technology Stack
 
 ### Frontend
 
-* React.js
-* Material UI
-* Framer Motion
-* React Router DOM
-* React Icons
+| Technology | Purpose |
+| --- | --- |
+| [React](https://react.dev/) 18.3.1 | UI development |
+| [Vite](https://vitejs.dev/) 6.0 | Development server and build tooling |
+| [Material UI](https://mui.com/) 5.16 | Component system |
+| [Framer Motion](https://motion.dev/) | UI animations and transitions |
+| React Icons | Iconography |
+| Material Icons | Interface icons |
+| Simple Icons | Technology and brand icons |
 
-### Animations & UI
+### Graphics and Styling
 
-* CSS Grid
-* Glassmorphism
-* Responsive Layouts
-* Motion Effects
-* Interactive Hover Effects
+- HTML5 Canvas 2D rendering
+- CSS responsive grids
+- Glassmorphism-inspired surfaces
+- `Space Grotesk` for headings
+- `Plus Jakarta Sans` for body text
+- `JetBrains Mono` for code and terminal content
+- Google Fonts CDN
 
-### Additional Features
+## Featured Projects
 
-* EmailJS / Nodemailer
-* PDF Resume Viewer
-* Dynamic Asset Management
+### 1. RAG-Grounded Local Assistant Engine
 
----
+**Technology:** Python, LangChain, Ollama, Llama 3.1:8B, ChromaDB, FastAPI
 
-## 👨‍💻 Roles Highlighted
+An offline-first document intelligence system that uses local language models and vector search to provide private, context-aware answers from user-provided documents.
 
-* Full Stack Developer
-* Android Developer
-* Frontend Engineer
-* AI/LLM Engineer
-* Modern Software Engineer
+**Highlights:**
 
----
+- Local document processing
+- Chunk-level similarity indexing
+- Vector-based retrieval
+- Contextual prompt synthesis
+- Privacy-focused, offline-first execution
 
-## 📂 Project Structure
+### 2. NetSentinel — Network Intrusion Detection Suite
 
-```bash
-portfolio/
-│
+**Technology:** Python, Scapy, Raw Sockets, Rules Engine
+
+A Linux-based network monitoring and intrusion detection project that captures and analyzes packets to identify suspicious network activity.
+
+**Highlights:**
+
+- Ethernet frame capture
+- Transport-layer header inspection
+- SYN flood detection
+- Port-scan anomaly detection
+- Real-time security alerts
+
+### 3. ESquare Mobile Educational Application
+
+**Technology:** Native Android, Java, SQLite, Background Services, Material 3
+
+An offline-first Android educational application designed to support course access, local caching, and background synchronization.
+
+**Highlights:**
+
+- Local course caching
+- Background synchronization
+- Persistent state management
+- Offline-first functionality
+- Native Android implementation
+
+### 4. FlipLearn Cross-Platform Interactive App
+
+**Technology:** Flutter, Dart, Hive, Firebase
+
+A cross-platform educational application featuring interactive learning cards, offline persistence, and real-time synchronization.
+
+**Highlights:**
+
+- Cross-platform application development
+- Hive-based local storage
+- Firebase integration
+- Offline persistence
+- Fluid card transitions
+
+### 5. NetFlow Linux System and Traffic Monitor
+
+**Technology:** Node.js, Express, WebSockets, Chart.js, Linux Procfs
+
+A live system telemetry application that streams Linux resource and network metrics to an interactive monitoring interface.
+
+**Highlights:**
+
+- CPU and memory monitoring
+- Socket connection tracking
+- Network interface metrics
+- WebSocket-based streaming
+- Sub-second telemetry updates
+
+## Project Structure
+
+```text
+Ashish's Portfolio/
 ├── public/
-│   ├── assets/
-│   │   ├── certificates/
-│   │   ├── projects/
-│   │   └── resume/
+│   └── assets/
+│       ├── certificates/          # Credential PDFs and badges
+│       ├── projects/              # Architecture diagrams and previews
+│       └── resume/                # Ashish_Kumar_Resume.pdf
 │
 ├── src/
 │   ├── components/
-│   ├── sections/
-│   ├── pages/
+│   │   ├── 3d/
+│   │   │   └── ParticleBackground.jsx
+│   │   ├── layout/
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Footer.jsx
+│   │   └── ui/
+│   │       ├── CommandPalette.jsx
+│   │       ├── DeveloperConsole.jsx
+│   │       ├── SectionHeader.jsx
+│   │       └── ScrollToTop.jsx
+│   │
 │   ├── data/
-│   ├── styles/
-│   ├── hooks/
-│   ├── utils/
-│   └── animations/
+│   │   ├── certificates.js
+│   │   ├── experience.js
+│   │   ├── projects.js
+│   │   ├── skills.js
+│   │   └── socialLinks.js
+│   │
+│   ├── sections/
+│   │   ├── Hero.jsx
+│   │   ├── About.jsx
+│   │   ├── Skills.jsx
+│   │   ├── Projects.jsx
+│   │   ├── Experience.jsx
+│   │   ├── Certifications.jsx
+│   │   ├── GithubStats.jsx
+│   │   ├── Resume.jsx
+│   │   └── Contact.jsx
+│   │
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
 │
+├── index.html
 ├── package.json
+├── vite.config.js
 └── README.md
 ```
 
----
+## Getting Started
 
-## 📸 Portfolio Sections
+### Prerequisites
 
-* Hero Section
-* About Me
-* Skills Galaxy
-* Projects Showcase
-* Certifications
-* GitHub Activity
-* Resume Viewer
-* Contact Section
+Make sure the following tools are installed:
 
----
+- [Node.js](https://nodejs.org/) 18.0.0 or later
+- npm, included with Node.js
+- Git
 
-## 📜 Featured Projects
+You may also use pnpm or Yarn if preferred.
 
-### AI Resume Interviewer Platform
+### Installation
 
-AI-powered interview workflow system using RAG, vector search, and LLM APIs.
+1. Clone the repository:
 
-### NetSentinel
+   ```bash
+   git clone https://github.com/adashish09/Portfolio-website.git
+   ```
 
-Linux-based Network Intrusion Detection System with live monitoring and anomaly detection.
+2. Move into the project directory:
 
-### FlipLearn
+   ```bash
+   cd Portfolio-website
+   ```
 
-Cross-platform Flutter learning application with Firebase integration.
+3. Install dependencies:
 
-### StockMate
+   ```bash
+   npm install
+   ```
 
-Inventory management system for small businesses.
+4. Start the development server:
 
-### Real-Time Network & Log Monitoring Dashboard
+   ```bash
+   npm run dev
+   ```
 
-Linux monitoring dashboard with analytics and visualization.
+5. Open the local development URL shown in your terminal. With the default Vite configuration, this is usually:
 
----
+   ```text
+   http://localhost:5173
+   ```
 
-## 📄 Resume
+## Available Scripts
 
-The portfolio includes:
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Starts the Vite development server |
+| `npm run build` | Creates an optimized production build |
+| `npm run preview` | Serves the production build locally |
+| `npm run lint` | Runs the project linter |
 
-* Fullscreen Resume Preview
-* Resume Download Support
-* Interactive Resume Experience
+## Keyboard Shortcuts
 
----
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl + K` / `Cmd + K` | Open the command palette |
+| `Esc` | Close a modal or the command palette |
+| `↑` / `↓` | Navigate command palette results |
+| `Enter` | Execute the selected command or open a project |
 
-## 🏅 Certifications
+## Customization
 
-* AWS Academy Graduate – Generative AI Foundations
-* Prompt Engineering with GPT
-* Android Mobile App Development
-* Front-End Apps with React
+Portfolio content is organized into reusable data files and React sections.
 
----
+To update the portfolio, edit the relevant files:
 
-## ⚡ Getting Started
+| File | Purpose |
+| --- | --- |
+| `src/data/projects.js` | Project information, architecture, metrics, and repository links |
+| `src/data/skills.js` | Skills and technical competencies |
+| `src/data/experience.js` | Education and experience timeline |
+| `src/data/certificates.js` | Certification details and verification information |
+| `src/data/socialLinks.js` | Social profiles and contact metadata |
+| `public/assets/resume/` | Resume PDF |
+| `public/assets/projects/` | Project diagrams and previews |
+| `public/assets/certificates/` | Certificate documents and badges |
 
-### Clone the Repository
+## Education and Certifications
 
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-```
+### Education
 
-### Navigate to the Project
+- **Master of Computer Applications (MCA)** — Chandigarh University  
+  2024–2026 | CGPA: 8.24 / 10
 
-```bash
-cd your-repo-name
-```
+- **Bachelor of Computer Applications (BCA)** — Indira Gandhi National Open University  
+  2020–2023 | 70.11%
 
-### Install Dependencies
+### Certifications
 
-```bash
-npm install
-```
+- AWS Academy Graduate — Generative AI Foundations
+- DeepLearning.AI / Coursera — Prompt Engineering with LLMs
+- Meta — Android Mobile Application Development Professional Certificate
+- Meta — Front-End Developer with React Professional Certificate
 
-### Start Development Server
+## Contact
 
-```bash
-npm run dev
-```
+**Ashish Kumar**  
+Software Engineer — Full-Stack, AI Systems, and Mobile
 
----
+- **Location:** New Delhi, India
+- **Email:** [ashishkumardev09@gmail.com](mailto:ashishkumardev09@gmail.com)
+- **Phone:** [+91 7678453413](tel:+917678453413)
+- **GitHub:** [@adashish09](https://github.com/adashish09)
+- **LinkedIn:** [ashish-kumar-dev](https://linkedin.com/in/ashish-kumar-dev)
 
-## 🌐 Deployment
+## License
 
-This portfolio is optimized for deployment on:
+This project is licensed under the MIT License.
 
-* Netlify
-* Vercel
-
----
-
-## 📁 Asset Management
-
-Static assets are managed through the `public/assets` directory.
-
-```bash
-public/assets/
-├── certificates/
-├── projects/
-└── resume/
-```
-
----
-
-## 📬 Contact
-
-Feel free to connect with me for collaboration, opportunities, or discussions related to:
-
-* Full Stack Development
-* Frontend Engineering
-* AI/LLM Systems
-* Android Development
-* Modern Web Technologies
-
----
-
-## 📌 Future Improvements
-
-* Blog Integration
-* Dynamic CMS Support
-* AI Chat Assistant
-* Enhanced 3D Interactions
-* Advanced GitHub Analytics
-* Theme Customization
-
----
-
-## ⭐ Acknowledgements
-
-Built with modern web technologies and inspired by futuristic UI/UX design principles, premium SaaS experiences, and modern engineering portfolios.
-
----
-
-## 📃 License
-
-This project is open source and available under the MIT License.
+You are free to use, modify, and adapt the codebase in accordance with the license terms.

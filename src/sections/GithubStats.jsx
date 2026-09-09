@@ -162,8 +162,7 @@ const GithubStats = () => {
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-                  gap: 3,
-                  alignItems: 'stretch'
+                  gap: 3
                 }}
               >
                 {featuredRepos.map((repo, idx) => (
@@ -173,45 +172,62 @@ const GithubStats = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    style={{ display: 'flex', height: '100%' }}
+                    style={{ width: '100%', display: 'flex' }}
                   >
                     <Box
-                      className="glass-container card-hover-lift"
+                      className="card-hover-lift"
                       sx={{
-                        p: 3,
+                        p: 2.8,
                         width: '100%',
-                        height: '100%',
-                        minHeight: { xs: 'auto', sm: '210px' },
+                        height: { xs: '210px', sm: '210px', md: '215px' },
+                        boxSizing: 'border-box',
                         borderRadius: '16px',
                         border: '1px solid rgba(56, 189, 248, 0.16)',
-                        bgcolor: 'rgba(9, 14, 28, 0.75)',
+                        background: 'linear-gradient(155deg, rgba(12, 18, 34, 0.85) 0%, rgba(6, 10, 22, 0.92) 100%)',
+                        backdropFilter: 'blur(16px)',
                         display: 'flex',
                         flexDirection: 'column',
                         position: 'relative',
                         overflow: 'hidden',
-                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
                         transition: 'all 0.25s ease',
                         '&:hover': {
                           borderColor: 'var(--primary-glow)',
                           transform: 'translateY(-4px)',
-                          boxShadow: '0 12px 30px -10px rgba(0, 242, 254, 0.25)'
+                          boxShadow: '0 12px 30px -10px rgba(0, 242, 254, 0.3)'
                         }
                       }}
                     >
-                      {/* Top Bar: Icon + Name + Clone */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5, minHeight: '34px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <GitHub sx={{ color: 'var(--primary-glow)', fontSize: 20 }} />
+                      {/* Top Glowing Accent Line */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: '2px',
+                          background: 'linear-gradient(90deg, var(--primary-glow), transparent 70%)'
+                        }}
+                      />
+
+                      {/* Top Bar: Icon + Truncated Name + Clone Action */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '34px', mb: 1.2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, pr: 1 }}>
+                          <GitHub sx={{ color: 'var(--primary-glow)', fontSize: 19, flexShrink: 0 }} />
                           <Typography
                             component="a"
                             href={repo.url}
                             target="_blank"
+                            title={repo.name}
                             sx={{
                               color: '#fff',
                               fontWeight: 700,
                               fontFamily: 'JetBrains Mono, monospace',
-                              fontSize: '0.95rem',
+                              fontSize: '0.93rem',
                               textDecoration: 'none',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
                               '&:hover': { color: 'var(--primary-glow)' }
                             }}
                           >
@@ -223,48 +239,48 @@ const GithubStats = () => {
                           <IconButton
                             size="small"
                             onClick={() => handleCopyClone(repo.name, repo.url)}
-                            sx={{ color: copiedRepo === repo.name ? '#10b981' : 'var(--text-secondary)' }}
+                            sx={{ color: copiedRepo === repo.name ? '#10b981' : 'var(--text-secondary)', flexShrink: 0 }}
                           >
                             {copiedRepo === repo.name ? <Check fontSize="small" /> : <ContentCopy fontSize="small" />}
                           </IconButton>
                         </Tooltip>
                       </Box>
 
-                      {/* Description with strict 48px height so cards stay identically sized */}
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: 'var(--text-secondary)',
-                          lineHeight: 1.6,
-                          mb: 2,
-                          minHeight: '48px',
-                          maxHeight: '48px',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden'
-                        }}
-                      >
-                        {repo.description}
-                      </Typography>
+                      {/* Description with strict 44px container so all cards stay identically sized */}
+                      <Box sx={{ height: '44px', overflow: 'hidden', mb: 1.5 }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: 'var(--text-secondary)',
+                            lineHeight: 1.55,
+                            fontSize: '0.84rem',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden'
+                          }}
+                        >
+                          {repo.description}
+                        </Typography>
+                      </Box>
 
-                      {/* Footer */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 1.8, borderTop: '1px solid rgba(255,255,255,0.06)', mt: 'auto', minHeight: '38px' }}>
-                        <span className="code-badge" style={{ fontSize: '0.72rem' }}>
+                      {/* Footer: Fixed height, pinned to bottom */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 1.2, borderTop: '1px solid rgba(255,255,255,0.06)', mt: 'auto', height: '32px' }}>
+                        <span className="code-badge" style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
                           {repo.language}
                         </span>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'var(--text-muted)' }}>
-                            <Star sx={{ fontSize: 16, color: '#f59e0b' }} />
-                            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace' }}>{repo.stars}</Typography>
+                            <Star sx={{ fontSize: 15, color: '#f59e0b' }} />
+                            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}>{repo.stars}</Typography>
                           </Box>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'var(--text-muted)' }}>
-                            <ForkRight sx={{ fontSize: 16 }} />
-                            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace' }}>{repo.forks}</Typography>
+                            <ForkRight sx={{ fontSize: 15 }} />
+                            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}>{repo.forks}</Typography>
                           </Box>
-                          <IconButton href={repo.url} target="_blank" size="small" sx={{ color: 'var(--text-secondary)', '&:hover': { color: '#fff' } }}>
-                            <OpenInNew fontSize="small" />
+                          <IconButton href={repo.url} target="_blank" size="small" sx={{ color: 'var(--text-secondary)', p: 0.5, '&:hover': { color: '#fff' } }}>
+                            <OpenInNew sx={{ fontSize: 16 }} />
                           </IconButton>
                         </Box>
                       </Box>
