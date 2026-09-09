@@ -1,204 +1,250 @@
-import React, { useState } from 'react';
-import { Box, Container, Typography, IconButton, useMediaQuery, useTheme } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useMemo } from 'react';
+import { Box, Container, Typography, Grid, InputBase, Chip, LinearProgress } from '@mui/material';
+import { Search, Code, Storage, Smartphone, Terminal, Hub, Layers, AutoAwesome } from '@mui/icons-material';
+import { motion } from 'framer-motion';
 import SectionHeader from '../components/ui/SectionHeader';
 import { skillsData } from '../data/skills';
-import { personalInfo } from '../data/socialLinks';
-import { DiJavascript1, DiPython, DiJava } from 'react-icons/di';
-import { SiKotlin, SiDart, SiCplusplus, SiMysql, SiC } from 'react-icons/si';
 
-const iconMap = {
-  "JavaScript": <DiJavascript1 size={18} />,
-  "Python": <DiPython size={18} />,
-  "Java": <DiJava size={18} />,
-  "Kotlin": <SiKotlin size={18} />,
-  "Dart": <SiDart size={18} />,
-  "C++": <SiCplusplus size={18} />,
-  "C": <SiC size={18} />,
-  "SQL": <SiMysql size={18} />
-};
-
-// Orbital Node Component (Domain or specific Skill)
-const OrbitNode = ({ title, icon, index, total, radius, isSkill, onClick }) => {
-  const angle = (index / total) * 2 * Math.PI;
-  const x = Math.cos(angle) * radius;
-  const y = Math.sin(angle) * radius;
-
-  return (
-    <motion.div
-      initial={{ x: 0, y: 0, opacity: 0, scale: 0 }}
-      animate={{ x, y, opacity: 1, scale: 1 }}
-      exit={{ x: 0, y: 0, opacity: 0, scale: 0 }}
-      transition={{ type: "spring", stiffness: 60, damping: 15, delay: index * 0.1 }}
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 10
-      }}
-    >
-      <motion.div
-        onClick={onClick}
-        whileHover={{ scale: 1.15, boxShadow: '0 0 25px rgba(0, 242, 254, 0.8)' }}
-        animate={{ rotate: -360 }} // Counter-rotate to keep text horizontal
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        style={{
-          cursor: onClick ? 'pointer' : 'default',
-          padding: isSkill ? '10px 16px' : '16px 24px',
-          borderRadius: '30px',
-          background: 'rgba(21, 16, 48, 0.95)',
-          border: '1px solid rgba(0, 242, 254, 0.5)',
-          boxShadow: '0 0 15px rgba(0, 242, 254, 0.2)',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          whiteSpace: 'nowrap'
-        }}
-      >
-        {icon && <span style={{ display: 'flex', alignItems: 'center', color: 'var(--primary-glow)' }}>{icon}</span>}
-        <Typography variant={isSkill ? "body2" : "subtitle2"} sx={{ color: '#fff', fontWeight: 'bold' }}>
-          {title}
-        </Typography>
-      </motion.div>
-    </motion.div>
-  );
-};
-
-const GalaxySystem = ({ centerTitle, centerSubtitle, items, isSkillGalaxy, onBack, radius }) => {
-  return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 1.2 }}
-      transition={{ duration: 0.5 }}
-      style={{ position: 'relative', width: '100%', height: radius * 2.5, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-    >
-      {onBack && (
-        <IconButton 
-          onClick={onBack} 
-          sx={{ position: 'absolute', top: 0, left: { xs: 0, md: '10%' }, color: 'var(--primary-glow)', border: '1px solid var(--primary-glow)', '&:hover': { bgcolor: 'rgba(0, 242, 254, 0.1)' } }}
-        >
-          <ArrowBack />
-        </IconButton>
-      )}
-
-      {/* Neural Orbit Rings */}
-      <Box sx={{ position: 'absolute', width: radius * 2, height: radius * 2, border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '50%' }} />
-      <Box sx={{ position: 'absolute', width: radius * 1.5, height: radius * 1.5, border: '1px dashed rgba(255,255,255,0.05)', borderRadius: '50%' }} />
-
-      {/* Center Core */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(0, 242, 254, 0.6)' }}
-        style={{
-          width: isSkillGalaxy ? '140px' : '180px',
-          height: isSkillGalaxy ? '140px' : '180px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle at 30% 30%, rgba(0,242,254,0.2) 0%, rgba(5,8,22,1) 100%)',
-          border: '2px solid rgba(0, 242, 254, 0.8)',
-          boxShadow: '0 0 30px rgba(0, 242, 254, 0.4)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center',
-          zIndex: 20,
-          padding: '20px'
-        }}
-      >
-        <Typography variant={isSkillGalaxy ? "body1" : "h6"} sx={{ color: '#fff', fontWeight: 'bold', textShadow: '0 0 10px rgba(0,242,254,0.8)' }}>
-          {centerTitle}
-        </Typography>
-        {centerSubtitle && (
-          <Typography variant="caption" sx={{ color: 'var(--primary-glow)', mt: 1 }}>
-            {centerSubtitle}
-          </Typography>
-        )}
-      </motion.div>
-
-      {/* Rotating Planets Container */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}
-      >
-        <AnimatePresence>
-          {items.map((item, index) => {
-            // Slight radius variations for a more organic look if it's the skills view
-            const nodeRadius = isSkillGalaxy ? radius * (0.8 + Math.random() * 0.4) : radius;
-            return (
-              <OrbitNode 
-                key={item.title}
-                title={item.title}
-                icon={item.icon}
-                index={index}
-                total={items.length}
-                radius={nodeRadius}
-                isSkill={isSkillGalaxy}
-                onClick={item.onClick}
-              />
-            );
-          })}
-        </AnimatePresence>
-      </motion.div>
-    </motion.div>
-  );
+const domainIcons = {
+  "AI & LLM Engineering": <AutoAwesome fontSize="small" />,
+  "Frontend Engineering": <Layers fontSize="small" />,
+  "Backend & Microservices": <Hub fontSize="small" />,
+  "Mobile Development": <Smartphone fontSize="small" />,
+  "Databases & Cloud": <Storage fontSize="small" />,
+  "Systems, Security & DevOps": <Terminal fontSize="small" />,
+  "Core Programming Languages": <Code fontSize="small" />
 };
 
 const Skills = () => {
-  const [selectedDomain, setSelectedDomain] = useState(null);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const radius = isMobile ? 140 : 260;
+  const [activeTab, setActiveTab] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Prepare Macro Galaxy Items (Domains)
-  const domainItems = skillsData.map((group, index) => ({
-    title: group.domain,
-    onClick: () => setSelectedDomain(index)
-  }));
+  // Flatten or filter skills
+  const filteredData = useMemo(() => {
+    return skillsData.map((category) => {
+      // Check category match
+      const categoryMatches = activeTab === 'ALL' || category.domain === activeTab;
+      if (!categoryMatches) return null;
 
-  // Prepare Micro Galaxy Items (Skills of selected domain)
-  const getSkillItems = () => {
-    if (selectedDomain === null) return [];
-    return skillsData[selectedDomain].skills.map(skill => ({
-      title: skill,
-      icon: iconMap[skill] || null,
-      onClick: null
-    }));
-  };
+      // Filter skills by search query
+      const matchingSkills = category.skills.filter((s) => {
+        const q = searchQuery.toLowerCase();
+        return s.name.toLowerCase().includes(q) || s.tag.toLowerCase().includes(q);
+      });
+
+      if (matchingSkills.length === 0) return null;
+
+      return {
+        ...category,
+        skills: matchingSkills
+      };
+    }).filter(Boolean);
+  }, [activeTab, searchQuery]);
 
   return (
-    <section id="skills" style={{ minHeight: '100vh', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
+    <section id="skills" style={{ minHeight: '100vh', padding: '110px 0', position: 'relative' }}>
       <Container maxWidth="lg">
-        <SectionHeader title="Knowledge Universe" subtitle="Explore domains to see specific technologies" />
-        
-        <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
-          <AnimatePresence mode="wait">
-            {selectedDomain === null ? (
-              <GalaxySystem 
-                key="macro"
-                centerTitle={personalInfo.name}
-                centerSubtitle="Software Engineer"
-                items={domainItems}
-                isSkillGalaxy={false}
-                radius={radius}
+        <SectionHeader
+          tag="TECH MATRIX"
+          title="Skills & Capabilities"
+          subtitle="Production-tested technologies, architectural patterns, languages, and frameworks."
+        />
+
+        {/* Search & Domain Filter Bar */}
+        <Box sx={{ mb: 5 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: 2,
+              mb: 3
+            }}
+          >
+            {/* Search Input */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                bgcolor: 'rgba(12, 18, 34, 0.7)',
+                border: '1px solid rgba(56, 189, 248, 0.25)',
+                borderRadius: '12px',
+                px: 2,
+                py: 1,
+                width: { xs: '100%', md: '380px' }
+              }}
+            >
+              <Search sx={{ color: 'var(--primary-glow)', fontSize: 20 }} />
+              <InputBase
+                placeholder="Search skills (e.g. 'RAG', 'Kotlin', 'React')..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{
+                  color: '#fff',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.88rem',
+                  width: '100%'
+                }}
               />
-            ) : (
-              <GalaxySystem 
-                key="micro"
-                centerTitle={skillsData[selectedDomain].domain}
-                centerSubtitle="Domain Expertise"
-                items={getSkillItems()}
-                isSkillGalaxy={true}
-                onBack={() => setSelectedDomain(null)}
-                radius={radius}
+              {searchQuery && (
+                <Typography
+                  onClick={() => setSearchQuery('')}
+                  sx={{ cursor: 'pointer', color: 'var(--text-muted)', fontSize: '0.8rem', fontFamily: 'JetBrains Mono, monospace' }}
+                >
+                  Clear
+                </Typography>
+              )}
+            </Box>
+
+            {/* Quick Stats Pill */}
+            <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+              Showing {filteredData.reduce((acc, cat) => acc + cat.skills.length, 0)} skills across {filteredData.length} domains
+            </Typography>
+          </Box>
+
+          {/* Domain Category Filter Chips */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            <Chip
+              label="All Domains"
+              onClick={() => setActiveTab('ALL')}
+              sx={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.78rem',
+                bgcolor: activeTab === 'ALL' ? 'var(--primary-glow)' : 'rgba(255, 255, 255, 0.04)',
+                color: activeTab === 'ALL' ? '#050814' : 'var(--text-secondary)',
+                fontWeight: activeTab === 'ALL' ? 700 : 500,
+                border: '1px solid',
+                borderColor: activeTab === 'ALL' ? 'var(--primary-glow)' : 'rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer',
+                '&:hover': { bgcolor: activeTab === 'ALL' ? 'var(--secondary-glow)' : 'rgba(56, 189, 248, 0.1)' }
+              }}
+            />
+            {skillsData.map((cat) => (
+              <Chip
+                key={cat.domain}
+                icon={<span style={{ display: 'flex', color: activeTab === cat.domain ? '#050814' : 'var(--primary-glow)' }}>{domainIcons[cat.domain]}</span>}
+                label={cat.domain}
+                onClick={() => setActiveTab(cat.domain)}
+                sx={{
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.78rem',
+                  bgcolor: activeTab === cat.domain ? 'var(--primary-glow)' : 'rgba(255, 255, 255, 0.04)',
+                  color: activeTab === cat.domain ? '#050814' : 'var(--text-secondary)',
+                  fontWeight: activeTab === cat.domain ? 700 : 500,
+                  border: '1px solid',
+                  borderColor: activeTab === cat.domain ? 'var(--primary-glow)' : 'rgba(255, 255, 255, 0.1)',
+                  cursor: 'pointer',
+                  '&:hover': { bgcolor: activeTab === cat.domain ? 'var(--secondary-glow)' : 'rgba(56, 189, 248, 0.1)' }
+                }}
               />
-            )}
-          </AnimatePresence>
+            ))}
+          </Box>
+        </Box>
+
+        {/* Skills Cards by Domain */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {filteredData.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 8, bgcolor: 'rgba(12, 18, 34, 0.5)', borderRadius: '16px', border: '1px dashed rgba(255,255,255,0.1)' }}>
+              <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text-muted)' }}>
+                No skills match "{searchQuery}". Try searching for 'Python', 'React', 'RAG', or 'Linux'.
+              </Typography>
+            </Box>
+          ) : (
+            filteredData.map((group, groupIdx) => (
+              <motion.div
+                key={group.domain}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: groupIdx * 0.05 }}
+              >
+                <Box
+                  className="glass-container"
+                  sx={{
+                    p: { xs: 2.5, sm: 3.5 },
+                    borderRadius: '16px',
+                    border: '1px solid rgba(56, 189, 248, 0.15)'
+                  }}
+                >
+                  {/* Category Header */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+                      <Box sx={{ p: 1, borderRadius: '8px', bgcolor: 'rgba(0, 242, 254, 0.1)', color: 'var(--primary-glow)', display: 'flex' }}>
+                        {domainIcons[group.domain] || <Code fontSize="small" />}
+                      </Box>
+                      <Box>
+                        <Typography variant="h6" sx={{ fontWeight: 700, color: '#fff', fontSize: '1.1rem' }}>
+                          {group.domain}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', display: { xs: 'none', sm: 'block' } }}>
+                          {group.description}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Chip
+                      label={`${group.skills.length} skills`}
+                      size="small"
+                      sx={{ bgcolor: 'rgba(255, 255, 255, 0.04)', color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem' }}
+                    />
+                  </Box>
+
+                  {/* Skills Grid */}
+                  <Grid container spacing={2}>
+                    {group.skills.map((skill, skillIdx) => (
+                      <Grid item xs={12} sm={6} md={4} key={skillIdx}>
+                        <Box
+                          sx={{
+                            p: 2,
+                            borderRadius: '12px',
+                            bgcolor: 'rgba(4, 8, 20, 0.6)',
+                            border: '1px solid rgba(255, 255, 255, 0.06)',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                              borderColor: 'rgba(0, 242, 254, 0.4)',
+                              bgcolor: 'rgba(56, 189, 248, 0.06)',
+                              transform: 'translateY(-2px)'
+                            }
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                            <Typography variant="body2" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
+                              {skill.name}
+                            </Typography>
+                            <span className="code-badge" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
+                              {skill.tag}
+                            </span>
+                          </Box>
+
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 1.5 }}>
+                            <LinearProgress
+                              variant="determinate"
+                              value={skill.level}
+                              sx={{
+                                flexGrow: 1,
+                                height: 5,
+                                borderRadius: 3,
+                                bgcolor: 'rgba(255, 255, 255, 0.06)',
+                                '& .MuiLinearProgress-bar': {
+                                  borderRadius: 3,
+                                  background: 'linear-gradient(90deg, var(--secondary-glow), var(--primary-glow))'
+                                }
+                              }}
+                            />
+                            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--secondary-glow)', fontSize: '0.72rem', minWidth: '32px', textAlign: 'right' }}>
+                              {skill.level}%
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              </motion.div>
+            ))
+          )}
         </Box>
       </Container>
     </section>

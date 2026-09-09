@@ -1,6 +1,5 @@
-import React from 'react';
-import { Dialog, Box, IconButton, Button, Typography } from '@mui/material';
-import { Close, Download } from '@mui/icons-material';
+import { Dialog, Box, IconButton, Typography } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CertificateViewer = ({ certificate, open, onClose }) => {

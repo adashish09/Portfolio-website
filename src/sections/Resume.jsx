@@ -1,107 +1,188 @@
-import React, { useState } from 'react';
-import { Box, Container, Typography, Grid, Button, Paper, Dialog, IconButton } from '@mui/material';
-import { Download, Description, Visibility, Close } from '@mui/icons-material';
+import { useState } from 'react';
+import { Box, Container, Typography, Grid, Button, IconButton } from '@mui/material';
+import { Download, Description, Visibility, Close, CheckCircle } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionHeader from '../components/ui/SectionHeader';
 
 const Resume = () => {
   const [open, setOpen] = useState(false);
-  const resumePath = "/assets/resume/Ashish_Kumar_Resume.pdf"; // From user instruction
+  const resumePath = "/assets/resume/Ashish_Kumar_Resume.pdf";
+
+  const keyPoints = [
+    "Master of Computer Applications (MCA) – Chandigarh University (8.24 CGPA)",
+    "Engineered AI Resume Interviewer with custom RAG & local Ollama (Llama 3.1) inference",
+    "Developed NetSentinel Linux network intrusion detection suite with live packet capture",
+    "Built and published native Android & cross-platform Flutter mobile applications",
+    "Strong core foundations in Data Structures, Algorithms, OOP, and Relational DBMS"
+  ];
 
   return (
-    <section id="resume" style={{ padding: '100px 0', position: 'relative' }}>
+    <section id="resume" style={{ minHeight: '100vh', padding: '110px 0', position: 'relative' }}>
       <Container maxWidth="lg">
-        <SectionHeader title="Resume" subtitle="Professional Overview" />
-        
-        <Grid container spacing={6} alignItems="center">
+        <SectionHeader
+          tag="DOCUMENTATION"
+          title="Curriculum Vitae"
+          subtitle="Official credentials, academic record, engineering experience, and technical achievements."
+        />
+
+        <Grid container spacing={5} alignItems="center">
+          {/* Left Column: Summary */}
           <Grid item xs={12} md={6}>
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
-                Technical Summary
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, lineHeight: 1.8 }}>
-                Highly adaptable Full Stack and Android Developer with expertise in modern web technologies, AI integrations, and cross-platform mobile development. Proven track record of building scalable architectures, implementing RAG pipelines, and delivering production-ready applications. Strong foundation in Linux system administration and network security concepts.
-              </Typography>
+              <Box className="glass-container" sx={{ p: { xs: 3, sm: 4.5 }, borderRadius: '16px', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: '#fff' }}>
+                  Technical Summary
+                </Typography>
 
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', color: 'var(--primary-glow)' }}>
-                Key Highlights
-              </Typography>
-              <Box component="ul" sx={{ pl: 2, color: 'text.secondary', mb: 4, '& li': { mb: 1 } }}>
-                <li>Engineered AI-driven platforms using RAG and Vector Databases.</li>
-                <li>Developed cross-platform mobile applications with offline-first synchronization.</li>
-                <li>Architected network monitoring solutions on Linux using Python.</li>
-                <li>Designed responsive, highly interactive web interfaces using React and Framer Motion.</li>
-              </Box>
+                <Typography variant="body1" sx={{ color: 'var(--text-secondary)', mb: 3, lineHeight: 1.8, fontSize: '1rem' }}>
+                  Software Engineer and MCA graduate with practical experience in building full-stack web platforms, cross-platform mobile apps, and AI-integrated systems using local LLMs (Ollama) and RAG. Strong grounding in computer science fundamentals and disciplined engineering practices.
+                </Typography>
 
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => setOpen(true)}
-                  startIcon={<Visibility />}
-                  sx={{
-                    bgcolor: 'var(--primary-glow)',
-                    color: '#050816',
-                    fontWeight: 'bold',
-                    py: 1.5,
-                    px: 4,
-                    '&:hover': { bgcolor: 'var(--secondary-glow)' }
-                  }}
-                >
-                  View Resume
-                </Button>
+                <Typography variant="subtitle2" sx={{ color: 'var(--primary-glow)', fontWeight: 700, mb: 2, fontFamily: 'JetBrains Mono, monospace' }}>
+                  // Key Highlights
+                </Typography>
+
+                <Box component="ul" sx={{ pl: 0, listStyle: 'none', mb: 4, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                  {keyPoints.map((pt, idx) => (
+                    <Box component="li" key={idx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.2 }}>
+                      <CheckCircle sx={{ color: 'var(--secondary-glow)', fontSize: 18, mt: 0.3, flexShrink: 0 }} />
+                      <Typography variant="body2" sx={{ color: 'var(--text-secondary)', lineHeight: 1.5, fontSize: '0.9rem' }}>
+                        {pt}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => setOpen(true)}
+                    startIcon={<Visibility />}
+                    sx={{
+                      bgcolor: 'var(--primary-glow)',
+                      color: '#050814',
+                      fontWeight: 700,
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: '0.88rem',
+                      textTransform: 'none',
+                      py: 1.3,
+                      px: 3,
+                      borderRadius: '8px',
+                      '&:hover': { bgcolor: 'var(--secondary-glow)' }
+                    }}
+                  >
+                    View Interactive PDF
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    href={resumePath}
+                    download="Ashish_Kumar_Resume.pdf"
+                    startIcon={<Download />}
+                    sx={{
+                      borderColor: 'rgba(56, 189, 248, 0.3)',
+                      color: '#fff',
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: '0.88rem',
+                      textTransform: 'none',
+                      py: 1.3,
+                      px: 3,
+                      borderRadius: '8px',
+                      '&:hover': { borderColor: 'var(--primary-glow)', bgcolor: 'rgba(0, 242, 254, 0.08)' }
+                    }}
+                  >
+                    Download PDF
+                  </Button>
+                </Box>
               </Box>
             </motion.div>
           </Grid>
 
+          {/* Right Column: Interactive Paper Preview Card */}
           <Grid item xs={12} md={6}>
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <Paper 
-                className="glass-container" 
+              <Box
+                className="glass-container card-hover-lift"
                 onClick={() => setOpen(true)}
-                sx={{ 
-                  p: 4, 
-                  display: 'flex', 
-                  flexDirection: 'column', 
+                sx={{
+                  p: 4,
+                  minHeight: '420px',
+                  display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  minHeight: '400px',
                   justifyContent: 'center',
-                  position: 'relative',
-                  overflow: 'hidden',
+                  textAlign: 'center',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(56, 189, 248, 0.25)',
+                  bgcolor: 'rgba(10, 15, 30, 0.75)',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    boxShadow: '0 10px 40px rgba(0, 242, 254, 0.3)'
-                  }
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                <Box sx={{ position: 'absolute', top: '-10%', right: '-10%', opacity: 0.05, transform: 'scale(3)' }}>
-                   <Description sx={{ fontSize: 200, color: 'var(--primary-glow)' }} />
+                <Box
+                  sx={{
+                    width: 90,
+                    height: 90,
+                    borderRadius: '50%',
+                    bgcolor: 'rgba(0, 242, 254, 0.1)',
+                    border: '1px solid var(--primary-glow)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 2.5,
+                    boxShadow: '0 0 30px rgba(0, 242, 254, 0.25)'
+                  }}
+                >
+                  <Description sx={{ fontSize: 44, color: 'var(--primary-glow)' }} />
                 </Box>
-                <Description sx={{ fontSize: 80, color: 'var(--primary-glow)', mb: 2, zIndex: 1 }} />
-                <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', zIndex: 1, color: '#fff' }}>
-                  Interactive Preview
+
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: '#fff' }}>
+                  Ashish_Kumar_Resume.pdf
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', maxWidth: '80%', zIndex: 1 }}>
-                  Click here to view the complete PDF version including detailed project metrics, professional experience, and educational background.
+
+                <Typography variant="caption" sx={{ color: 'var(--secondary-glow)', fontFamily: 'JetBrains Mono, monospace', mb: 2 }}>
+                  Last Updated: 2026 • Verified PDF Document
                 </Typography>
-              </Paper>
+
+                <Typography variant="body2" sx={{ color: 'var(--text-secondary)', maxWidth: '80%', mb: 3, lineHeight: 1.6 }}>
+                  Click to launch the fullscreen PDF reader with full academic records, project metrics, and contact details.
+                </Typography>
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<Visibility />}
+                  sx={{
+                    color: 'var(--primary-glow)',
+                    borderColor: 'var(--primary-glow)',
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: '0.8rem',
+                    textTransform: 'none',
+                    borderRadius: '8px'
+                  }}
+                >
+                  Preview Document
+                </Button>
+              </Box>
             </motion.div>
           </Grid>
         </Grid>
       </Container>
 
-      {/* Fullscreen Custom Resume Overlay */}
+      {/* Fullscreen PDF Modal Overlay */}
       <AnimatePresence>
         {open && (
           <Box
@@ -113,7 +194,7 @@ const Resume = () => {
               height: '100vh',
               zIndex: 9999,
               backdropFilter: 'blur(20px)',
-              bgcolor: 'rgba(0, 0, 0, 0.85)',
+              bgcolor: 'rgba(3, 7, 18, 0.92)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -123,50 +204,65 @@ const Resume = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               style={{
+                width: '92vw',
+                height: '92vh',
                 display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden'
+                flexDirection: 'column'
               }}
             >
-              <Box 
-                sx={{ 
-                  width: { xs: '98vw', sm: '94vw', md: '90vw' },
-                  height: { xs: '96vh', sm: '94vh', md: '92vh' },
-                  bgcolor: 'rgba(5, 8, 22, 0.95)',
-                  border: '1px solid rgba(0, 242, 254, 0.3)',
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  bgcolor: '#040814',
+                  border: '1px solid rgba(56, 189, 248, 0.3)',
                   borderRadius: '16px',
                   display: 'flex',
                   flexDirection: 'column',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  boxShadow: '0 25px 60px rgba(0,0,0,0.8)'
                 }}
               >
                 {/* Header */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#fff' }}>Ashish Kumar Resume</Typography>
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Button 
-                      variant="outlined" 
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, px: 3, borderBottom: '1px solid rgba(255,255,255,0.08)', bgcolor: '#070c1a' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Description sx={{ color: 'var(--primary-glow)', fontSize: 20 }} />
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#fff', fontFamily: 'JetBrains Mono, monospace' }}>
+                      Ashish Kumar – Curriculum Vitae (PDF)
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 1.5 }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
                       startIcon={<Download />}
                       href={resumePath}
                       download="Ashish_Kumar_Resume.pdf"
-                      sx={{ color: 'var(--primary-glow)', borderColor: 'var(--primary-glow)', '&:hover': { bgcolor: 'rgba(0,242,254,0.1)' }, display: { xs: 'none', sm: 'flex' } }}
+                      sx={{
+                        color: 'var(--primary-glow)',
+                        borderColor: 'var(--primary-glow)',
+                        fontFamily: 'JetBrains Mono, monospace',
+                        fontSize: '0.78rem',
+                        textTransform: 'none'
+                      }}
                     >
                       Download PDF
                     </Button>
-                    <IconButton onClick={() => setOpen(false)} sx={{ color: '#fff', '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' } }}>
+                    <IconButton onClick={() => setOpen(false)} sx={{ color: '#fff' }}>
                       <Close />
                     </IconButton>
                   </Box>
                 </Box>
 
-                {/* PDF Viewer */}
-                <Box sx={{ flexGrow: 1, width: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#fff', overflow: 'hidden' }}>
-                  <iframe 
+                {/* PDF Viewer frame */}
+                <Box sx={{ flexGrow: 1, width: '100%', bgcolor: '#fff', overflow: 'hidden' }}>
+                  <iframe
                     src={`${resumePath}#view=FitH`}
-                    title="Resume"
-                    style={{ width: '100%', height: '100%', border: 'none', flexGrow: 1 }}
+                    title="Ashish Kumar Resume"
+                    style={{ width: '100%', height: '100%', border: 'none' }}
                   />
                 </Box>
               </Box>
