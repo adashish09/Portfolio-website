@@ -350,7 +350,7 @@ To update the portfolio, edit the relevant files:
 **Ashish Kumar**  
 Software Engineer — Full-Stack, AI Systems, and Mobile
 
-- **Location:** New Delhi, India
+- **Location:** Bengaluru, India
 - **Email:** [ashishkumar.dev16@gmail.com](mailto:ashishkumar.dev16@gmail.com)
 - **GitHub:** [@adashish09](https://github.com/adashish09)
 - **LinkedIn:** [Ashish Kumar](https://linkedin.com/in/ashish-kumar-ad0016)
