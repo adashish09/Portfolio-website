@@ -22,7 +22,7 @@ const Experience = () => {
         />
 
         {/* Filter Buttons */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5, mb: 6 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5, mb: 6, flexWrap: 'wrap' }}>
           {[
             { label: 'All Milestones', val: 'ALL' },
             { label: 'Projects & Work', val: 'work' },
