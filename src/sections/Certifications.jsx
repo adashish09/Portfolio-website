@@ -5,8 +5,10 @@ import { Visibility, Verified } from '@mui/icons-material';
 import SectionHeader from '../components/ui/SectionHeader';
 import CertificateViewer from '../components/ui/CertificateViewer';
 import { certificationsData } from '../data/certificates';
+import { useThemeMode } from '../context/ThemeContext';
 
 const CertificateCard = ({ cert, onView }) => {
+  const { isDark } = useThemeMode();
   return (
     <motion.div
       initial={{ opacity: 0, y: 25 }}
@@ -26,9 +28,10 @@ const CertificateCard = ({ cert, onView }) => {
           borderRadius: '16px',
           overflow: 'hidden',
           cursor: 'pointer',
-          border: '1px solid rgba(56, 189, 248, 0.16)',
-          bgcolor: 'rgba(10, 15, 29, 0.75)',
-          position: 'relative'
+          border: '1px solid var(--card-border)',
+          bgcolor: 'var(--card-bg)',
+          position: 'relative',
+          boxShadow: 'var(--card-shadow)'
         }}
       >
         {/* Certificate Image Frame */}
@@ -45,7 +48,7 @@ const CertificateCard = ({ cert, onView }) => {
               '&:hover': { transform: 'scale(1.05)' }
             }}
           />
-          <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(10, 15, 29, 0.95) 100%)' }} />
+          <Box sx={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, transparent 40%, ${isDark ? 'rgba(9, 14, 28, 0.95)' : 'rgba(255, 255, 255, 0.95)'} 100%)` }} />
 
           {/* Top category badge */}
           <Box sx={{ position: 'absolute', top: 12, left: 12 }}>
@@ -53,9 +56,9 @@ const CertificateCard = ({ cert, onView }) => {
               label={cert.category}
               size="small"
               sx={{
-                bgcolor: 'rgba(7, 10, 19, 0.85)',
+                bgcolor: isDark ? 'rgba(7, 10, 19, 0.85)' : 'rgba(255, 255, 255, 0.92)',
                 backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(0, 242, 254, 0.4)',
+                border: isDark ? '1px solid rgba(0, 242, 254, 0.4)' : '1px solid rgba(2, 132, 199, 0.3)',
                 color: 'var(--primary-glow)',
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: '0.7rem',
@@ -64,7 +67,7 @@ const CertificateCard = ({ cert, onView }) => {
             />
           </Box>
 
-          <Box sx={{ position: 'absolute', top: 12, right: 12, bgcolor: 'rgba(7, 10, 19, 0.85)', color: 'var(--primary-glow)', p: 0.8, borderRadius: '50%', display: 'flex' }}>
+          <Box sx={{ position: 'absolute', top: 12, right: 12, bgcolor: isDark ? 'rgba(7, 10, 19, 0.85)' : 'rgba(255, 255, 255, 0.92)', color: 'var(--primary-glow)', p: 0.8, borderRadius: '50%', display: 'flex' }}>
             <Verified fontSize="small" />
           </Box>
         </Box>
@@ -74,7 +77,7 @@ const CertificateCard = ({ cert, onView }) => {
             {cert.organization} • {cert.issueDate}
           </Typography>
 
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5, color: '#fff', lineHeight: 1.3, minHeight: '44px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5, color: 'var(--text-primary)', lineHeight: 1.35, minHeight: '48px' }}>
             {cert.title}
           </Typography>
 
@@ -88,7 +91,7 @@ const CertificateCard = ({ cert, onView }) => {
           </Box>
 
           {/* View Button */}
-          <Box sx={{ mt: 'auto', pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <Box sx={{ mt: 'auto', pt: 2, borderTop: '1px solid var(--card-border)' }}>
             <Button
               onClick={(e) => { e.stopPropagation(); onView(); }}
               startIcon={<Visibility sx={{ fontSize: 16 }} />}

@@ -1,357 +1,223 @@
 import { useEffect, useRef } from 'react';
+import { useThemeMode } from '../../context/ThemeContext';
 
+/**
+ * Modern Kinetic Ambient Mesh & Radiant Light Waves Background
+ * Ultra-modern, premium backdrop inspired by Vercel & Linear:
+ * - Multi-layer fluid radiant blooms with organic harmonic oscillation
+ * - Ambient kinetic light streams and bezier wave sweeps
+ * - Responsive interactive cursor illumination with smooth spring damping
+ * - Zero noisy dots or distracting particles: pristine, aesthetic, 60fps hardware-accelerated
+ */
 const ParticleBackground = () => {
   const canvasRef = useRef(null);
+  const { mode } = useThemeMode();
+  const isLight = mode === 'light';
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     let animationFrameId;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Mouse coordinates with smooth interpolation
+    // Mouse coordinates with spring damping
     const mouse = {
-      x: null,
-      y: null,
-      targetX: null,
-      targetY: null,
-      radius: 190
+      x: width * 0.5,
+      y: height * 0.35,
+      targetX: width * 0.5,
+      targetY: height * 0.35,
+      active: false
     };
 
     const handleMouseMove = (e) => {
       mouse.targetX = e.clientX;
       mouse.targetY = e.clientY;
-      if (mouse.x === null) {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      }
+      mouse.active = true;
     };
 
     const handleMouseLeave = () => {
-      mouse.targetX = null;
-      mouse.targetY = null;
+      mouse.active = false;
+      mouse.targetX = width * 0.5;
+      mouse.targetY = height * 0.35;
     };
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-      initNetwork();
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseleave', handleMouseLeave);
     window.addEventListener('resize', handleResize);
 
-    // Floating Code Glyphs
-    const glyphs = ['<AI />', '0x7F', 'async', 'λ', 'git', 'RAG', 'NIDS', 'Ollama', '=>', '{ }', 'fn()', '01'];
-    const floatingGlyphs = Array.from({ length: 16 }, () => ({
-      text: glyphs[Math.floor(Math.random() * glyphs.length)],
-      x: Math.random() * width,
-      y: Math.random() * height,
-      speed: 0.18 + Math.random() * 0.3,
-      size: 11 + Math.random() * 3,
-      opacity: 0.04 + Math.random() * 0.05
-    }));
+    // Kinetic Light Waves
+    const waves = [
+      { y: 0.25, amplitude: 45, frequency: 0.0018, speed: 0.0008, colorDark: 'rgba(6, 182, 212, 0.07)', colorLight: 'rgba(2, 132, 199, 0.05)' },
+      { y: 0.55, amplitude: 60, frequency: 0.0012, speed: -0.0006, colorDark: 'rgba(139, 92, 246, 0.06)', colorLight: 'rgba(124, 58, 237, 0.04)' },
+      { y: 0.80, amplitude: 50, frequency: 0.0015, speed: 0.0007, colorDark: 'rgba(16, 185, 129, 0.05)', colorLight: 'rgba(5, 150, 105, 0.035)' }
+    ];
 
-    // Neural Nodes & Dynamic Network
-    let nodes = [];
-    let packets = [];
-    const maxNodes = Math.min(Math.floor((width * height) / 15000), 85);
-    const maxDistance = 145;
-
-    class Node {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.55;
-        this.vy = (Math.random() - 0.5) * 0.55;
-        this.baseRadius = Math.random() * 1.8 + 1.2;
-        this.color = Math.random() > 0.4 ? '#00f2fe' : '#a855f7';
-        this.pulse = Math.random() * Math.PI * 2;
-        this.flash = 0; // Triggered when a packet arrives
+    // Dynamic Radiant Blooms
+    const blooms = [
+      {
+        baseX: 0.22,
+        baseY: 0.22,
+        radiusMult: 0.52,
+        vx: 0.0007,
+        vy: 0.0009,
+        angleX: 0,
+        angleY: 1.2,
+        colorDark: 'rgba(6, 182, 212, 0.16)', // Electric Cyan
+        colorLight: 'rgba(56, 189, 248, 0.10)' // Sky
+      },
+      {
+        baseX: 0.78,
+        baseY: 0.28,
+        radiusMult: 0.58,
+        vx: 0.0009,
+        vy: 0.0006,
+        angleX: 2.1,
+        angleY: 0.8,
+        colorDark: 'rgba(139, 92, 246, 0.14)', // Cosmic Violet
+        colorLight: 'rgba(129, 140, 248, 0.09)' // Lavender Iris
+      },
+      {
+        baseX: 0.50,
+        baseY: 0.72,
+        radiusMult: 0.48,
+        vx: 0.0008,
+        vy: 0.0011,
+        angleX: 3.5,
+        angleY: 2.6,
+        colorDark: 'rgba(79, 70, 229, 0.13)', // Deep Indigo
+        colorLight: 'rgba(52, 211, 153, 0.07)' // Fresh Mint
+      },
+      {
+        baseX: 0.15,
+        baseY: 0.85,
+        radiusMult: 0.42,
+        vx: 0.0011,
+        vy: 0.0008,
+        angleX: 1.4,
+        angleY: 3.1,
+        colorDark: 'rgba(16, 185, 129, 0.10)', // Emerald
+        colorLight: 'rgba(244, 114, 182, 0.06)' // Rose blush
       }
+    ];
 
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.pulse += 0.035;
+    let time = 0;
 
-        if (this.flash > 0) {
-          this.flash -= 0.04;
-          if (this.flash < 0) this.flash = 0;
-        }
+    const render = () => {
+      time += 0.012;
 
-        // Bounce off canvas edges
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
+      // Smooth mouse interpolation with easing
+      mouse.x += (mouse.targetX - mouse.x) * 0.04;
+      mouse.y += (mouse.targetY - mouse.y) * 0.04;
 
-        // Subtle repulsion from cursor
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = mouse.x - this.x;
-          const dy = mouse.y - this.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < mouse.radius) {
-            const force = (mouse.radius - dist) / mouse.radius;
-            const angle = Math.atan2(dy, dx);
-            this.x -= Math.cos(angle) * force * 1.6;
-            this.y -= Math.sin(angle) * force * 1.6;
-          }
-        }
-      }
-
-      draw() {
-        const radius = this.baseRadius + Math.sin(this.pulse) * 0.4 + this.flash * 2;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, Math.max(0.5, radius), 0, Math.PI * 2);
-
-        if (this.flash > 0) {
-          ctx.fillStyle = '#ffffff';
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = this.color;
-        } else {
-          ctx.fillStyle = this.color;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = this.color;
-        }
-
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-    }
-
-    // Traveling Data Packet (Photons on lines)
-    class Packet {
-      constructor(fromNode, toNode) {
-        this.from = fromNode;
-        this.to = toNode;
-        this.progress = 0;
-        this.speed = 0.015 + Math.random() * 0.02;
-        this.color = Math.random() > 0.5 ? '#00f2fe' : '#38bdf8';
-        this.size = Math.random() * 1.6 + 1.4;
-      }
-
-      update() {
-        this.progress += this.speed;
-        return this.progress < 1;
-      }
-
-      draw() {
-        const currX = this.from.x + (this.to.x - this.from.x) * this.progress;
-        const currY = this.from.y + (this.to.y - this.from.y) * this.progress;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(currX, currY, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = '#00f2fe';
-        ctx.fill();
-
-        // Subtle spark tail
-        const tailProgress = Math.max(0, this.progress - 0.08);
-        const tailX = this.from.x + (this.to.x - this.from.x) * tailProgress;
-        const tailY = this.from.y + (this.to.y - this.from.y) * tailProgress;
-        ctx.beginPath();
-        ctx.moveTo(currX, currY);
-        ctx.lineTo(tailX, tailY);
-        ctx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-
-        ctx.restore();
-      }
-    }
-
-    const initNetwork = () => {
-      nodes = [];
-      packets = [];
-      for (let i = 0; i < maxNodes; i++) {
-        nodes.push(new Node());
-      }
-    };
-
-    initNetwork();
-
-    // Perspective Cyber Grid at the Bottom
-    let gridOffset = 0;
-    const drawPerspectiveHorizon = () => {
-      gridOffset = (gridOffset + 0.35) % 40;
-      const horizonY = height * 0.84;
-      const gridDepth = height - horizonY;
-
-      ctx.save();
-
-      // Horizon neon haze
-      const horizonGlow = ctx.createLinearGradient(0, horizonY - 20, 0, horizonY + 40);
-      horizonGlow.addColorStop(0, 'transparent');
-      horizonGlow.addColorStop(0.5, 'rgba(0, 242, 254, 0.04)');
-      horizonGlow.addColorStop(1, 'transparent');
-      ctx.fillStyle = horizonGlow;
-      ctx.fillRect(0, horizonY - 20, width, 60);
-
-      // Horizontal lines with exponential perspective spacing
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.06)';
-      ctx.lineWidth = 1;
-
-      for (let y = horizonY; y < height; y += 12) {
-        const progress = (y - horizonY) / gridDepth;
-        const lineY = horizonY + Math.pow(progress, 1.8) * gridDepth;
-        ctx.beginPath();
-        ctx.moveTo(0, lineY);
-        ctx.lineTo(width, lineY);
-        ctx.stroke();
-      }
-
-      // Converging perspective lines
-      const centerX = width / 2;
-      const rays = 26;
-      for (let i = -rays; i <= rays; i++) {
-        const bottomX = centerX + (i * (width / rays)) * 1.35;
-        ctx.beginPath();
-        ctx.moveTo(centerX + (i * 10), horizonY);
-        ctx.lineTo(bottomX, height);
-        ctx.stroke();
-      }
-
-      ctx.restore();
-    };
-
-    // Render loop
-    const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth mouse interpolation
-      if (mouse.targetX !== null) {
-        mouse.x += (mouse.targetX - mouse.x) * 0.15;
-        mouse.y += (mouse.targetY - mouse.y) * 0.15;
+      // 1. Base Gradient Canvas Fill
+      const baseGradient = ctx.createLinearGradient(0, 0, width, height);
+      if (isLight) {
+        baseGradient.addColorStop(0, '#f8fafc');
+        baseGradient.addColorStop(0.5, '#f1f5f9');
+        baseGradient.addColorStop(1, '#f8fafc');
       } else {
-        mouse.x = null;
-        mouse.y = null;
+        baseGradient.addColorStop(0, '#060913');
+        baseGradient.addColorStop(0.5, '#090e22');
+        baseGradient.addColorStop(1, '#060913');
+      }
+      ctx.fillStyle = baseGradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // 2. Render Radiant Blooms
+      blobsLoop: for (let i = 0; i < blooms.length; i++) {
+        const b = blooms[i];
+        b.angleX += b.vx;
+        b.angleY += b.vy;
+
+        const currentX = width * b.baseX + Math.sin(b.angleX) * (width * 0.12);
+        const currentY = height * b.baseY + Math.cos(b.angleY) * (height * 0.10);
+        const radius = Math.min(width, height) * b.radiusMult;
+
+        const radGrad = ctx.createRadialGradient(
+          currentX,
+          currentY,
+          0,
+          currentX,
+          currentY,
+          radius
+        );
+
+        const color = isLight ? b.colorLight : b.colorDark;
+        radGrad.addColorStop(0, color);
+        radGrad.addColorStop(0.55, color.replace(/[\d.]+\)$/, isLight ? '0.03)' : '0.05)'));
+        radGrad.addColorStop(1, 'transparent');
+
+        ctx.fillStyle = radGrad;
+        ctx.beginPath();
+        ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
+        ctx.fill();
       }
 
-      // 1. Deep Space Cybernetic Canvas Gradient
-      const bgGrad = ctx.createRadialGradient(
-        width * 0.25, height * 0.2, 50,
-        width * 0.5, height * 0.5, Math.max(width, height) * 0.85
-      );
-      bgGrad.addColorStop(0, '#0a1026');
-      bgGrad.addColorStop(0.45, '#050814');
-      bgGrad.addColorStop(1, '#020409');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, width, height);
+      // 3. Render Smooth Kinetic Light Streams (Bezier Undulations)
+      for (let i = 0; i < waves.length; i++) {
+        const w = waves[i];
+        const waveBaseY = height * w.y;
+        const color = isLight ? w.colorLight : w.colorDark;
 
-      // 2. Ambient Cyber Aura (Cyan Top-Right, Violet Bottom-Left)
-      const cyanAura = ctx.createRadialGradient(width * 0.85, height * 0.18, 0, width * 0.85, height * 0.18, 480);
-      cyanAura.addColorStop(0, 'rgba(0, 242, 254, 0.06)');
-      cyanAura.addColorStop(1, 'transparent');
-      ctx.fillStyle = cyanAura;
-      ctx.fillRect(0, 0, width, height);
+        ctx.beginPath();
+        ctx.moveTo(0, waveBaseY);
 
-      const purpleAura = ctx.createRadialGradient(width * 0.12, height * 0.78, 0, width * 0.12, height * 0.78, 460);
-      purpleAura.addColorStop(0, 'rgba(168, 85, 247, 0.05)');
-      purpleAura.addColorStop(1, 'transparent');
-      ctx.fillStyle = purpleAura;
-      ctx.fillRect(0, 0, width, height);
+        for (let x = 0; x <= width; x += 24) {
+          const sine = Math.sin(x * w.frequency + time * 1.5 + i);
+          const cosine = Math.cos(x * w.frequency * 0.5 + time * 0.8);
+          const y = waveBaseY + (sine + cosine) * w.amplitude;
+          ctx.lineTo(x, y);
+        }
 
-      // 3. Magnetic Cursor Aurora & Reactive Light Ring
+        ctx.lineTo(width, height);
+        ctx.lineTo(0, height);
+        ctx.closePath();
+
+        const waveGrad = ctx.createLinearGradient(0, waveBaseY - w.amplitude, 0, waveBaseY + w.amplitude * 2);
+        waveGrad.addColorStop(0, color);
+        waveGrad.addColorStop(1, 'transparent');
+
+        ctx.fillStyle = waveGrad;
+        ctx.fill();
+      }
+
+      // 4. Interactive Cursor Illumination Spotlight
       if (mouse.x !== null && mouse.y !== null) {
-        const cursorGlow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
-        cursorGlow.addColorStop(0, 'rgba(0, 242, 254, 0.08)');
-        cursorGlow.addColorStop(0.6, 'rgba(79, 172, 254, 0.03)');
+        const cursorRadius = Math.min(width * 0.35, 340);
+        const cursorGlow = ctx.createRadialGradient(
+          mouse.x,
+          mouse.y,
+          0,
+          mouse.x,
+          mouse.y,
+          cursorRadius
+        );
+
+        const spotlightColor = isLight ? 'rgba(2, 132, 199, 0.08)' : 'rgba(0, 242, 254, 0.12)';
+        cursorGlow.addColorStop(0, spotlightColor);
+        cursorGlow.addColorStop(0.5, spotlightColor.replace(/[\d.]+\)$/, isLight ? '0.02)' : '0.04)'));
         cursorGlow.addColorStop(1, 'transparent');
+
         ctx.fillStyle = cursorGlow;
-        ctx.fillRect(0, 0, width, height);
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, cursorRadius, 0, Math.PI * 2);
+        ctx.fill();
       }
 
-      // 4. Floating Developer Code Glyphs
-      ctx.font = '12px "JetBrains Mono", monospace';
-      floatingGlyphs.forEach((glyph) => {
-        glyph.y -= glyph.speed;
-        if (glyph.y < -20) {
-          glyph.y = height + 20;
-          glyph.x = Math.random() * width;
-        }
-        ctx.fillStyle = `rgba(56, 189, 248, ${glyph.opacity})`;
-        ctx.fillText(glyph.text, glyph.x, glyph.y);
-      });
-
-      // 5. Draw Perspective Cyber Grid
-      drawPerspectiveHorizon();
-
-      // 6. Update Nodes & Active Connections
-      const activePairs = [];
-
-      for (let i = 0; i < nodes.length; i++) {
-        nodes[i].update();
-        nodes[i].draw();
-
-        // Connect with other nodes
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < maxDistance) {
-            activePairs.push({ from: nodes[i], to: nodes[j] });
-            const alpha = (1 - dist / maxDistance) * 0.22;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
-            ctx.lineWidth = 0.85;
-            ctx.stroke();
-          }
-        }
-
-        // Connect directly to cursor
-        if (mouse.x !== null && mouse.y !== null) {
-          const dx = nodes[i].x - mouse.x;
-          const dy = nodes[i].y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < mouse.radius) {
-            const alpha = (1 - dist / mouse.radius) * 0.45;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
-            ctx.lineWidth = 1.1;
-            ctx.stroke();
-          }
-        }
-      }
-
-      // 7. Spawn & Update Data Packets (Energy Pulses on Lines)
-      if (activePairs.length > 0 && packets.length < 18 && Math.random() < 0.08) {
-        const randomPair = activePairs[Math.floor(Math.random() * activePairs.length)];
-        // Randomize direction
-        if (Math.random() > 0.5) {
-          packets.push(new Packet(randomPair.from, randomPair.to));
-        } else {
-          packets.push(new Packet(randomPair.to, randomPair.from));
-        }
-      }
-
-      // Animate all traveling packets
-      for (let k = packets.length - 1; k >= 0; k--) {
-        const packet = packets[k];
-        packet.draw();
-        const alive = packet.update();
-        if (!alive) {
-          // Packet arrived at destination
-          packet.to.flash = 0.8;
-          packets.splice(k, 1);
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(render);
     };
 
-    animate();
+    render();
 
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -359,7 +225,7 @@ const ParticleBackground = () => {
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [isLight]);
 
   return (
     <canvas
@@ -368,11 +234,11 @@ const ParticleBackground = () => {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: -1,
+        width: '100%',
+        height: '100%',
+        zIndex: 0,
         pointerEvents: 'none',
-        display: 'block'
+        transition: 'opacity 0.4s ease'
       }}
     />
   );

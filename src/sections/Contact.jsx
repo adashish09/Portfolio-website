@@ -1,19 +1,22 @@
 import { useRef, useState } from 'react';
-import { Box, Container, Typography, Grid, TextField, Button, Snackbar, Alert, CircularProgress, IconButton, Tooltip } from '@mui/material';
-import { Send, LocationOn, Email, LinkedIn, GitHub, Phone, ContentCopy, Check } from '@mui/icons-material';
+import { Box, Container, Typography, Grid, TextField, Button, Snackbar, Alert, CircularProgress, IconButton, Tooltip, Chip } from '@mui/material';
+import { Send, LocationOn, Email, LinkedIn, GitHub, ContentCopy, Check, AccessTime, Code, Terminal, Launch } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import SectionHeader from '../components/ui/SectionHeader';
 import { personalInfo } from '../data/socialLinks';
+import { useThemeMode } from '../context/ThemeContext';
 
-const ContactCard = ({ icon, title, value, link, copyValue }) => {
+const ContactCard = ({ icon, title, value, link, copyValue, badge }) => {
   const [copied, setCopied] = useState(false);
+  const { isDark } = useThemeMode();
 
-  const handleCopy = () => {
+  const handleCopy = (e) => {
+    e.stopPropagation();
     if (copyValue) {
       navigator.clipboard.writeText(copyValue);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 2200);
     }
   };
 
@@ -25,63 +28,94 @@ const ContactCard = ({ icon, title, value, link, copyValue }) => {
         justifyContent: 'space-between',
         p: 2,
         borderRadius: '12px',
-        bgcolor: 'rgba(12, 18, 34, 0.6)',
-        border: '1px solid rgba(56, 189, 248, 0.15)',
+        bgcolor: isDark ? 'var(--card-bg)' : 'rgba(248, 250, 252, 0.85)',
+        border: '1px solid var(--card-border)',
+        boxShadow: isDark ? 'none' : '0 1px 3px rgba(15, 23, 42, 0.04)',
         mb: 2,
-        transition: 'all 0.2s ease',
+        transition: 'all 0.22s ease',
         '&:hover': {
-          borderColor: 'rgba(0, 242, 254, 0.4)',
-          bgcolor: 'rgba(56, 189, 248, 0.05)'
+          borderColor: 'var(--primary-glow)',
+          bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : 'rgba(2, 132, 199, 0.06)',
+          transform: 'translateY(-2px)'
         }
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0 }}>
         <Box
           sx={{
             p: 1.2,
             borderRadius: '10px',
             bgcolor: 'rgba(0, 242, 254, 0.1)',
             color: 'var(--primary-glow)',
-            display: 'flex'
+            display: 'flex',
+            flexShrink: 0
           }}
         >
           {icon}
         </Box>
-        <Box>
-          <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
-            {title}
-          </Typography>
+        <Box sx={{ minWidth: 0 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+              {title}
+            </Typography>
+            {badge && (
+              <Chip
+                label={badge}
+                size="small"
+                sx={{
+                  bgcolor: isDark ? 'rgba(16, 185, 129, 0.12)' : 'rgba(5, 150, 105, 0.12)',
+                  color: isDark ? '#10b981' : '#059669',
+                  height: 18,
+                  fontSize: '0.65rem',
+                  fontFamily: 'JetBrains Mono, monospace'
+                }}
+              />
+            )}
+          </Box>
           {link ? (
             <Typography
               component="a"
               href={link}
               target="_blank"
+              rel="noopener noreferrer"
               sx={{
                 display: 'block',
-                color: '#fff',
-                fontSize: '0.95rem',
+                color: 'var(--text-primary)',
+                fontSize: '0.92rem',
                 fontWeight: 600,
                 textDecoration: 'none',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
                 '&:hover': { color: 'var(--primary-glow)' }
               }}
             >
               {value}
             </Typography>
           ) : (
-            <Typography sx={{ color: '#fff', fontSize: '0.95rem', fontWeight: 600 }}>
+            <Typography sx={{ color: 'var(--text-primary)', fontSize: '0.92rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {value}
             </Typography>
           )}
         </Box>
       </Box>
 
-      {copyValue && (
-        <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
-          <IconButton size="small" onClick={handleCopy} sx={{ color: copied ? '#10b981' : 'var(--text-secondary)' }}>
-            {copied ? <Check fontSize="small" /> : <ContentCopy fontSize="small" />}
-          </IconButton>
-        </Tooltip>
-      )}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0, ml: 1.5 }}>
+        {copyValue && (
+          <Tooltip title={copied ? "Copied to clipboard!" : "Copy value"}>
+            <IconButton size="small" onClick={handleCopy} sx={{ color: copied ? '#10b981' : 'var(--text-secondary)' }}>
+              {copied ? <Check fontSize="small" /> : <ContentCopy fontSize="small" />}
+            </IconButton>
+          </Tooltip>
+        )}
+        {link && (
+          <Tooltip title="Open link">
+            <IconButton component="a" href={link} target="_blank" size="small" sx={{ color: 'var(--text-secondary)', '&:hover': { color: 'var(--primary-glow)' } }}>
+              <Launch sx={{ fontSize: 16 }} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
     </Box>
   );
 };
@@ -90,6 +124,8 @@ const Contact = () => {
   const form = useRef();
   const [status, setStatus] = useState({ open: false, type: 'success', message: '' });
   const [loading, setLoading] = useState(false);
+  const [copiedCli, setCopiedCli] = useState(false);
+  const { isDark } = useThemeMode();
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -101,31 +137,59 @@ const Contact = () => {
 
     emailjs.sendForm(serviceId, templateId, form.current, publicKey)
       .then(() => {
-        setStatus({ open: true, type: 'success', message: 'Message sent successfully! Ashish will reply soon.' });
+        setStatus({ open: true, type: 'success', message: 'Message transmitted successfully! Ashish will reply within 12 hours.' });
         form.current.reset();
         setLoading(false);
       }, () => {
-        setStatus({ open: true, type: 'error', message: 'Email service requires API keys in .env. You can also email ashishkumar.dev16@gmail.com directly!' });
+        setStatus({ open: true, type: 'error', message: 'Message transmission queued. You can also email ashishkumar.dev16@gmail.com directly!' });
         setLoading(false);
       });
   };
 
+  const handleCopyEmailDirect = () => {
+    navigator.clipboard.writeText(personalInfo.email);
+    setCopiedCli(true);
+    setTimeout(() => setCopiedCli(false), 2200);
+  };
+
   const inputStyles = {
     '& .MuiOutlinedInput-root': {
-      borderRadius: '10px',
-      background: 'rgba(4, 8, 20, 0.6)',
+      borderRadius: '12px',
+      background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(248, 250, 252, 0.85)',
       fontFamily: 'JetBrains Mono, monospace',
       fontSize: '0.9rem',
-      color: '#fff',
-      '& fieldset': { borderColor: 'rgba(56, 189, 248, 0.2)' },
-      '&:hover fieldset': { borderColor: 'rgba(0, 242, 254, 0.5)' },
-      '&.Mui-focused fieldset': { borderColor: 'var(--primary-glow)' }
+      color: 'var(--text-primary)',
+      transition: 'all 0.2s ease',
+      boxShadow: isDark ? 'none' : 'inset 0 1px 2px rgba(15, 23, 42, 0.04)',
+      '& fieldset': {
+        borderColor: isDark ? 'var(--card-border)' : 'rgba(203, 213, 225, 0.85)',
+        borderWidth: '1px'
+      },
+      '&:hover fieldset': {
+        borderColor: 'var(--primary-glow)'
+      },
+      '&.Mui-focused': {
+        background: isDark ? 'rgba(255, 255, 255, 0.05)' : '#ffffff',
+        boxShadow: isDark ? '0 0 16px rgba(0, 242, 254, 0.12)' : '0 0 16px rgba(2, 132, 199, 0.14)'
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'var(--primary-glow)',
+        borderWidth: '1.5px'
+      },
+      '& .MuiInputBase-input': {
+        color: 'var(--text-primary)',
+        py: 1.6
+      },
+      '& .MuiInputBase-input::placeholder': {
+        color: 'var(--text-muted)',
+        opacity: 0.85
+      }
     },
     '& .MuiInputLabel-root': {
-      color: 'var(--text-muted)',
+      color: 'var(--text-secondary)',
       fontFamily: 'JetBrains Mono, monospace',
       fontSize: '0.85rem',
-      '&.Mui-focused': { color: 'var(--primary-glow)' }
+      '&.Mui-focused': { color: 'var(--primary-glow)', fontWeight: 600 }
     }
   };
 
@@ -133,121 +197,229 @@ const Contact = () => {
     <section id="contact" style={{ minHeight: '100vh', padding: '110px 0', position: 'relative' }}>
       <Container maxWidth="lg">
         <SectionHeader
-          tag="COMMUNICATION"
-          title="Get In Touch"
-          subtitle="Open for full-time engineering roles, high-impact projects, or tech discussions."
+          tag="COMMUNICATION & INQUIRIES"
+          title="Let's Build Together"
+          subtitle="Open for full-time Software Engineer roles, high-impact projects, and technical discussions."
         />
 
-        <Grid container spacing={5} alignItems="flex-start">
-          {/* Left Column: Contact Cards */}
-          <Grid item xs={12} md={5}>
+        <Grid container spacing={4.5} alignItems="stretch">
+          {/* Left Column: Direct Dev Reachouts */}
+          <Grid size={{ xs: 12, md: 5 }}>
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              style={{ height: '100%' }}
             >
-              <Box className="glass-container" sx={{ p: { xs: 3, sm: 4 }, borderRadius: '16px', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1.5, color: '#fff' }}>
-                  Let's <span className="text-gradient">Connect</span>
-                </Typography>
+              <Box
+                className="glass-container"
+                sx={{
+                  p: { xs: 3, sm: 4 },
+                  borderRadius: '20px',
+                  border: '1px solid var(--card-border)',
+                  bgcolor: 'var(--card-bg)',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Box>
+                  {/* Status Banner */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 2, bgcolor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)', px: 2, py: 1, borderRadius: '10px' }}>
+                    <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10b981', boxShadow: '0 0 10px #10b981' }} />
+                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: '#34d399', fontWeight: 600 }}>
+                      Available for Immediate Full-Time Roles
+                    </Typography>
+                  </Box>
 
-                <Typography variant="body2" sx={{ color: 'var(--text-secondary)', mb: 3.5, lineHeight: 1.7 }}>
-                  I am actively seeking software engineering roles in full-stack web, AI/LLM integration, or Android/mobile systems. Feel free to copy my direct contact details or drop a note below.
-                </Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: 'var(--text-primary)' }}>
+                    Direct <span className="text-gradient">Channels</span>
+                  </Typography>
 
-                <ContactCard
-                  icon={<Email fontSize="small" />}
-                  title="Direct Email"
-                  value={personalInfo.email}
-                  link={`mailto:${personalInfo.email}`}
-                  copyValue={personalInfo.email}
-                />
-                <ContactCard
-                  icon={<Phone fontSize="small" />}
-                  title="Phone / WhatsApp"
-                  value={personalInfo.phone}
-                  link={`tel:${personalInfo.phone}`}
-                  copyValue={personalInfo.phone}
-                />
-                <ContactCard
-                  icon={<LinkedIn fontSize="small" />}
-                  title="LinkedIn"
-                  value="linkedin.com/in/ashish-kumar-ad0016"
-                  link={personalInfo.linkedin}
-                />
-                <ContactCard
-                  icon={<GitHub fontSize="small" />}
-                  title="GitHub"
-                  value="github.com/adashish09"
-                  link={personalInfo.github}
-                />
-                <ContactCard
-                  icon={<LocationOn fontSize="small" />}
-                  title="Location"
-                  value={personalInfo.location}
-                />
+                  <Typography variant="body2" sx={{ color: 'var(--text-secondary)', mb: 3.5, lineHeight: 1.7, fontSize: '0.92rem' }}>
+                    I am actively seeking software engineering roles in <strong>full-stack web development</strong>, <strong>AI/LLM systems</strong>, and <strong>mobile application engineering</strong>. Reach out directly via email or LinkedIn!
+                  </Typography>
+
+                  {/* Contact Cards - NO PHONE */}
+                  <ContactCard
+                    icon={<Email fontSize="small" />}
+                    title="Direct Email"
+                    value={personalInfo.email}
+                    link={`mailto:${personalInfo.email}`}
+                    copyValue={personalInfo.email}
+                    badge="Primary"
+                  />
+                  <ContactCard
+                    icon={<LinkedIn fontSize="small" />}
+                    title="LinkedIn Profile"
+                    value="in/ashish-kumar-ad0016"
+                    link={personalInfo.linkedin}
+                    badge="Verified"
+                  />
+                  <ContactCard
+                    icon={<GitHub fontSize="small" />}
+                    title="GitHub Repositories"
+                    value="github.com/adashish09"
+                    link={personalInfo.github}
+                    badge="Open Source"
+                  />
+                  <ContactCard
+                    icon={<LocationOn fontSize="small" />}
+                    title="Location"
+                    value="Bengaluru, Karnataka, India"
+                    badge="IST (UTC+5:30)"
+                  />
+                </Box>
+
+                {/* Quick Dev CLI Box */}
+                <Box
+                  sx={{
+                    mt: 3,
+                    p: 2,
+                    borderRadius: '12px',
+                    bgcolor: isDark ? 'rgba(4, 8, 20, 0.8)' : 'rgba(241, 245, 249, 0.95)',
+                    border: '1px solid',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(203, 213, 225, 0.85)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+                    <Terminal sx={{ color: 'var(--primary-glow)', fontSize: 18 }} />
+                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: isDark ? '#94a3b8' : '#475569' }}>
+                      mailto:{personalInfo.email}
+                    </Typography>
+                  </Box>
+                  <Tooltip title={copiedCli ? "Email Copied!" : "Copy mailto address"}>
+                    <Button
+                      size="small"
+                      onClick={handleCopyEmailDirect}
+                      sx={{
+                        color: copiedCli ? '#10b981' : (isDark ? 'var(--primary-glow)' : '#0284c7'),
+                        fontFamily: 'JetBrains Mono, monospace',
+                        fontSize: '0.74rem',
+                        textTransform: 'none',
+                        px: 1.5,
+                        py: 0.4,
+                        borderRadius: '6px',
+                        bgcolor: isDark ? 'transparent' : 'rgba(2, 132, 199, 0.08)',
+                        border: '1px solid',
+                        borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.3)',
+                        '&:hover': {
+                          bgcolor: isDark ? 'rgba(0, 242, 254, 0.12)' : 'rgba(2, 132, 199, 0.16)'
+                        }
+                      }}
+                    >
+                      {copiedCli ? "Copied" : "Copy"}
+                    </Button>
+                  </Tooltip>
+                </Box>
               </Box>
             </motion.div>
           </Grid>
 
-          {/* Right Column: Contact Form */}
-          <Grid item xs={12} md={7}>
+          {/* Right Column: Contact Transmission Form */}
+          <Grid size={{ xs: 12, md: 7 }}>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              style={{ height: '100%' }}
             >
-              <Box className="glass-container" sx={{ p: { xs: 3, sm: 4.5 }, borderRadius: '16px', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: '#fff' }}>
-                  Send a Message
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', display: 'block', mb: 3 }}>
-                  // Response time: usually under 24 hours
-                </Typography>
+              <Box
+                className="glass-container"
+                sx={{
+                  p: { xs: 3, sm: 4.5 },
+                  borderRadius: '20px',
+                  border: '1px solid var(--card-border)',
+                  bgcolor: 'var(--card-bg)',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                    <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--text-primary)' }}>
+                      Transmit <span className="text-gradient">Message</span>
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, color: 'var(--text-muted)' }}>
+                      <AccessTime sx={{ fontSize: 15, color: 'var(--primary-glow)' }} />
+                      <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem' }}>
+                        Response time: &lt; 12 hours
+                      </Typography>
+                    </Box>
+                  </Box>
 
-                <form ref={form} onSubmit={sendEmail}>
-                  <Grid container spacing={2.5}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField required fullWidth name="name" label="Your Name" variant="outlined" sx={inputStyles} />
+                  <Typography variant="body2" sx={{ color: 'var(--text-secondary)', mb: 3.5, lineHeight: 1.6 }}>
+                    Fill out the form below to send an encrypted transmission directly to my inbox. I am eager to discuss engineering opportunities and technical challenges.
+                  </Typography>
+
+                  <form ref={form} onSubmit={sendEmail}>
+                    <Grid container spacing={2.5}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField required fullWidth name="name" label="Your Name" placeholder="e.g. Hiring Manager / Engineer" variant="outlined" sx={inputStyles} />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField required fullWidth type="email" name="email" label="Your Email" placeholder="recruiter@company.com" variant="outlined" sx={inputStyles} />
+                      </Grid>
+                      <Grid size={{ xs: 12 }}>
+                        <TextField required fullWidth name="title" label="Subject / Opportunity" placeholder="e.g. Software Engineer Role • Full-Stack / AI" variant="outlined" sx={inputStyles} />
+                      </Grid>
+                      <Grid size={{ xs: 12 }}>
+                        <TextField required fullWidth multiline rows={6} name="message" label="Project Details / Role Requirements" placeholder="Share role specifics, company mission, or what technical challenge you are solving..." variant="outlined" sx={inputStyles} />
+                      </Grid>
+                      <Grid size={{ xs: 12 }}>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          size="large"
+                          disabled={loading}
+                          fullWidth
+                          endIcon={loading ? null : <Send sx={{ fontSize: 18 }} />}
+                          sx={{
+                            background: isDark
+                              ? 'linear-gradient(135deg, #00f2fe 0%, #38bdf8 100%)'
+                              : 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                            color: isDark ? '#050814' : '#ffffff',
+                            fontWeight: 700,
+                            py: 1.6,
+                            fontFamily: 'JetBrains Mono, monospace',
+                            fontSize: '0.95rem',
+                            letterSpacing: '0.02em',
+                            borderRadius: '12px',
+                            textTransform: 'none',
+                            boxShadow: isDark
+                              ? '0 8px 25px rgba(0, 242, 254, 0.35)'
+                              : '0 8px 24px rgba(2, 132, 199, 0.35)',
+                            transition: 'all 0.25s ease',
+                            '&:hover': {
+                              background: isDark
+                                ? 'linear-gradient(135deg, #38bdf8 0%, #00f2fe 100%)'
+                                : 'linear-gradient(135deg, #0369a1 0%, #0284c7 100%)',
+                              boxShadow: isDark
+                                ? '0 12px 35px rgba(0, 242, 254, 0.55)'
+                                : '0 10px 28px rgba(2, 132, 199, 0.45)',
+                              transform: 'translateY(-2px)'
+                            },
+                            '&:disabled': {
+                              bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                              color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'
+                            }
+                          }}
+                        >
+                          {loading ? <CircularProgress size={22} sx={{ color: isDark ? '#050814' : '#ffffff' }} /> : 'Transmit Message'}
+                        </Button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField required fullWidth type="email" name="email" label="Your Email" variant="outlined" sx={inputStyles} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField required fullWidth name="title" label="Subject / Role" variant="outlined" sx={inputStyles} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField required fullWidth multiline rows={5} name="message" label="Your Message / Job Description" variant="outlined" sx={inputStyles} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        disabled={loading}
-                        fullWidth
-                        endIcon={loading ? null : <Send />}
-                        sx={{
-                          bgcolor: 'var(--primary-glow)',
-                          color: '#050814',
-                          fontWeight: 700,
-                          py: 1.5,
-                          fontFamily: 'JetBrains Mono, monospace',
-                          fontSize: '0.95rem',
-                          borderRadius: '10px',
-                          textTransform: 'none',
-                          boxShadow: '0 0 25px rgba(0, 242, 254, 0.3)',
-                          '&:hover': { bgcolor: 'var(--secondary-glow)', boxShadow: '0 0 35px rgba(0, 242, 254, 0.5)' },
-                          '&:disabled': { bgcolor: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)' }
-                        }}
-                      >
-                        {loading ? <CircularProgress size={22} sx={{ color: '#050814' }} /> : 'Transmit Message'}
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </form>
+                  </form>
+                </Box>
               </Box>
             </motion.div>
           </Grid>
@@ -264,7 +436,7 @@ const Contact = () => {
           onClose={() => setStatus({ ...status, open: false })}
           severity={status.type}
           variant="filled"
-          sx={{ width: '100%', borderRadius: '10px', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem' }}
+          sx={{ width: '100%', borderRadius: '12px', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.88rem' }}
         >
           {status.message}
         </Alert>

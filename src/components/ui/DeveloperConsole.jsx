@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Tabs, Tab, Chip } from '@mui/material';
 import { Terminal, Code, Hub, FiberManualRecord } from '@mui/icons-material';
 import { personalInfo } from '../../data/socialLinks';
+import { useThemeMode } from '../../context/ThemeContext';
 
 const DeveloperConsole = () => {
+  const { mode, toggleTheme, setThemeMode, isDark } = useThemeMode();
   const [activeTab, setActiveTab] = useState(0);
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState([
@@ -41,13 +43,34 @@ const DeveloperConsole = () => {
           type: 'output',
           text: `Available commands:
   • about     - Who is Ashish Kumar?
-  • projects  - List featured projects
+  • projects  - List 4 featured engineering projects
   • skills    - View core technical stack
+  • stack     - Polyglot & adaptability breakdown
   • timeline  - Education & experience overview
-  • contact   - Email, phone, and social links
-  • resume    - View resume download command
+  • theme     - Toggle or set visual theme (light / dark)
+  • contact   - Direct email and professional links
+  • resume    - Download verified PDF resume
   • clear     - Clear terminal screen`
         });
+        break;
+
+      case 'theme':
+      case 'toggle-theme':
+        toggleTheme();
+        newHistory.push({
+          type: 'output',
+          text: `Theme toggled to: ${mode === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}`
+        });
+        break;
+
+      case 'theme light':
+        setThemeMode('light');
+        newHistory.push({ type: 'output', text: `Theme switched to LIGHT MODE.` });
+        break;
+
+      case 'theme dark':
+        setThemeMode('dark');
+        newHistory.push({ type: 'output', text: `Theme switched to DARK MODE.` });
         break;
 
       case 'about':
@@ -57,55 +80,67 @@ const DeveloperConsole = () => {
           text: `${personalInfo.name} | ${personalInfo.title}
 📍 Location: ${personalInfo.location}
 🎓 Education: ${personalInfo.educationHighlight}
-💡 Focus: RAG pipelines, local LLM inference (Ollama), full-stack apps, and cross-platform mobile.`
+💡 Superpower: Eager learner who built 4 independent production projects across 4 distinct tech stacks in 12 months.`
         });
         break;
 
       case 'projects':
         newHistory.push({
           type: 'output',
-          text: `Featured Engineering Projects:
-1. AI Resume Interviewer (RAG, Llama 3.1:8B via Ollama, React, Node.js)
-2. NetSentinel (Linux Packet Capture, Python, Intrusion Detection)
-3. FlipLearn (Flutter, Dart, Offline-first Firestore)
-4. ESquare (Production Native Android Trivia App, Java, Firebase)
-5. StockMate (React, Firebase, Inventory Analytics)
-Run 'about' or click 'View Projects' to explore details.`
+          text: `Featured Engineering Systems:
+1. AI Resume Interviewer [AI/LLM] - RAG + Local Ollama Llama 3.1:8B, React, Node.js, Python
+2. NetSentinel [Security] - Linux Raw Packet Capture, Anomaly Detection, React Dashboard
+3. FlipLearn [Mobile] - Cross-platform Flutter & Dart, Offline-First Cloud Firestore Sync
+4. ESquare [Android] - Native Android SDK, Java, Firebase Realtime DB (Google Play Published)
+Run 'stack' to see how these architectures connect, or click any project card.`
+        });
+        break;
+
+      case 'stack':
+        newHistory.push({
+          type: 'output',
+          text: `Adaptability & Architecture Stacks:
+[AI / RAG]     Python • Ollama (Llama 3.1:8B) • Vector Embeddings • Semantic Search
+[Systems]      Linux (Ubuntu/Kali) • Raw Packet Sockets • Rule-based Anomaly Engine
+[Mobile]       Flutter / Dart (Offline Sync) • Native Android SDK (Java/Kotlin)
+[Full-Stack]   React.js • Node.js • Express.js • MongoDB • Firebase • MySQL
+[Philosophy]   "Read the RFCs, inspect the codebase, prototype in 48 hours."`
         });
         break;
 
       case 'skills':
         newHistory.push({
           type: 'output',
-          text: `Technical Stack:
-• AI/LLM: Ollama (Llama 3.1), RAG, Vector Search, MCP, Prompt Engineering
-• Frontend: React.js, JavaScript (ES6+), Material UI, Tailwind CSS, HTML5/CSS3
-• Backend: Node.js, Express.js, REST APIs, MongoDB, Firebase
-• Mobile: Android (Java/Kotlin), Flutter & Dart
-• Systems: Linux (Ubuntu/Kali), Packet Capture, Git`
+          text: `Technical Skills Matrix:
+• AI & ML: Ollama, Llama 3.1, RAG Pipelines, Vector Search, Prompt Engineering
+• Frontend & Mobile: React.js, Android (Kotlin/XML), Flutter, Dart, Bootstrap, HTML5/CSS3
+• Backend & DB: Node.js, Express.js, REST APIs, MongoDB, Firebase Firestore, MySQL
+• Core & Systems: Java, Python, JavaScript, Linux CLI/Daemons, Git, DSA, OOP`
         });
         break;
 
       case 'timeline':
         newHistory.push({
           type: 'output',
-          text: `Chronology:
-• 2024 – 2026: MCA @ Chandigarh University (CGPA: 8.24)
-• 2026: AI Resume Interviewer (RAG & Ollama) & NetSentinel (Linux NIDS)
-• 2025: FlipLearn (Cross-platform Flutter App)
-• 2024: ESquare (Native Android Trivia App with Netrom Services)
-• 2021 – 2024: BCA @ IGNOU (70.11%)`
+          text: `Engineering Milestones:
+• 2024 – 2026: MCA @ Chandigarh University (CGPA: 8.24/10)
+• Apr 2026 – May 2026: AI Resume Interviewer Platform (RAG & Ollama)
+• Jan 2026 – Mar 2026: NetSentinel Linux NIDS Suite
+• Sept 2025 – Nov 2025: FlipLearn (Cross-platform Flutter App)
+• Jan 2024 – May 2024: ESquare Native Android App (Netrom Services / Google Play)
+• 2021 – 2024: BCA @ IGNOU (Score: 70.11%)`
         });
         break;
 
       case 'contact':
         newHistory.push({
           type: 'output',
-          text: `Connect with Ashish:
-• Email:    ${personalInfo.email}
-• Phone:    ${personalInfo.phone}
+          text: `Direct Contact Channels:
+• Email:    ${personalInfo.email} (Primary • Replies < 12h)
+• LinkedIn: ${personalInfo.linkedin}
 • GitHub:   ${personalInfo.github}
-• LinkedIn: ${personalInfo.linkedin}`
+• Portfolio: ${personalInfo.portfolioUrl}
+• Location: ${personalInfo.location}`
         });
         break;
 
@@ -197,10 +232,10 @@ Run 'about' or click 'View Projects' to explore details.`
 
       {/* Tab 0: Interactive Terminal */}
       {activeTab === 0 && (
-        <Box sx={{ p: { xs: 1.5, sm: 2 }, height: { xs: '280px', sm: '320px' }, display: 'flex', flexDirection: 'column', bgcolor: '#040814' }}>
+        <Box sx={{ p: { xs: 2, sm: 2.5 }, height: { xs: '380px', sm: '460px', md: '500px' }, display: 'flex', flexDirection: 'column', bgcolor: 'var(--code-bg)' }}>
           <Box ref={terminalLogsRef} sx={{ flexGrow: 1, overflowY: 'auto', pr: 1 }}>
             {history.map((item, idx) => (
-              <Box key={idx} sx={{ mb: 1, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', lineHeight: 1.5 }}>
+              <Box key={idx} sx={{ mb: 1, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', lineHeight: 1.55 }}>
                 {item.type === 'system' && (
                   <Typography sx={{ color: 'var(--text-muted)', fontFamily: 'inherit', fontSize: 'inherit' }}>
                     # {item.text}
@@ -212,7 +247,7 @@ Run 'about' or click 'View Projects' to explore details.`
                   </Typography>
                 )}
                 {item.type === 'output' && (
-                  <Typography component="pre" sx={{ color: '#e2e8f0', fontFamily: 'inherit', fontSize: 'inherit', whiteSpace: 'pre-wrap' }}>
+                  <Typography component="pre" sx={{ color: 'var(--text-secondary)', fontFamily: 'inherit', fontSize: 'inherit', whiteSpace: 'pre-wrap' }}>
                     {item.text}
                   </Typography>
                 )}
@@ -226,8 +261,8 @@ Run 'about' or click 'View Projects' to explore details.`
           </Box>
 
           {/* Prompt line */}
-          <Box sx={{ display: 'flex', alignItems: 'center', pt: 1, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            <Typography sx={{ color: 'var(--primary-glow)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', mr: 1, whiteSpace: 'nowrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', pt: 1.2, borderTop: '1px solid var(--card-border)' }}>
+            <Typography sx={{ color: 'var(--primary-glow)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', mr: 1, whiteSpace: 'nowrap', fontWeight: 700 }}>
               ashish@portfolio:~$
             </Typography>
             <input
@@ -241,16 +276,16 @@ Run 'about' or click 'View Projects' to explore details.`
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontFamily: 'JetBrains Mono, monospace',
-                fontSize: '0.82rem'
+                fontSize: '0.84rem'
               }}
             />
           </Box>
 
           {/* Quick command buttons */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mt: 1.5 }}>
-            {['help', 'about', 'projects', 'skills', 'timeline', 'contact', 'clear'].map((cmd) => (
+            {['help', 'about', 'projects', 'stack', 'skills', 'timeline', 'theme', 'contact', 'clear'].map((cmd) => (
               <Chip
                 key={cmd}
                 label={cmd}
@@ -258,14 +293,16 @@ Run 'about' or click 'View Projects' to explore details.`
                 onClick={() => executeCommand(cmd)}
                 sx={{
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: '0.7rem',
-                  height: 22,
-                  bgcolor: 'rgba(56, 189, 248, 0.08)',
-                  border: '1px solid rgba(56, 189, 248, 0.2)',
-                  color: 'var(--secondary-glow)',
+                  fontSize: '0.72rem',
+                  height: 24,
+                  bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : 'rgba(2, 132, 199, 0.08)',
+                  border: '1px solid',
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.25)',
+                  color: isDark ? 'var(--secondary-glow)' : '#0284c7',
                   cursor: 'pointer',
+                  transition: 'all 0.2s ease',
                   '&:hover': {
-                    bgcolor: 'rgba(0, 242, 254, 0.2)',
+                    bgcolor: isDark ? 'rgba(0, 242, 254, 0.2)' : 'rgba(2, 132, 199, 0.16)',
                     borderColor: 'var(--primary-glow)'
                   }
                 }}
@@ -277,8 +314,8 @@ Run 'about' or click 'View Projects' to explore details.`
 
       {/* Tab 1: TypeScript Config */}
       {activeTab === 1 && (
-        <Box sx={{ p: 2.5, height: '320px', overflowY: 'auto', bgcolor: '#040814', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', lineHeight: 1.6 }}>
-          <Typography component="pre" sx={{ fontFamily: 'inherit', fontSize: 'inherit', color: '#94a3b8' }}>
+        <Box sx={{ p: 2.5, height: { xs: '380px', sm: '460px', md: '500px' }, overflowY: 'auto', bgcolor: 'var(--code-bg)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', lineHeight: 1.65 }}>
+          <Typography component="pre" sx={{ fontFamily: 'inherit', fontSize: 'inherit', color: 'var(--text-secondary)' }}>
             <span className="code-syntax-keyword">import</span> &#123; DeveloperProfile &#125; <span className="code-syntax-keyword">from</span> <span className="code-syntax-string">'@ashish/core'</span>;{'\n\n'}
             <span className="code-syntax-keyword">export const</span> <span className="code-syntax-variable">ashishKumar</span>: DeveloperProfile = &#123;{'\n'}
             {'  '}<span className="code-syntax-variable">name</span>: <span className="code-syntax-string">"{personalInfo.name}"</span>,{'\n'}
@@ -305,8 +342,8 @@ Run 'about' or click 'View Projects' to explore details.`
 
       {/* Tab 2: Telemetry JSON */}
       {activeTab === 2 && (
-        <Box sx={{ p: 2.5, height: '320px', overflowY: 'auto', bgcolor: '#040814', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.82rem', lineHeight: 1.6 }}>
-          <Typography component="pre" sx={{ fontFamily: 'inherit', fontSize: 'inherit', color: '#94a3b8' }}>
+        <Box sx={{ p: 2.5, height: { xs: '380px', sm: '460px', md: '500px' }, overflowY: 'auto', bgcolor: 'var(--code-bg)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', lineHeight: 1.65 }}>
+          <Typography component="pre" sx={{ fontFamily: 'inherit', fontSize: 'inherit', color: 'var(--text-secondary)' }}>
             &#123;{'\n'}
             {'  '}<span className="code-syntax-variable">"nodeEnv"</span>: <span className="code-syntax-string">"production"</span>,{'\n'}
             {'  '}<span className="code-syntax-variable">"serverStatus"</span>: <span className="code-syntax-string">"HEALTHY_200_OK"</span>,{'\n'}

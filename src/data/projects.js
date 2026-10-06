@@ -5,10 +5,17 @@ export const projectsData = [
     timeline: "Apr 2026 – May 2026",
     category: "AI & LLM",
     headline: "Adaptive AI interview simulation grounded with RAG & local LLM inference",
-    description: "An end-to-end AI-powered interview preparation platform that parses resumes, builds semantic embeddings, and generates role-tailored technical interview questions using locally served Llama 3.1:8B models.",
-    problemSolved: "Candidate preparation tools lack realistic, contextual grounding in an applicant's actual resume experience, resulting in generic interview simulations.",
-    architecture: "React frontend communicates via Node.js REST API with a Python inference microservice. Documents are parsed and indexed into vector embeddings for fast similarity retrieval before prompting the LLM.",
+    resumeFlagship: true,
+    description: "An AI-powered interview platform that parses resume content and generates role-specific interview questions using an open-source Llama 3.1:8B model served locally through Ollama, grounded via a Retrieval-Augmented Generation (RAG) pipeline with embeddings and semantic search.",
+    problemSolved: "Candidate interview prep tools are usually generic wrappers without real grounding in an applicant's exact resume history, leading to repetitive or unhelpful practice sessions.",
+    workaroundHighlight: "Bypassed costly third-party cloud LLM APIs by architecting a local Ollama inference service running Llama 3.1:8B. Designed a custom chunking and vector embedding pipeline in Python to supply high-precision context directly to prompts.",
+    architecture: "React.js frontend with streamed response rendering communicates via Node.js REST APIs for auth and session state, passing document queries to a Python RAG inference engine with vector similarity search.",
     techStack: ["React.js", "Node.js", "Python", "MongoDB", "Ollama (Llama 3.1:8B)", "RAG", "Vector Search", "Prompt Engineering"],
+    bulletPoints: [
+      "Built an AI-powered interview platform that parses resume content and generates role-specific interview questions using an open-source Llama 3.1:8B model served locally through Ollama, grounded via a Retrieval-Augmented Generation (RAG) pipeline with embeddings and semantic search.",
+      "Developed Node.js REST APIs for authentication, resume upload/parsing, and interview-session state, integrating the React frontend with a Python-based AI inference service.",
+      "Built a React.js interface supporting resume upload, streamed AI responses, and adaptive follow-up questions based on previous answers."
+    ],
     features: [
       "Custom RAG pipeline for resume context retrieval",
       "Vector embeddings & semantic similarity search",
@@ -17,22 +24,29 @@ export const projectsData = [
       "Secure JWT authentication & interview session state management",
       "Interactive candidate response evaluation and scorecard"
     ],
-    github: "https://github.com/adashish09/AI_Resume_Interviewer",
+    github: "https://github.com/adashish09/AI-Resume-Interviewer",
     demo: "#",
-    cloneCmd: "git clone https://github.com/adashish09/AI_Resume_Interviewer.git",
+    cloneCmd: "git clone https://github.com/adashish09/AI-Resume-Interviewer.git",
     image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=1000",
     featured: true
   },
   {
     id: 2,
-    title: "NetSentinel – Network Intrusion Detection",
+    title: "NetSentinel – Network Intrusion Detection System",
     timeline: "Jan 2026 – Mar 2026",
     category: "Systems & Security",
     headline: "Linux-based real-time packet capture, anomaly detection & security dashboard",
-    description: "A comprehensive network monitoring and intrusion detection system running on Linux that inspects live traffic, triggers threshold-based anomaly alerts, and streams diagnostics to a React dashboard.",
-    problemSolved: "Network administrators require lightweight, transparent packet inspection tools with actionable visual alerting rather than opaque enterprise monitoring systems.",
-    architecture: "Raw Linux packet capture listener feeding into an event-stream pipeline. Anomaly detection engine evaluates packets against rule signatures and logs incidents to a live React analytics dashboard.",
-    techStack: ["Python", "Linux / Ubuntu", "React.js", "Packet Capture", "Anomaly Detection", "Log Analysis", "REST APIs"],
+    resumeFlagship: true,
+    description: "A Linux-based network monitoring system using Python packet capture to inspect live traffic and identify suspicious activity through rule-based detection, complete with near real-time log analysis and a reactive React security dashboard.",
+    problemSolved: "Traditional security tools are cumbersome black boxes that require complex enterprise setups rather than lightweight, transparent live inspection for developers and sysadmins.",
+    workaroundHighlight: "Tackled Linux socket streaming directly using Python raw packet listeners. Implemented threshold- and pattern-based rule parsing that processes high packet volumes without memory leaks or dropped frames.",
+    architecture: "Linux socket capture daemon streaming raw frames into an event-stream pipeline. Threshold detection engine scores anomalies and emits real-time security events to a React.js monitoring dashboard.",
+    techStack: ["Python", "React.js", "Linux", "Packet Capture", "Anomaly Detection", "Log Analysis", "REST APIs"],
+    bulletPoints: [
+      "Built a Linux-based network monitoring system using Python packet capture to inspect live traffic and identify suspicious activity through rule-based detection.",
+      "Implemented near real-time log and event processing with threshold- and pattern-based rules for detecting anomalous network behavior.",
+      "Developed a React.js security dashboard for live traffic visualization, alert history, and threat monitoring."
+    ],
     features: [
       "Live Linux socket packet capture & dissection",
       "Rule-based threshold and pattern anomaly detection",
@@ -49,14 +63,21 @@ export const projectsData = [
   },
   {
     id: 3,
-    title: "FlipLearn – Gamified Learning App",
+    title: "FlipLearn – Cross-Platform Learning App",
     timeline: "Sept 2025 – Nov 2025",
     category: "Mobile Apps",
-    headline: "Cross-platform mobile education app with offline-first synchronization",
-    description: "A cross-platform Flutter application featuring a gamified quiz engine, dynamic content management, and offline-first synchronization using Cloud Firestore and local caching.",
-    problemSolved: "Students in intermittent network conditions lose learning progress during quizzes and practice tests.",
-    architecture: "Clean Flutter architecture separating UI, BLoC/state management, and repository layers. SQLite/Hive local storage synchronizes bidirectionally with Cloud Firestore upon network reconnection.",
-    techStack: ["Flutter", "Dart", "Firebase Authentication", "Cloud Firestore", "Local Caching", "BLoC"],
+    headline: "Cross-platform Flutter education app with offline-first synchronization",
+    resumeFlagship: true,
+    description: "A cross-platform Flutter application with Firebase Auth and Firestore, using local caching for offline-first data sync, featuring a gamified quiz engine with dynamic content loading and per-user progress tracking.",
+    problemSolved: "Students frequently face network drops during study sessions, leading to lost quiz submissions, frustrated users, and fragmented learning records.",
+    workaroundHighlight: "Engineered an offline-first repository layer with local cache queuing (Hive/SQLite) that automatically detects network restoration and syncs quiz attempts bidirectionally to Firestore without race conditions.",
+    architecture: "Modular Flutter architecture strictly separating UI, state management (BLoC), and repository data layers. Offline caches handle immediate UX updates while background workers sync with Cloud Firestore.",
+    techStack: ["Flutter", "Dart", "Firebase Authentication", "Firestore", "Local Caching", "BLoC"],
+    bulletPoints: [
+      "Built a cross-platform Flutter app with Firebase Auth and Firestore, using local caching for offline-first data sync.",
+      "Designed a gamified quiz engine with dynamic content loading and per-user progress tracking.",
+      "Structured the app with a modular architecture separating UI, state management, and data layers."
+    ],
     features: [
       "Offline-first quiz engine with local state reconciliation",
       "Bi-directional sync with Firebase Cloud Firestore",
@@ -73,14 +94,21 @@ export const projectsData = [
   },
   {
     id: 4,
-    title: "ESquare – Android Trivia Application",
+    title: "ESquare – Trivia Android App",
     timeline: "Jan 2024 – May 2024",
     category: "Mobile Apps",
     headline: "Native Android trivia platform with real-time quiz streaming & live leaderboards",
-    description: "A native Android trivia application built using Java and Android SDK. Engineered for high reliability with real-time Firebase syncing, background lifecycle services, and interactive quiz sessions.",
-    problemSolved: "Real-time multi-user quiz updates require robust lifecycle-aware background synchronization without causing UI stutters or battery drain on diverse Android devices.",
-    architecture: "Native Android MVVM architecture with Firebase Realtime Database observers. Lifecycle-aware components ensure smooth state restoration across screen rotations and app backgrounding.",
+    resumeFlagship: true,
+    description: "A production Android trivia application built using Java and Android SDK under a professional engagement with Netrom Services India Pvt. Ltd. Integrated Firebase Realtime Database for live quiz delivery, score tracking, and leaderboard updates.",
+    problemSolved: "Real-time multi-user quiz games must synchronize live scores across heterogeneous Android devices without draining batteries or dropping state during configuration changes.",
+    workaroundHighlight: "Mastered Android lifecycle intricacies and background services to eliminate state loss when users received phone calls or rotated screens during time-sensitive trivia rounds.",
+    architecture: "Native Android MVVM architecture paired with Firebase Realtime Database event listeners. Clean lifecycle-bound ViewModels ensure smooth screen rotation handling and background recovery.",
     techStack: ["Java", "Android SDK", "Firebase Realtime Database", "XML Layouts", "Background Services"],
+    bulletPoints: [
+      "Built and shipped a production Android trivia app to the Google Play Store under a professional engagement with Netrom Services India Pvt. Ltd. (listing since deactivated).",
+      "Integrated Firebase Realtime Database for live quiz delivery, score tracking, and leaderboard updates.",
+      "Applied Android lifecycle management and background sync to maintain stability across devices."
+    ],
     features: [
       "Real-time quiz delivery powered by Firebase Realtime DB",
       "Live score calculation and dynamic multi-player leaderboards",
@@ -101,10 +129,17 @@ export const projectsData = [
     timeline: "2025",
     category: "Full Stack",
     headline: "Real-time inventory management and predictive business metrics platform",
+    resumeFlagship: false,
     description: "A modern web dashboard for inventory tracking, low-stock notifications, sales metric visualization, and real-time database syncing built on React.js and Firebase.",
     problemSolved: "Small businesses struggle with disjointed spreadsheets and lack automated visibility into item depletion rates and restocking cycles.",
+    workaroundHighlight: "Implemented reactive Firestore snapshot listeners and automated low-stock triggers with client-side CSV data transformation.",
     architecture: "Single Page Application (SPA) in React backed by Firebase authentication and Firestore triggers for real-time ledger updates and CSV export generation.",
     techStack: ["React.js", "Firebase", "Node.js", "Chart.js", "Tailwind CSS"],
+    bulletPoints: [
+      "Engineered real-time inventory tracking with automated stock depletion alerts.",
+      "Designed visual analytics dashboards for revenue patterns and item velocities.",
+      "Integrated secure multi-role access controls and audit logging."
+    ],
     features: [
       "Real-time item stock tracking and automated reorder alerts",
       "Interactive data visualizations for monthly revenue and depletion",
@@ -124,10 +159,17 @@ export const projectsData = [
     timeline: "2025",
     category: "Systems & Security",
     headline: "System telemetry visualization platform for Linux server health and logs",
+    resumeFlagship: false,
     description: "A centralized dashboard for monitoring server CPU, memory, active network connections, and system log anomalies with real-time graphing and alerts.",
     problemSolved: "Command-line tools like top and htop lack persistent historical graphing and unified multi-metric observation across network interfaces.",
+    workaroundHighlight: "Wrote lightweight Python sampling scripts polling Linux /proc pseudo-filesystem with minimal CPU consumption.",
     architecture: "Python daemon sampling /proc and system metrics, publishing to a lightweight web socket gateway that feeds into a React charting dashboard.",
     techStack: ["Linux", "Python", "React.js", "WebSockets", "Chart.js"],
+    bulletPoints: [
+      "Built lightweight Linux system sampling daemon consuming < 1% CPU overhead.",
+      "Streamed system telemetry via WebSockets into reactive React charting components.",
+      "Parsed syslog records for anomaly flags with visual severity indicators."
+    ],
     features: [
       "Real-time CPU, RAM, and disk utilization graphs",
       "Live network throughput and connection socket telemetry",

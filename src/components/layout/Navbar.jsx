@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Box } from '@mui/material';
-import { Menu as MenuIcon, Close as CloseIcon, Search, Download } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Box, Tooltip } from '@mui/material';
+import { Menu as MenuIcon, Close as CloseIcon, Search, Download, LightMode, DarkMode } from '@mui/icons-material';
 import { personalInfo } from '../../data/socialLinks';
+import { useThemeMode } from '../../context/ThemeContext';
 
 const navLinks = [
   { title: 'About', id: 'about' },
@@ -16,6 +17,7 @@ const navLinks = [
 const Navbar = ({ onOpenCommandPalette }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { mode, toggleTheme, isDark } = useThemeMode();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,10 +40,10 @@ const Navbar = ({ onOpenCommandPalette }) => {
       position="fixed"
       elevation={0}
       sx={{
-        background: scrolled ? 'rgba(7, 10, 19, 0.88)' : 'rgba(7, 10, 19, 0.4)',
-        backdropFilter: 'blur(16px)',
+        background: scrolled ? 'var(--navbar-bg)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(16px)' : 'none',
         borderBottom: '1px solid',
-        borderColor: scrolled ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255, 255, 255, 0.05)',
+        borderColor: scrolled ? 'var(--navbar-border)' : 'transparent',
         transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         zIndex: 1100
       }}
@@ -57,8 +59,11 @@ const Navbar = ({ onOpenCommandPalette }) => {
               width: 38,
               height: 38,
               borderRadius: '10px',
-              background: 'linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(168,85,247,0.15) 100%)',
-              border: '1px solid rgba(0,242,254,0.4)',
+              background: isDark 
+                ? 'linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(168,85,247,0.15) 100%)' 
+                : 'linear-gradient(135deg, rgba(2,132,199,0.12) 0%, rgba(124,58,237,0.12) 100%)',
+              border: '1px solid',
+              borderColor: 'var(--card-border-hover)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -71,7 +76,7 @@ const Navbar = ({ onOpenCommandPalette }) => {
           </Box>
 
           <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#fff', lineHeight: 1.1, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1, display: 'flex', alignItems: 'center', gap: 1 }}>
               {personalInfo.name}
               <Box component="span" sx={{ display: { xs: 'none', sm: 'inline-block' }, width: 6, height: 6, borderRadius: '50%', bgcolor: '#10b981', boxShadow: '0 0 8px #10b981' }} />
             </Typography>
@@ -90,7 +95,7 @@ const Navbar = ({ onOpenCommandPalette }) => {
               sx={{
                 color: 'var(--text-secondary)',
                 fontSize: '0.88rem',
-                fontWeight: 500,
+                fontWeight: 600,
                 textTransform: 'none',
                 px: 1.6,
                 py: 0.6,
@@ -107,8 +112,29 @@ const Navbar = ({ onOpenCommandPalette }) => {
           ))}
         </Box>
 
-        {/* Right Actions: Command Palette Trigger + Resume */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        {/* Right Actions: Theme Toggle + Search + Resume */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+          {/* Light / Dark Mode Toggle */}
+          <Tooltip title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}>
+            <IconButton
+              onClick={toggleTheme}
+              aria-label="Toggle theme mode"
+              sx={{
+                color: isDark ? 'var(--primary-glow)' : '#f59e0b',
+                bgcolor: isDark ? 'rgba(0, 242, 254, 0.08)' : 'rgba(245, 158, 11, 0.12)',
+                border: '1px solid',
+                borderColor: isDark ? 'rgba(0, 242, 254, 0.3)' : 'rgba(245, 158, 11, 0.35)',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                '&:hover': {
+                  transform: 'rotate(20deg) scale(1.08)',
+                  bgcolor: isDark ? 'rgba(0, 242, 254, 0.2)' : 'rgba(245, 158, 11, 0.25)'
+                }
+              }}
+            >
+              {isDark ? <LightMode sx={{ fontSize: 18 }} /> : <DarkMode sx={{ fontSize: 18 }} />}
+            </IconButton>
+          </Tooltip>
+
           {/* Command Palette Trigger */}
           <Button
             onClick={onOpenCommandPalette}
@@ -117,8 +143,8 @@ const Navbar = ({ onOpenCommandPalette }) => {
             startIcon={<Search sx={{ fontSize: 16 }} />}
             sx={{
               display: { xs: 'none', sm: 'inline-flex' },
-              borderColor: 'rgba(255, 255, 255, 0.12)',
-              bgcolor: 'rgba(255, 255, 255, 0.03)',
+              borderColor: 'var(--card-border)',
+              bgcolor: 'var(--subtle-chip-bg)',
               color: 'var(--text-secondary)',
               textTransform: 'none',
               fontFamily: 'JetBrains Mono, monospace',
@@ -128,7 +154,7 @@ const Navbar = ({ onOpenCommandPalette }) => {
               borderRadius: '8px',
               '&:hover': {
                 borderColor: 'var(--primary-glow)',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 bgcolor: 'rgba(0, 242, 254, 0.08)'
               }
             }}
@@ -145,16 +171,17 @@ const Navbar = ({ onOpenCommandPalette }) => {
             startIcon={<Download sx={{ fontSize: 16 }} />}
             sx={{
               display: { xs: 'none', lg: 'inline-flex' },
-              bgcolor: 'rgba(0, 242, 254, 0.12)',
-              border: '1px solid rgba(0, 242, 254, 0.4)',
+              bgcolor: isDark ? 'rgba(0, 242, 254, 0.12)' : 'rgba(2, 132, 199, 0.12)',
+              border: '1px solid',
+              borderColor: isDark ? 'rgba(0, 242, 254, 0.4)' : 'rgba(2, 132, 199, 0.4)',
               color: 'var(--primary-glow)',
               fontWeight: 600,
               fontSize: '0.8rem',
               textTransform: 'none',
               borderRadius: '8px',
               '&:hover': {
-                bgcolor: 'rgba(0, 242, 254, 0.25)',
-                boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)'
+                bgcolor: isDark ? 'rgba(0, 242, 254, 0.25)' : 'rgba(2, 132, 199, 0.25)',
+                boxShadow: '0 0 15px rgba(0, 242, 254, 0.25)'
               }
             }}
           >
@@ -172,7 +199,7 @@ const Navbar = ({ onOpenCommandPalette }) => {
           {/* Mobile Hamburger Drawer toggle */}
           <IconButton
             onClick={() => setMobileOpen(!mobileOpen)}
-            sx={{ display: { md: 'none' }, color: '#fff' }}
+            sx={{ display: { md: 'none' }, color: 'var(--text-primary)' }}
           >
             {mobileOpen ? <CloseIcon /> : <MenuIcon />}
           </IconButton>
@@ -186,10 +213,10 @@ const Navbar = ({ onOpenCommandPalette }) => {
         onClose={() => setMobileOpen(false)}
         PaperProps={{
           sx: {
-            width: 270,
-            background: 'rgba(7, 10, 19, 0.98)',
+            width: 280,
+            background: 'var(--card-bg)',
             backdropFilter: 'blur(20px)',
-            borderLeft: '1px solid rgba(56, 189, 248, 0.2)',
+            borderLeft: '1px solid var(--card-border)',
             p: 2.5
           }
         }}
@@ -198,9 +225,31 @@ const Navbar = ({ onOpenCommandPalette }) => {
           <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: 'var(--primary-glow)' }}>
             Navigation
           </Typography>
-          <IconButton onClick={() => setMobileOpen(false)} sx={{ color: '#fff' }}>
+          <IconButton onClick={() => setMobileOpen(false)} sx={{ color: 'var(--text-primary)' }}>
             <CloseIcon />
           </IconButton>
+        </Box>
+
+        {/* Mobile Theme Toggle Button */}
+        <Box sx={{ mb: 2, pb: 2, borderBottom: '1px solid var(--card-border)' }}>
+          <Button
+            fullWidth
+            onClick={toggleTheme}
+            startIcon={isDark ? <LightMode sx={{ color: '#f59e0b' }} /> : <DarkMode sx={{ color: '#0284c7' }} />}
+            sx={{
+              justifyContent: 'flex-start',
+              px: 2,
+              py: 1.2,
+              borderRadius: '8px',
+              color: 'var(--text-primary)',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.85rem',
+              bgcolor: 'var(--subtle-chip-bg)',
+              border: '1px solid var(--card-border)'
+            }}
+          >
+            {isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          </Button>
         </Box>
 
         <List>
@@ -216,7 +265,7 @@ const Navbar = ({ onOpenCommandPalette }) => {
                 <ListItemText
                   primary={link.title}
                   primaryTypographyProps={{
-                    sx: { color: '#f1f5f9', fontWeight: 500, fontSize: '1rem' }
+                    sx: { color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem' }
                   }}
                 />
               </ListItemButton>
@@ -224,7 +273,7 @@ const Navbar = ({ onOpenCommandPalette }) => {
           ))}
         </List>
 
-        <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+        <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid var(--card-border)', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <Button
             fullWidth
             href="/assets/resume/Ashish_Kumar_Resume.pdf"
@@ -250,8 +299,8 @@ const Navbar = ({ onOpenCommandPalette }) => {
             variant="contained"
             startIcon={<Search />}
             sx={{
-              bgcolor: 'rgba(56, 189, 248, 0.2)',
-              color: '#fff',
+              bgcolor: isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.2)',
+              color: 'var(--text-primary)',
               fontFamily: 'JetBrains Mono, monospace',
               fontSize: '0.85rem'
             }}

@@ -27,15 +27,15 @@ const Resume = () => {
 
         <Grid container spacing={5} alignItems="center">
           {/* Left Column: Summary */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <Box className="glass-container" sx={{ p: { xs: 3, sm: 4.5 }, borderRadius: '16px', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: '#fff' }}>
+              <Box className="glass-container" sx={{ p: { xs: 3, sm: 4.5 }, borderRadius: '16px', border: '1px solid var(--card-border)', bgcolor: 'var(--card-bg)' }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2, color: 'var(--text-primary)' }}>
                   Technical Summary
                 </Typography>
 
@@ -87,8 +87,8 @@ const Resume = () => {
                     download="Ashish_Kumar_Resume.pdf"
                     startIcon={<Download />}
                     sx={{
-                      borderColor: 'rgba(56, 189, 248, 0.3)',
-                      color: '#fff',
+                      borderColor: 'var(--card-border)',
+                      color: 'var(--text-primary)',
                       fontFamily: 'JetBrains Mono, monospace',
                       fontSize: '0.88rem',
                       textTransform: 'none',
@@ -106,7 +106,7 @@ const Resume = () => {
           </Grid>
 
           {/* Right Column: Interactive Paper Preview Card */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -125,8 +125,8 @@ const Resume = () => {
                   justifyContent: 'center',
                   textAlign: 'center',
                   borderRadius: '20px',
-                  border: '1px solid rgba(56, 189, 248, 0.25)',
-                  bgcolor: 'rgba(10, 15, 30, 0.75)',
+                  border: '1px solid var(--card-border)',
+                  bgcolor: 'var(--card-bg)',
                   cursor: 'pointer',
                   position: 'relative',
                   overflow: 'hidden'
@@ -149,7 +149,7 @@ const Resume = () => {
                   <Description sx={{ fontSize: 44, color: 'var(--primary-glow)' }} />
                 </Box>
 
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: '#fff' }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'var(--text-primary)' }}>
                   Ashish_Kumar_Resume.pdf
                 </Typography>
 
@@ -216,20 +216,20 @@ const Resume = () => {
                 sx={{
                   width: '100%',
                   height: '100%',
-                  bgcolor: '#040814',
-                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  bgcolor: 'var(--card-bg)',
+                  border: '1px solid var(--card-border)',
                   borderRadius: '16px',
                   display: 'flex',
                   flexDirection: 'column',
                   overflow: 'hidden',
-                  boxShadow: '0 25px 60px rgba(0,0,0,0.8)'
+                  boxShadow: 'var(--card-shadow)'
                 }}
               >
                 {/* Header */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, px: 3, borderBottom: '1px solid rgba(255,255,255,0.08)', bgcolor: '#070c1a' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, px: 3, borderBottom: '1px solid var(--card-border)', bgcolor: 'var(--subtle-chip-bg)' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                     <Description sx={{ color: 'var(--primary-glow)', fontSize: 20 }} />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#fff', fontFamily: 'JetBrains Mono, monospace' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace' }}>
                       Ashish Kumar – Curriculum Vitae (PDF)
                     </Typography>
                   </Box>
@@ -251,7 +251,7 @@ const Resume = () => {
                     >
                       Download PDF
                     </Button>
-                    <IconButton onClick={() => setOpen(false)} sx={{ color: '#fff' }}>
+                    <IconButton onClick={() => setOpen(false)} sx={{ color: 'var(--text-primary)' }}>
                       <Close />
                     </IconButton>
                   </Box>

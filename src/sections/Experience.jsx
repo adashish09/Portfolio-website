@@ -4,9 +4,11 @@ import { motion } from 'framer-motion';
 import { School, Work, CalendarToday } from '@mui/icons-material';
 import SectionHeader from '../components/ui/SectionHeader';
 import { timelineData } from '../data/experience';
+import { useThemeMode } from '../context/ThemeContext';
 
 const Experience = () => {
   const [filter, setFilter] = useState('ALL');
+  const { isDark } = useThemeMode();
 
   const filteredTimeline = filter === 'ALL'
     ? timelineData
@@ -38,12 +40,14 @@ const Experience = () => {
                 py: 2,
                 px: 1.2,
                 borderRadius: '8px',
-                bgcolor: filter === tab.val ? 'var(--primary-glow)' : 'rgba(12, 18, 34, 0.6)',
-                color: filter === tab.val ? '#050814' : 'var(--text-secondary)',
+                bgcolor: filter === tab.val ? 'var(--primary-glow)' : 'var(--card-bg)',
+                color: filter === tab.val ? (isDark ? '#050814' : '#fff') : 'var(--text-secondary)',
                 fontWeight: filter === tab.val ? 700 : 500,
                 border: '1px solid',
-                borderColor: filter === tab.val ? 'var(--primary-glow)' : 'rgba(56, 189, 248, 0.2)',
+                borderColor: filter === tab.val ? 'var(--primary-glow)' : 'var(--card-border)',
+                boxShadow: 'var(--card-shadow)',
                 cursor: 'pointer',
+                transition: 'all 0.2s ease',
                 '&:hover': {
                   bgcolor: filter === tab.val ? 'var(--secondary-glow)' : 'rgba(56, 189, 248, 0.1)'
                 }
@@ -91,7 +95,7 @@ const Experience = () => {
                     width: '20px',
                     height: '20px',
                     borderRadius: '50%',
-                    bgcolor: '#070a13',
+                    bgcolor: 'var(--bg-color)',
                     border: '3px solid var(--primary-glow)',
                     zIndex: 2,
                     boxShadow: '0 0 15px var(--primary-glow)',
@@ -100,7 +104,7 @@ const Experience = () => {
                     justifyContent: 'center'
                   }}
                 >
-                  <Box sx={{ width: '6px', height: '6px', borderRadius: '50%', bgcolor: '#fff' }} />
+                  <Box sx={{ width: '6px', height: '6px', borderRadius: '50%', bgcolor: 'var(--primary-glow)' }} />
                 </Box>
 
                 {/* Timeline Card Content */}
@@ -124,7 +128,8 @@ const Experience = () => {
                       sx={{
                         p: { xs: 2.5, sm: 3.5 },
                         borderRadius: '16px',
-                        border: '1px solid rgba(56, 189, 248, 0.18)',
+                        border: '1px solid var(--card-border)',
+                        bgcolor: 'var(--card-bg)',
                         textAlign: 'left'
                       }}
                     >
@@ -153,7 +158,7 @@ const Experience = () => {
                       </Box>
 
                       {/* Title & Organization */}
-                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#fff', mb: 0.5, fontSize: '1.15rem' }}>
+                      <Typography variant="h6" sx={{ fontWeight: 700, color: 'var(--text-primary)', mb: 0.5, fontSize: '1.15rem' }}>
                         {item.title}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'var(--secondary-glow)', fontWeight: 600, mb: 1.5, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem' }}>

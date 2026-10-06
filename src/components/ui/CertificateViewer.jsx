@@ -13,18 +13,18 @@ const CertificateViewer = ({ certificate, open, onClose }) => {
       fullWidth
       PaperProps={{
         sx: {
-          background: 'rgba(5, 8, 22, 0.9)',
+          background: 'var(--card-bg)',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(0, 242, 254, 0.3)',
+          border: '1px solid var(--card-border)',
           borderRadius: '16px',
-          color: '#fff',
+          color: 'var(--text-primary)',
           overflow: 'hidden'
         }
       }}
       slotProps={{
         backdrop: {
           sx: {
-            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
             backdropFilter: 'blur(8px)',
           }
         }
@@ -40,13 +40,13 @@ const CertificateViewer = ({ certificate, open, onClose }) => {
             style={{ display: 'flex', flexDirection: 'column', height: '80vh' }}
           >
             {/* Header */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, borderBottom: '1px solid var(--card-border)' }}>
               <Box>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#fff' }}>{certificate.title}</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{certificate.title}</Typography>
                 <Typography variant="caption" sx={{ color: 'var(--primary-glow)' }}>{certificate.organization} • {certificate.issueDate}</Typography>
               </Box>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton onClick={onClose} sx={{ color: '#fff', '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' } }}>
+                <IconButton onClick={onClose} sx={{ color: 'var(--text-primary)', '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' } }}>
                   <Close />
                 </IconButton>
               </Box>

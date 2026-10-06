@@ -8,7 +8,7 @@ const Footer = () => {
   };
 
   return (
-    <Box component="footer" sx={{ bgcolor: '#040711', borderTop: '1px solid rgba(56, 189, 248, 0.12)', py: 6, position: 'relative' }}>
+    <Box component="footer" sx={{ bgcolor: 'var(--bg-primary)', borderTop: '1px solid var(--card-border)', py: 6, position: 'relative', transition: 'background-color 0.3s ease, border-color 0.3s ease' }}>
       <Container maxWidth="lg">
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 3 }}>
           {/* Brand info */}
@@ -41,8 +41,8 @@ const Footer = () => {
               target="_blank"
               sx={{
                 color: 'var(--text-secondary)',
-                bgcolor: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                bgcolor: 'var(--card-bg)',
+                border: '1px solid var(--card-border)',
                 '&:hover': { color: 'var(--primary-glow)', borderColor: 'var(--primary-glow)', bgcolor: 'rgba(0,242,254,0.1)' }
               }}
             >
@@ -53,8 +53,8 @@ const Footer = () => {
               target="_blank"
               sx={{
                 color: 'var(--text-secondary)',
-                bgcolor: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                bgcolor: 'var(--card-bg)',
+                border: '1px solid var(--card-border)',
                 '&:hover': { color: 'var(--primary-glow)', borderColor: 'var(--primary-glow)', bgcolor: 'rgba(0,242,254,0.1)' }
               }}
             >
@@ -64,8 +64,8 @@ const Footer = () => {
               href={`mailto:${personalInfo.email}`}
               sx={{
                 color: 'var(--text-secondary)',
-                bgcolor: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                bgcolor: 'var(--card-bg)',
+                border: '1px solid var(--card-border)',
                 '&:hover': { color: 'var(--primary-glow)', borderColor: 'var(--primary-glow)', bgcolor: 'rgba(0,242,254,0.1)' }
               }}
             >
@@ -75,9 +75,9 @@ const Footer = () => {
               onClick={scrollToTop}
               sx={{
                 color: 'var(--text-secondary)',
-                bgcolor: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                '&:hover': { color: '#fff', borderColor: 'rgba(255,255,255,0.3)', bgcolor: 'rgba(255,255,255,0.08)' }
+                bgcolor: 'var(--card-bg)',
+                border: '1px solid var(--card-border)',
+                '&:hover': { color: 'var(--text-primary)', borderColor: 'var(--primary-glow)', bgcolor: 'rgba(56,189,248,0.1)' }
               }}
             >
               <KeyboardArrowUp fontSize="small" />
@@ -85,7 +85,7 @@ const Footer = () => {
           </Stack>
         </Box>
 
-        <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid var(--card-border)', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
           <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
             &copy; {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
           </Typography>

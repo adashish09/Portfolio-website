@@ -1,22 +1,67 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap');
 
+/* ==========================================================================
+   CSS VARIABLES & DESIGN SYSTEM (DARK MODE DEFAULT)
+   ========================================================================== */
 :root {
-  --bg-color: #050813;
-  --bg-secondary: #090e1e;
-  --bg-tertiary: #0f172a;
-  --card-bg: rgba(9, 14, 28, 0.75);
+  --bg-color: #050814;
+  --bg-secondary: #090e22;
+  --bg-tertiary: #0e172e;
+  --card-bg: rgba(9, 14, 28, 0.82);
   --card-border: rgba(56, 189, 248, 0.16);
   --card-border-hover: rgba(0, 242, 254, 0.55);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   --primary-glow: #00f2fe;
   --secondary-glow: #38bdf8;
   --accent-purple: #a855f7;
   --accent-emerald: #10b981;
+  --accent-coral: #f43f5e;
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
   --text-muted: #64748b;
   --code-bg: #030712;
+  --navbar-bg: rgba(7, 10, 19, 0.82);
+  --navbar-border: rgba(56, 189, 248, 0.18);
+  --glass-panel: rgba(15, 23, 42, 0.65);
+  --glass-panel-border: rgba(255, 255, 255, 0.08);
+  --subtle-chip-bg: rgba(255, 255, 255, 0.05);
+  --subtle-chip-border: rgba(255, 255, 255, 0.1);
+  --grid-line-color: rgba(56, 189, 248, 0.06);
 }
 
+/* ==========================================================================
+   LIGHT MODE DESIGN TOKENS
+   ========================================================================== */
+[data-theme='light'],
+body.light-mode {
+  --bg-color: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e2e8f0;
+  --card-bg: rgba(255, 255, 255, 0.94);
+  --card-border: rgba(14, 165, 233, 0.22);
+  --card-border-hover: rgba(2, 132, 199, 0.65);
+  --card-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --primary-glow: #0284c7;
+  --secondary-glow: #0ea5e9;
+  --accent-purple: #7c3aed;
+  --accent-emerald: #059669;
+  --accent-coral: #e11d48;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --code-bg: #ffffff;
+  --navbar-bg: rgba(255, 255, 255, 0.88);
+  --navbar-border: rgba(14, 165, 233, 0.2);
+  --glass-panel: rgba(248, 250, 252, 0.85);
+  --glass-panel-border: rgba(14, 165, 233, 0.18);
+  --subtle-chip-bg: rgba(15, 23, 42, 0.04);
+  --subtle-chip-border: rgba(15, 23, 42, 0.1);
+  --grid-line-color: rgba(14, 165, 233, 0.08);
+}
+
+/* ==========================================================================
+   BASE & RESET
+   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
@@ -33,12 +78,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Space Grotesk', sans-serif !important;
   letter-spacing: -0.025em;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  color: var(--text-primary);
 }
 
 /* Custom Scrollbar */
@@ -52,9 +99,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--text-muted);
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  opacity: 0.5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -62,69 +109,95 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: rgba(0, 242, 254, 0.25);
-  color: #fff;
+  background: rgba(0, 242, 254, 0.28);
+  color: inherit;
 }
 
-/* Developer Typography Utility */
+[data-theme='light'] ::selection {
+  background: rgba(2, 132, 199, 0.22);
+}
+
+/* ==========================================================================
+   TYPOGRAPHY & UTILITIES
+   ========================================================================== */
 .font-mono {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* Glassmorphism 2.0 */
-.glass-container {
-  background: var(--card-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-.glass-container:hover {
-  border-color: var(--card-border-hover);
-}
-
-.glass-panel {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
 /* Text Gradients */
 .text-gradient {
-  background: linear-gradient(135deg, #00f2fe 0%, #38bdf8 50%, #818cf8 100%);
+  background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 50%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme='light'] .text-gradient {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .text-gradient-purple {
-  background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #38bdf8 100%);
+  background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, var(--secondary-glow) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glow Utilities */
-.glow-cyan {
-  box-shadow: 0 0 25px rgba(0, 242, 254, 0.35);
+/* ==========================================================================
+   GLASSMORPHISM & CARDS
+   ========================================================================== */
+.glass-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
 }
 
-.glow-purple {
-  box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+.glass-container:hover {
+  border-color: var(--card-border-hover);
 }
 
-/* Terminal & Code Badges */
+.card-hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.glass-panel {
+  background: var(--glass-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-panel-border);
+}
+
+/* ==========================================================================
+   DEVELOPER BADGES & PILLS
+   ========================================================================== */
 .code-badge {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   padding: 3px 8px;
   border-radius: 6px;
   background: rgba(56, 189, 248, 0.08);
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.24);
   color: var(--secondary-glow);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+[data-theme='light'] .code-badge {
+  background: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.24);
+  color: #0369a1;
 }
 
 .kbd-badge {
@@ -132,28 +205,42 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.72rem;
   padding: 2px 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--subtle-chip-bg);
+  border: 1px solid var(--subtle-chip-border);
   color: var(--text-secondary);
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* Terminal Window Frame */
+/* ==========================================================================
+   TERMINAL & CODE SNIPPETS (AUTHENTIC DEV EDITOR LOOK IN BOTH MODES)
+   ========================================================================== */
 .terminal-window {
   background: #040814;
   border: 1px solid rgba(56, 189, 248, 0.25);
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.08);
+  transition: border-color 0.25s ease;
+}
+
+[data-theme='light'] .terminal-window {
+  background: #ffffff;
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08), 0 0 20px rgba(2, 132, 199, 0.06);
 }
 
 .terminal-header {
-  background: rgba(15, 23, 42, 0.9);
+  background: #090e22;
   padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='light'] .terminal-header {
+  background: #f1f5f9;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.95);
 }
 
 .terminal-dots {
@@ -171,7 +258,6 @@ h1, h2, h3, h4, h5, h6 {
 .terminal-dot.yellow { background: #f59e0b; }
 .terminal-dot.green { background: #10b981; }
 
-/* Blinking Cursor */
 .terminal-cursor {
   display: inline-block;
   width: 8px;
@@ -187,8 +273,101 @@ h1, h2, h3, h4, h5, h6 {
   50% { opacity: 0; }
 }
 
-/* Subtle Matrix Grid Pattern */
+/* Background grid pattern */
 .bg-grid-pattern {
-  background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-image: none;
 }
+
+/* Soft animated pulse for live status indicators */
+@keyframes statusPulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.pulse-indicator {
+  animation: statusPulse 2.2s infinite ease-in-out;
+}
+
+/* ==========================================================================
+   SKILLS ARSENAL & TECH BADGES (AUTHENTIC DEVELOPER UX)
+   ========================================================================== */
+.skills-ambient-bg {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(0, 242, 254, 0.06) 0%, transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.05) 0%, transparent 55%);
+}
+
+[data-theme='light'] .skills-ambient-bg {
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(14, 165, 233, 0.05) 0%, transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(124, 58, 237, 0.04) 0%, transparent 55%);
+}
+
+/* Infinite Marquee Track */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.marquee-content {
+  display: inline-flex;
+  gap: 16px;
+  animation: marqueeScroll 32s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Modern Tech Badge Card */
+.tech-badge-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 16px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.tech-badge-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-glow);
+  box-shadow: 0 10px 24px -6px rgba(0, 242, 254, 0.25);
+}
+
+.tech-badge-card.active-inspected {
+  border-color: var(--primary-glow);
+  box-shadow: 0 0 0 2px var(--primary-glow), 0 12px 28px -6px rgba(0, 242, 254, 0.35);
+  background: var(--card-bg);
+}
+
+/* Tech Inspector HUD Panel */
+.tech-inspector-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+}
+

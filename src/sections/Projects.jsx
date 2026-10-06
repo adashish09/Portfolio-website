@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Box, Container, Typography, Card, CardMedia, CardContent, Chip, IconButton, Button, Tooltip } from '@mui/material';
-import { GitHub, OpenInNew, Visibility, ContentCopy, Check } from '@mui/icons-material';
+import { GitHub, OpenInNew, Visibility, ContentCopy, Check, Star, Bolt, Terminal } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionHeader from '../components/ui/SectionHeader';
 import ProjectModal from '../components/ui/ProjectModal';
 import { projectsData } from '../data/projects';
+import { useThemeMode } from '../context/ThemeContext';
 
 const ProjectCard = ({ project, onViewDetails }) => {
+  const { isDark } = useThemeMode();
   const [copied, setCopied] = useState(false);
 
   const handleCopyClone = (e) => {
@@ -14,7 +16,7 @@ const ProjectCard = ({ project, onViewDetails }) => {
     if (project.cloneCmd) {
       navigator.clipboard.writeText(project.cloneCmd);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 2200);
     }
   };
 
@@ -34,12 +36,13 @@ const ProjectCard = ({ project, onViewDetails }) => {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          borderRadius: '16px',
+          borderRadius: '18px',
           overflow: 'hidden',
           cursor: 'pointer',
-          border: '1px solid rgba(56, 189, 248, 0.16)',
-          bgcolor: 'rgba(10, 15, 29, 0.75)',
-          position: 'relative'
+          border: project.resumeFlagship ? '1px solid var(--primary-glow)' : '1px solid var(--card-border)',
+          bgcolor: 'var(--card-bg)',
+          position: 'relative',
+          boxShadow: project.resumeFlagship ? '0 10px 30px rgba(0, 242, 254, 0.15)' : 'var(--card-shadow)'
         }}
       >
         {/* Project Thumbnail with Overlay Badges */}
@@ -56,38 +59,54 @@ const ProjectCard = ({ project, onViewDetails }) => {
               '&:hover': { transform: 'scale(1.04)' }
             }}
           />
-          <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(7,10,19,0.2) 0%, rgba(7,10,19,0.85) 100%)' }} />
+          <Box sx={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, ${isDark ? 'rgba(7,10,19,0.92)' : 'rgba(255,255,255,0.95)'} 100%)` }} />
 
-          {/* Top Category Badge */}
-          <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 2 }}>
+          {/* Top Badges */}
+          <Box sx={{ position: 'absolute', top: 12, left: 12, zIndex: 2, display: 'flex', gap: 0.8, flexWrap: 'wrap' }}>
             <Chip
               label={project.category}
               size="small"
               sx={{
-                bgcolor: 'rgba(7, 10, 19, 0.85)',
+                bgcolor: isDark ? 'rgba(7, 10, 19, 0.9)' : 'rgba(255, 255, 255, 0.92)',
                 backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(0, 242, 254, 0.5)',
+                border: isDark ? '1px solid rgba(0, 242, 254, 0.5)' : '1px solid rgba(2, 132, 199, 0.35)',
                 color: 'var(--primary-glow)',
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: '0.72rem',
                 fontWeight: 600
               }}
             />
+            {project.resumeFlagship && (
+              <Chip
+                icon={<Star sx={{ fontSize: '13px !important', color: '#10b981 !important' }} />}
+                label="Resume Flagship"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? 'rgba(7, 10, 19, 0.9)' : 'rgba(255, 255, 255, 0.92)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid #10b981',
+                  color: isDark ? '#34d399' : '#059669',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.7rem',
+                  fontWeight: 700
+                }}
+              />
+            )}
           </Box>
 
           {/* Quick Clone Button */}
           {project.cloneCmd && (
             <Box sx={{ position: 'absolute', top: 12, right: 12, zIndex: 2 }}>
-              <Tooltip title={copied ? "Copied!" : "Copy git clone"}>
+              <Tooltip title={copied ? "Copied git clone!" : "Copy git clone command"}>
                 <IconButton
                   size="small"
                   onClick={handleCopyClone}
                   sx={{
-                    bgcolor: 'rgba(7, 10, 19, 0.85)',
+                    bgcolor: isDark ? 'rgba(7, 10, 19, 0.9)' : 'rgba(255, 255, 255, 0.92)',
                     color: copied ? '#10b981' : 'var(--text-secondary)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid var(--card-border)',
                     backdropFilter: 'blur(8px)',
-                    '&:hover': { color: 'var(--primary-glow)', bgcolor: '#040814' }
+                    '&:hover': { color: 'var(--primary-glow)', bgcolor: 'var(--card-bg)' }
                   }}
                 >
                   {copied ? <Check fontSize="small" /> : <ContentCopy fontSize="small" />}
@@ -98,19 +117,19 @@ const ProjectCard = ({ project, onViewDetails }) => {
 
           {/* Timeline Pill */}
           <Box sx={{ position: 'absolute', bottom: 10, left: 14, zIndex: 2 }}>
-            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: '#cbd5e1', fontSize: '0.75rem' }}>
+            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: '#cbd5e1', fontSize: '0.75rem', bgcolor: 'rgba(0,0,0,0.6)', px: 1, py: 0.3, borderRadius: '4px' }}>
               {project.timeline}
             </Typography>
           </Box>
         </Box>
 
         {/* Card Content */}
-        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: 3, pt: 2.5 }}>
+        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: 3, pt: 2.2 }}>
           <Typography
             variant="h6"
             sx={{
-              fontWeight: 700,
-              color: '#fff',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
               lineHeight: 1.3,
               mb: 1,
               fontSize: '1.15rem'
@@ -126,10 +145,11 @@ const ProjectCard = ({ project, onViewDetails }) => {
               lineHeight: 1.6,
               mb: 2.5,
               display: '-webkit-box',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 4,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              minHeight: '68px'
+              minHeight: '68px',
+              fontSize: '0.88rem'
             }}
           >
             {project.headline || project.description}
@@ -150,7 +170,7 @@ const ProjectCard = ({ project, onViewDetails }) => {
           </Box>
 
           {/* Bottom Action Footer */}
-          <Box sx={{ mt: 'auto', pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ mt: 'auto', pt: 2, borderTop: '1px solid var(--card-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Button
               size="small"
               startIcon={<Visibility sx={{ fontSize: 16 }} />}
@@ -160,11 +180,11 @@ const ProjectCard = ({ project, onViewDetails }) => {
                 textTransform: 'none',
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: '0.8rem',
-                fontWeight: 600,
+                fontWeight: 700,
                 '&:hover': { bgcolor: 'rgba(0, 242, 254, 0.08)' }
               }}
             >
-              Architecture Deep Dive
+              Architecture & Details
             </Button>
 
             <Box sx={{ display: 'flex', gap: 1 }}>
@@ -201,6 +221,7 @@ const ProjectCard = ({ project, onViewDetails }) => {
 const Projects = ({ onSelectProjectModal, selectedProjectModal, onCloseProjectModal }) => {
   const [internalSelected, setInternalSelected] = useState(null);
   const [filter, setFilter] = useState('ALL');
+  const { isDark } = useThemeMode();
 
   const selectedProject = selectedProjectModal || internalSelected;
   const handleSelect = (project) => {
@@ -218,46 +239,60 @@ const Projects = ({ onSelectProjectModal, selectedProjectModal, onCloseProjectMo
     }
   };
 
-  const categories = ['ALL', 'AI & LLM', 'Systems & Security', 'Mobile Apps', 'Full Stack'];
+  const categories = [
+    { id: 'ALL', label: 'All Projects' },
+    { id: 'FLAGSHIP', label: '⭐ Resume Flagships' },
+    { id: 'AI & LLM', label: 'AI & LLM' },
+    { id: 'Systems & Security', label: 'Systems & Linux' },
+    { id: 'Mobile Apps', label: 'Mobile Apps' }
+  ];
 
-  const filteredProjects = filter === 'ALL'
-    ? projectsData
-    : projectsData.filter((p) => p.category === filter);
+  const filteredProjects = projectsData.filter((p) => {
+    if (filter === 'ALL') return true;
+    if (filter === 'FLAGSHIP') return p.resumeFlagship;
+    return p.category === filter;
+  });
 
   return (
     <section id="projects" style={{ minHeight: '100vh', padding: '110px 0', position: 'relative' }}>
       <Container maxWidth="lg">
         <SectionHeader
-          tag="CODE & SYSTEMS"
+          tag="ENGINEERED SYSTEMS"
           title="Featured Projects"
-          subtitle="Production-ready applications, local AI pipelines, network telemetry, and cross-platform mobile systems."
+          subtitle="Four independent flagship architectures built across AI & LLMs, Linux Security, and Mobile Systems."
         />
 
         {/* Category Filters */}
         <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1.2, mb: 6 }}>
           {categories.map((cat) => {
-            const count = cat === 'ALL' ? projectsData.length : projectsData.filter((p) => p.category === cat).length;
-            const isSelected = filter === cat;
+            const count = cat.id === 'ALL'
+              ? projectsData.length
+              : cat.id === 'FLAGSHIP'
+              ? projectsData.filter((p) => p.resumeFlagship).length
+              : projectsData.filter((p) => p.category === cat.id).length;
+
+            const isSelected = filter === cat.id;
             return (
               <Chip
-                key={cat}
-                label={`${cat} (${count})`}
-                onClick={() => setFilter(cat)}
+                key={cat.id}
+                label={`${cat.label} (${count})`}
+                onClick={() => setFilter(cat.id)}
                 sx={{
                   fontFamily: 'JetBrains Mono, monospace',
                   fontSize: '0.82rem',
                   py: 2.2,
-                  px: 1,
+                  px: 1.2,
                   borderRadius: '10px',
-                  bgcolor: isSelected ? 'var(--primary-glow)' : 'rgba(12, 18, 34, 0.6)',
-                  color: isSelected ? '#050814' : 'var(--text-secondary)',
+                  bgcolor: isSelected ? 'var(--primary-glow)' : 'var(--card-bg)',
+                  color: isSelected ? (isDark ? '#050814' : '#ffffff') : 'var(--text-secondary)',
                   fontWeight: isSelected ? 700 : 500,
                   border: '1px solid',
-                  borderColor: isSelected ? 'var(--primary-glow)' : 'rgba(56, 189, 248, 0.2)',
+                  borderColor: isSelected ? 'var(--primary-glow)' : 'var(--card-border)',
+                  boxShadow: 'var(--card-shadow)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   '&:hover': {
-                    bgcolor: isSelected ? 'var(--secondary-glow)' : 'rgba(56, 189, 248, 0.1)',
+                    bgcolor: isSelected ? 'var(--secondary-glow)' : 'rgba(56, 189, 248, 0.12)',
                     borderColor: 'var(--primary-glow)'
                   }
                 }}

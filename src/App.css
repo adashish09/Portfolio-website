@@ -54,3 +54,10 @@
 .code-syntax-comment { color: #64748b; font-style: italic; }
 .code-syntax-number { color: #fbbf24; }
 .code-syntax-variable { color: #a78bfa; }
+
+[data-theme='light'] .code-syntax-keyword { color: #dc2626; font-weight: 600; }
+[data-theme='light'] .code-syntax-function { color: #0284c7; font-weight: 600; }
+[data-theme='light'] .code-syntax-string { color: #059669; }
+[data-theme='light'] .code-syntax-comment { color: #64748b; font-style: italic; }
+[data-theme='light'] .code-syntax-number { color: #d97706; font-weight: 600; }
+[data-theme='light'] .code-syntax-variable { color: #7c3aed; }

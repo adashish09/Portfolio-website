@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Fab, Zoom } from '@mui/material';
+import { Fab, Zoom, Tooltip } from '@mui/material';
 import { KeyboardArrowUp } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { useThemeMode } from '../../context/ThemeContext';
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { isDark } = useThemeMode();
 
   const toggleVisibility = () => {
     if (window.scrollY > 300) {
@@ -29,8 +31,8 @@ const ScrollToTop = () => {
   return (
     <Zoom in={isVisible}>
       <motion.div
-        whileHover={{ scale: 1.1, boxShadow: '0 0 20px rgba(0, 242, 254, 0.6)' }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.12, y: -2 }}
+        whileTap={{ scale: 0.92 }}
         style={{
           position: 'fixed',
           bottom: '2rem',
@@ -39,21 +41,33 @@ const ScrollToTop = () => {
           borderRadius: '50%'
         }}
       >
-        <Fab 
-          aria-label="scroll back to top" 
-          onClick={scrollToTop}
-          sx={{
-            background: 'rgba(5, 8, 22, 0.8)',
-            border: '1px solid rgba(0, 242, 254, 0.5)',
-            color: 'var(--primary-glow)',
-            backdropFilter: 'blur(10px)',
-            '&:hover': {
-              background: 'rgba(0, 242, 254, 0.2)',
-            }
-          }}
-        >
-          <KeyboardArrowUp />
-        </Fab>
+        <Tooltip title="Back to top" placement="left">
+          <Fab 
+            size="medium"
+            aria-label="scroll back to top" 
+            onClick={scrollToTop}
+            sx={{
+              background: isDark ? 'rgba(9, 14, 28, 0.88)' : 'rgba(255, 255, 255, 0.95)',
+              border: '1.5px solid',
+              borderColor: isDark ? 'rgba(0, 242, 254, 0.45)' : 'rgba(2, 132, 199, 0.45)',
+              color: isDark ? 'var(--primary-glow)' : '#0284c7',
+              backdropFilter: 'blur(12px)',
+              boxShadow: isDark
+                ? '0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 242, 254, 0.2)'
+                : '0 8px 24px rgba(15, 23, 42, 0.12), 0 0 15px rgba(2, 132, 199, 0.12)',
+              transition: 'all 0.25s ease',
+              '&:hover': {
+                background: isDark ? 'rgba(0, 242, 254, 0.2)' : 'rgba(2, 132, 199, 0.12)',
+                borderColor: 'var(--primary-glow)',
+                boxShadow: isDark
+                  ? '0 12px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.4)'
+                  : '0 10px 28px rgba(15, 23, 42, 0.16), 0 0 20px rgba(2, 132, 199, 0.25)'
+              }
+            }}
+          >
+            <KeyboardArrowUp sx={{ fontSize: 26 }} />
+          </Fab>
+        </Tooltip>
       </motion.div>
     </Zoom>
   );

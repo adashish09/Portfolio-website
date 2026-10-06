@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Box, Typography, Button, Stack, Container, Grid, IconButton, Chip } from '@mui/material';
+import { Box, Typography, Button, Stack, Container, Grid, IconButton, Chip, Tooltip } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Download, GitHub, LinkedIn, Email, ArrowForward, Search } from '@mui/icons-material';
+import { Download, GitHub, LinkedIn, Email, ArrowForward, Search, ContentCopy, Check, Terminal, Bolt } from '@mui/icons-material';
 import { personalInfo } from '../data/socialLinks';
 import DeveloperConsole from '../components/ui/DeveloperConsole';
+import { useThemeMode } from '../context/ThemeContext';
 
-const TypewriterText = ({ words, typingSpeed = 70, deletingSpeed = 35, pauseTime = 1800 }) => {
+const TypewriterText = ({ words, typingSpeed = 65, deletingSpeed = 30, pauseTime = 1600 }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -19,7 +20,7 @@ const TypewriterText = ({ words, typingSpeed = 70, deletingSpeed = 35, pauseTime
         timeoutId = setTimeout(() => {
           setIsDeleting(false);
           setCurrentWordIndex((prev) => (prev + 1) % words.length);
-        }, 100);
+        }, 120);
       } else {
         timeoutId = setTimeout(() => {
           setCurrentText(word.substring(0, currentText.length - 1));
@@ -47,47 +48,58 @@ const TypewriterText = ({ words, typingSpeed = 70, deletingSpeed = 35, pauseTime
 };
 
 const Hero = ({ onOpenCommandPalette }) => {
+  const { isDark } = useThemeMode();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 }
+      transition: { staggerChildren: 0.12 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } }
   };
 
   return (
     <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: '100px', paddingBottom: '60px', overflow: 'hidden' }}>
       <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
-        <Grid container spacing={{ xs: 6, lg: 6 }} alignItems="center" justifyContent="space-between">
+        <Grid container spacing={{ xs: 6, lg: 5 }} alignItems="center" justifyContent="space-between">
           
           {/* Left Column: Developer Intro */}
-          <Grid item xs={12} lg={6}>
+          <Grid size={{ xs: 12, lg: 6 }}>
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
-              {/* Status Pill */}
+              {/* Status Pill & Trajectory Tag */}
               <motion.div variants={itemVariants}>
-                <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.2, px: 2, py: 0.8, borderRadius: '9999px', bgcolor: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.25)', mb: 3 }}>
-                  <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10b981', boxShadow: '0 0 10px #10b981' }} />
-                  <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: 'var(--secondary-glow)', fontWeight: 600 }}>
-                    {personalInfo.status}
-                  </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                  <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, px: 2, py: 0.7, borderRadius: '9999px', bgcolor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                    <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10b981', boxShadow: '0 0 10px #10b981' }} />
+                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.78rem', color: '#34d399', fontWeight: 600 }}>
+                      {personalInfo.status}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: { xs: 'none', sm: 'inline-flex' }, alignItems: 'center', gap: 0.8, px: 1.8, py: 0.7, borderRadius: '9999px', bgcolor: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+                    <Bolt sx={{ color: 'var(--primary-glow)', fontSize: 16 }} />
+                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.76rem', color: 'var(--secondary-glow)' }}>
+                      4 Stacks in 12 Mos • Quick Learner
+                    </Typography>
+                  </Box>
                 </Box>
               </motion.div>
 
               {/* Developer Greeting & Name */}
               <motion.div variants={itemVariants}>
-                <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: '1.05rem', fontWeight: 600, mb: 1 }}>
-                  &gt; console.log("Hello, World!");
+                <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: '1rem', fontWeight: 600, mb: 1, letterSpacing: '0.04em' }}>
+                  &gt; const engineer = new AdaptiveDeveloper();
                 </Typography>
-                <Typography variant="h1" sx={{ fontSize: { xs: '2.4rem', sm: '3.4rem', md: '4.6rem' }, fontWeight: 800, lineHeight: 1.1, mb: 2, letterSpacing: '-0.02em' }}>
+                <Typography variant="h1" sx={{ fontSize: { xs: '2.5rem', sm: '3.6rem', md: '4.5rem' }, fontWeight: 800, lineHeight: 1.08, mb: 2, letterSpacing: '-0.025em' }}>
                   I'm <span className="text-gradient">{personalInfo.name}</span>
                 </Typography>
               </motion.div>
@@ -95,7 +107,7 @@ const Hero = ({ onOpenCommandPalette }) => {
               {/* Typewriter Role */}
               <motion.div variants={itemVariants}>
                 <Box sx={{ minHeight: '44px', display: 'flex', alignItems: 'center', mb: 2.5 }}>
-                  <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: { xs: '1.15rem', sm: '1.5rem', md: '1.85rem' }, color: '#f8fafc', fontWeight: 700 }}>
+                  <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: { xs: '1.15rem', sm: '1.45rem', md: '1.8rem' }, color: 'var(--text-primary)', fontWeight: 700 }}>
                     <TypewriterText words={personalInfo.roles} />
                   </Typography>
                 </Box>
@@ -103,31 +115,38 @@ const Hero = ({ onOpenCommandPalette }) => {
 
               {/* Bio & Education highlight */}
               <motion.div variants={itemVariants}>
-                <Typography variant="body1" sx={{ fontSize: { xs: '0.98rem', md: '1.12rem' }, color: 'var(--text-secondary)', mb: 2, maxWidth: '580px', lineHeight: 1.7 }}>
-                  {personalInfo.subtitle}
+                <Typography variant="body1" sx={{ fontSize: { xs: '0.96rem', md: '1.08rem' }, color: 'var(--text-secondary)', mb: 2.5, maxWidth: '580px', lineHeight: 1.75 }}>
+                  {personalInfo.summary}
                 </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 4 }}>
+
+                {/* Metric Badges */}
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3.5 }}>
                   <Chip
-                    label="MCA '26 (Chandigarh Univ, 8.24 CGPA)"
+                    label="MCA '26 (Chandigarh Univ • 8.24 CGPA)"
                     size="small"
-                    sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}
+                    sx={{ bgcolor: 'var(--subtle-chip-bg)', border: '1px solid var(--card-border)', color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}
                   />
                   <Chip
-                    label="Bengaluru, India"
+                    label="Bengaluru, Karnataka, India"
                     size="small"
-                    sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}
+                    sx={{ bgcolor: 'var(--subtle-chip-bg)', border: '1px solid var(--card-border)', color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}
                   />
                   <Chip
-                    label="RAG & Local LLMs"
+                    label="Local LLMs (Ollama) & RAG"
                     size="small"
-                    sx={{ bgcolor: 'rgba(0, 242, 254, 0.1)', border: '1px solid rgba(0, 242, 254, 0.3)', color: 'var(--primary-glow)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}
+                    sx={{ bgcolor: 'rgba(0, 242, 254, 0.1)', border: '1px solid rgba(0, 242, 254, 0.35)', color: 'var(--primary-glow)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', fontWeight: 600 }}
+                  />
+                  <Chip
+                    label="Mobile: Flutter & Android SDK"
+                    size="small"
+                    sx={{ bgcolor: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.35)', color: 'var(--accent-purple)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}
                   />
                 </Box>
               </motion.div>
 
               {/* Action Buttons */}
               <motion.div variants={itemVariants}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4, width: { xs: '100%', sm: 'auto' } }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3.5, width: { xs: '100%', sm: 'auto' } }}>
                   <Button
                     variant="contained"
                     size="large"
@@ -135,11 +154,11 @@ const Hero = ({ onOpenCommandPalette }) => {
                     endIcon={<ArrowForward />}
                     sx={{
                       bgcolor: 'var(--primary-glow)',
-                      color: '#050814',
+                      color: isDark ? '#050814' : '#ffffff',
                       fontWeight: 700,
                       px: 3.5,
                       py: 1.4,
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       textTransform: 'none',
                       fontFamily: 'JetBrains Mono, monospace',
                       fontSize: '0.92rem',
@@ -147,12 +166,12 @@ const Hero = ({ onOpenCommandPalette }) => {
                       transition: 'all 0.25s ease',
                       '&:hover': {
                         bgcolor: 'var(--secondary-glow)',
-                        boxShadow: '0 0 35px rgba(0, 242, 254, 0.5)',
+                        boxShadow: '0 0 35px rgba(0, 242, 254, 0.55)',
                         transform: 'translateY(-2px)'
                       }
                     }}
                   >
-                    View Projects
+                    Explore Projects
                   </Button>
 
                   <Button
@@ -162,15 +181,15 @@ const Hero = ({ onOpenCommandPalette }) => {
                     download="Ashish_Kumar_Resume.pdf"
                     startIcon={<Download />}
                     sx={{
-                      borderColor: 'rgba(255, 255, 255, 0.2)',
-                      color: '#fff',
+                      borderColor: 'var(--card-border)',
+                      color: 'var(--text-primary)',
                       px: 3.5,
                       py: 1.4,
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       textTransform: 'none',
                       fontFamily: 'JetBrains Mono, monospace',
                       fontSize: '0.92rem',
-                      bgcolor: 'rgba(255, 255, 255, 0.02)',
+                      bgcolor: 'var(--subtle-chip-bg)',
                       transition: 'all 0.25s ease',
                       '&:hover': {
                         borderColor: 'var(--primary-glow)',
@@ -180,7 +199,7 @@ const Hero = ({ onOpenCommandPalette }) => {
                       }
                     }}
                   >
-                    Download CV
+                    Resume (PDF)
                   </Button>
 
                   {onOpenCommandPalette && (
@@ -190,74 +209,72 @@ const Hero = ({ onOpenCommandPalette }) => {
                       onClick={onOpenCommandPalette}
                       startIcon={<Search />}
                       sx={{
-                        borderColor: 'rgba(255, 255, 255, 0.12)',
+                        borderColor: 'var(--card-border)',
                         color: 'var(--text-secondary)',
-                        px: 2.5,
+                        px: 2.2,
                         py: 1.4,
-                        borderRadius: '10px',
+                        borderRadius: '12px',
                         textTransform: 'none',
                         fontFamily: 'JetBrains Mono, monospace',
-                        fontSize: '0.92rem',
+                        fontSize: '0.88rem',
                         display: { xs: 'none', md: 'inline-flex' },
                         '&:hover': {
-                          borderColor: 'rgba(255, 255, 255, 0.3)',
-                          color: '#fff'
+                          borderColor: 'var(--primary-glow)',
+                          color: 'var(--primary-glow)'
                         }
                       }}
                     >
-                      ⌘K
+                      ⌘K Palette
                     </Button>
                   )}
                 </Stack>
               </motion.div>
 
-              {/* Social Links & Terminal Hint */}
+              {/* Developer Quick-Clone / Contact Pill */}
               <motion.div variants={itemVariants}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                  <Stack direction="row" spacing={1.5}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, flexWrap: 'wrap' }}>
+                  <Stack direction="row" spacing={1.2}>
                     {[
-                      { icon: <GitHub fontSize="small" />, link: personalInfo.github, label: 'GitHub' },
-                      { icon: <LinkedIn fontSize="small" />, link: personalInfo.linkedin, label: 'LinkedIn' },
-                      { icon: <Email fontSize="small" />, link: `mailto:${personalInfo.email}`, label: 'Email' }
+                      { icon: <GitHub fontSize="small" />, link: personalInfo.github, label: 'GitHub Profile' },
+                      { icon: <LinkedIn fontSize="small" />, link: personalInfo.linkedin, label: 'LinkedIn Profile' },
+                      { icon: <Email fontSize="small" />, link: `mailto:${personalInfo.email}`, label: 'Direct Email' }
                     ].map((item, idx) => (
-                      <IconButton
-                        key={idx}
-                        href={item.link}
-                        target="_blank"
-                        sx={{
-                          color: 'var(--text-secondary)',
-                          bgcolor: 'rgba(255, 255, 255, 0.03)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          p: 1.2,
-                          borderRadius: '10px',
-                          transition: 'all 0.2s ease',
-                          '&:hover': {
-                            color: 'var(--primary-glow)',
-                            borderColor: 'var(--primary-glow)',
-                            bgcolor: 'rgba(0, 242, 254, 0.1)',
-                            transform: 'translateY(-3px)'
-                          }
-                        }}
-                      >
-                        {item.icon}
-                      </IconButton>
+                      <Tooltip key={idx} title={item.label}>
+                        <IconButton
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{
+                            color: 'var(--text-secondary)',
+                            bgcolor: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            p: 1.2,
+                            borderRadius: '10px',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                              color: 'var(--primary-glow)',
+                              borderColor: 'var(--primary-glow)',
+                              bgcolor: 'rgba(0, 242, 254, 0.1)',
+                              transform: 'translateY(-3px)'
+                            }
+                          }}
+                        >
+                          {item.icon}
+                        </IconButton>
+                      </Tooltip>
                     ))}
                   </Stack>
-
-                  <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', display: { xs: 'none', sm: 'block' } }}>
-                    // Tip: run <span style={{ color: 'var(--primary-glow)' }}>help</span> in console →
-                  </Typography>
                 </Box>
               </motion.div>
             </motion.div>
           </Grid>
 
           {/* Right Column: Interactive Developer Console */}
-          <Grid item xs={12} lg={6}>
+          <Grid size={{ xs: 12, lg: 6 }}>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
             >
               <DeveloperConsole />
             </motion.div>
