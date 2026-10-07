@@ -75,12 +75,13 @@ const Skills = () => {
     setSelectedTech(tech);
     // Smoothly scroll to the side poster / inspector HUD with navbar clearance
     if (inspectorRef.current) {
-      const navClearance = 100; // Clean clearance below fixed navbar
+      const isMobile = window.innerWidth < 900;
+      const navClearance = isMobile ? 75 : 100; // Clean clearance below fixed navbar
       const elementTop = inspectorRef.current.getBoundingClientRect().top + window.pageYOffset;
       const targetScroll = Math.max(0, elementTop - navClearance);
       
       const rect = inspectorRef.current.getBoundingClientRect();
-      if (rect.top < 95 || rect.top > window.innerHeight - 200) {
+      if (rect.top < (isMobile ? 75 : 95) || rect.top > window.innerHeight - 200) {
         window.scrollTo({
           top: targetScroll,
           behavior: 'smooth'
@@ -95,8 +96,16 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="skills-ambient-bg" style={{ minHeight: '100vh', padding: '110px 0', position: 'relative' }}>
-      <Container maxWidth="lg">
+    <section
+      id="skills"
+      className="skills-ambient-bg"
+      style={{
+        minHeight: '100vh',
+        position: 'relative',
+        overflowX: 'clip'
+      }}
+    >
+      <Container maxWidth="lg" sx={{ py: { xs: 9, md: 14 }, px: { xs: 2, sm: 3 } }}>
         <SectionHeader
           tag="TECH ARSENAL & TOOLING"
           title="Skills & Technical Ecosystem"
@@ -104,20 +113,23 @@ const Skills = () => {
         />
 
         {/* 1. Animated Marquee of Core Technologies */}
-        <Box sx={{ mb: 5 }}>
+        <Box sx={{ mb: { xs: 3.5, md: 5 }, width: '100%', minWidth: 0 }}>
           <Box
             sx={{
-              p: 1.5,
+              p: { xs: 1.2, sm: 1.5 },
               borderRadius: '16px',
               bgcolor: 'var(--card-bg)',
               border: '1px solid var(--card-border)',
-              boxShadow: 'var(--card-shadow)'
+              boxShadow: 'var(--card-shadow)',
+              overflow: 'hidden',
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 2, mb: 1.2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: { xs: 1, sm: 2 }, mb: 1.2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <span className="pulse-indicator" style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} />
-                <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: 'var(--primary-glow)', letterSpacing: '0.05em' }}>
+                <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: 'var(--primary-glow)', letterSpacing: '0.05em', fontSize: { xs: '0.72rem', sm: '0.78rem' } }}>
                   CORE ARSENAL & DAILY DRIVERS
                 </Typography>
               </Box>
@@ -168,13 +180,13 @@ const Skills = () => {
         </Box>
 
         {/* 2. Search & Category Filters */}
-        <Box sx={{ mb: 4.5 }}>
+        <Box sx={{ mb: { xs: 3.5, md: 4.5 }, width: '100%', minWidth: 0 }}>
           <Box
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
               justifyContent: 'space-between',
-              alignItems: 'center',
+              alignItems: { xs: 'stretch', md: 'center' },
               gap: 2,
               mb: 2.5
             }}
@@ -191,6 +203,7 @@ const Skills = () => {
                 px: 2,
                 py: 1.2,
                 width: { xs: '100%', md: '380px' },
+                boxSizing: 'border-box',
                 transition: 'border-color 0.2s ease',
                 '&:focus-within': { borderColor: 'var(--primary-glow)' }
               }}
@@ -239,9 +252,9 @@ const Skills = () => {
                   onClick={() => setActiveDomain(dom)}
                   sx={{
                     fontFamily: 'JetBrains Mono, monospace',
-                    fontSize: '0.8rem',
-                    py: 2,
-                    px: 1,
+                    fontSize: { xs: '0.74rem', sm: '0.8rem' },
+                    py: { xs: 1.5, sm: 2 },
+                    px: { xs: 0.5, sm: 1 },
                     bgcolor: isSelected ? 'var(--primary-glow)' : 'var(--card-bg)',
                     color: isSelected ? (isDark ? '#050814' : '#fff') : 'var(--text-secondary)',
                     fontWeight: isSelected ? 700 : 500,
@@ -260,10 +273,23 @@ const Skills = () => {
         </Box>
 
         {/* 3. Main Interactive Workspace: Tech Grid + Sticky Tech Inspector HUD */}
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 340px', lg: '1fr 380px' }, gap: 3.5, alignItems: 'start' }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'minmax(0, 1fr)',
+              md: 'minmax(0, 1fr) 340px',
+              lg: 'minmax(0, 1fr) 380px'
+            },
+            gap: { xs: 3, md: 3.5 },
+            alignItems: 'start',
+            width: '100%',
+            minWidth: 0
+          }}
+        >
           
           {/* Tech Grid Column (Uniform Cards) */}
-          <Box>
+          <Box sx={{ width: '100%', minWidth: 0 }}>
             {filteredSkills.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 8, bgcolor: 'var(--card-bg)', borderRadius: '16px', border: '1px dashed var(--card-border)' }}>
                 <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text-muted)' }}>
@@ -275,11 +301,13 @@ const Skills = () => {
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: {
-                    xs: 'repeat(2, 1fr)',
-                    sm: 'repeat(3, 1fr)',
-                    md: 'repeat(4, 1fr)'
+                    xs: 'repeat(2, minmax(0, 1fr))',
+                    sm: 'repeat(3, minmax(0, 1fr))',
+                    md: 'repeat(4, minmax(0, 1fr))'
                   },
-                  gap: 2
+                  gap: { xs: 1.25, sm: 2 },
+                  width: '100%',
+                  minWidth: 0
                 }}
               >
                 <AnimatePresence>
@@ -295,19 +323,23 @@ const Skills = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.25 }}
+                        style={{ minWidth: 0, width: '100%' }}
                       >
                         <Box
                           onClick={() => handleCardClick(tech)}
                           className={`tech-badge-card ${isSelected ? 'active-inspected' : ''}`}
                           sx={{
-                            height: '162px',
+                            height: { xs: '150px', sm: '162px' },
                             boxSizing: 'border-box',
-                            p: 2,
+                            width: '100%',
+                            minWidth: 0,
+                            p: { xs: 1.25, sm: 2 },
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             textAlign: 'center',
+                            overflow: 'hidden',
                             borderColor: isSelected ? tech.brandColor : 'var(--card-border)',
                             boxShadow: isSelected ? `0 12px 30px -6px ${tech.brandColor}40` : 'none',
                             '&:hover': {
@@ -320,13 +352,24 @@ const Skills = () => {
                             }
                           }}
                         >
-                          {/* Top: Tier dot & Domain indicator (Fixed 18px) */}
-                          <Box sx={{ width: '100%', height: '18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          {/* Top: Tier dot & Domain indicator */}
+                          <Box
+                            sx={{
+                              width: '100%',
+                              height: '18px',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              gap: 0.5,
+                              minWidth: 0
+                            }}
+                          >
                             <Box
                               sx={{
                                 width: 7,
                                 height: 7,
                                 borderRadius: '50%',
+                                flexShrink: 0,
                                 bgcolor: tierColor,
                                 boxShadow: `0 0 8px ${tierColor}`
                               }}
@@ -335,25 +378,28 @@ const Skills = () => {
                               variant="caption"
                               sx={{
                                 color: 'var(--text-muted)',
-                                fontSize: '0.66rem',
+                                fontSize: { xs: '0.62rem', sm: '0.66rem' },
                                 fontFamily: 'JetBrains Mono, monospace',
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                maxWidth: '85%'
+                                minWidth: 0,
+                                maxWidth: 'calc(100% - 12px)',
+                                textAlign: 'right'
                               }}
                             >
                               {tech.tier}
                             </Typography>
                           </Box>
 
-                          {/* Center: Brand Logo (Fixed 48px) */}
+                          {/* Center: Brand Logo */}
                           <Box
                             className="tech-icon-wrapper"
                             sx={{
-                              width: 48,
-                              height: 48,
+                              width: { xs: 42, sm: 48 },
+                              height: { xs: 42, sm: 48 },
                               borderRadius: '12px',
+                              flexShrink: 0,
                               bgcolor: isSelected ? `${tech.brandColor}20` : 'var(--subtle-chip-bg)',
                               border: `1px solid ${isSelected ? tech.brandColor : 'var(--card-border)'}`,
                               display: 'flex',
@@ -362,20 +408,21 @@ const Skills = () => {
                               transition: 'all 0.25s ease'
                             }}
                           >
-                            <TechIcon iconKey={tech.iconKey} size={26} color={tech.brandColor} />
+                            <TechIcon iconKey={tech.iconKey} size={24} color={tech.brandColor} />
                           </Box>
 
-                          {/* Bottom: Name & Specialty Subtext (Fixed containers) */}
-                          <Box sx={{ width: '100%' }}>
-                            <Box sx={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {/* Bottom: Name & Specialty Subtext */}
+                          <Box sx={{ width: '100%', minWidth: 0 }}>
+                            <Box sx={{ height: { xs: '34px', sm: '38px' }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               <Typography
                                 variant="subtitle2"
                                 sx={{
                                   fontWeight: 700,
                                   color: 'var(--text-primary)',
-                                  fontSize: '0.90rem',
-                                  lineHeight: 1.25,
+                                  fontSize: { xs: '0.80rem', sm: '0.90rem' },
+                                  lineHeight: 1.2,
                                   textAlign: 'center',
+                                  wordBreak: 'break-word',
                                   display: '-webkit-box',
                                   WebkitLineClamp: 2,
                                   WebkitBoxOrient: 'vertical',
@@ -389,14 +436,15 @@ const Skills = () => {
                               variant="caption"
                               sx={{
                                 color: isSelected ? tech.brandColor : 'var(--text-muted)',
-                                fontSize: '0.70rem',
+                                fontSize: { xs: '0.65rem', sm: '0.70rem' },
                                 fontFamily: 'JetBrains Mono, monospace',
                                 display: 'block',
                                 lineHeight: 1.2,
                                 height: '16px',
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
-                                textOverflow: 'ellipsis'
+                                textOverflow: 'ellipsis',
+                                width: '100%'
                               }}
                             >
                               {tech.specialty}
@@ -411,8 +459,17 @@ const Skills = () => {
             )}
           </Box>
 
-          {/* Sticky Tech Inspector HUD Column (Desktop Viewport Anchored) */}
-          <Box ref={inspectorRef} sx={{ position: { md: 'sticky' }, top: { md: '90px' }, scrollMarginTop: '110px' }}>
+          {/* Sticky Tech Inspector HUD Column */}
+          <Box
+            ref={inspectorRef}
+            sx={{
+              position: { md: 'sticky' },
+              top: { md: '90px' },
+              scrollMarginTop: { xs: '80px', md: '110px' },
+              width: '100%',
+              minWidth: 0
+            }}
+          >
             <AnimatePresence mode="wait">
               {selectedTech && (
                 <motion.div
@@ -421,21 +478,27 @@ const Skills = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
                   transition={{ duration: 0.2 }}
+                  style={{ width: '100%', minWidth: 0 }}
                 >
                   <Box
                     className="tech-inspector-panel"
                     sx={{
-                      p: 3,
-                      borderTop: `4px solid ${selectedTech.brandColor}`
+                      p: { xs: 2, sm: 3 },
+                      borderTop: `4px solid ${selectedTech.brandColor}`,
+                      boxSizing: 'border-box',
+                      width: '100%',
+                      maxWidth: '100%',
+                      overflow: 'hidden'
                     }}
                   >
                     {/* Header: Logo, Title, Domain */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2 }, mb: 2, minWidth: 0, width: '100%' }}>
                       <Box
                         sx={{
-                          width: 58,
-                          height: 58,
+                          width: { xs: 48, sm: 58 },
+                          height: { xs: 48, sm: 58 },
                           borderRadius: '14px',
+                          flexShrink: 0,
                           bgcolor: `${selectedTech.brandColor}18`,
                           border: `1.5px solid ${selectedTech.brandColor}50`,
                           display: 'flex',
@@ -444,20 +507,41 @@ const Skills = () => {
                           boxShadow: `0 8px 20px -4px ${selectedTech.brandColor}35`
                         }}
                       >
-                        <TechIcon iconKey={selectedTech.iconKey} size={32} color={selectedTech.brandColor} />
+                        <TechIcon iconKey={selectedTech.iconKey} size={28} color={selectedTech.brandColor} />
                       </Box>
-                      <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.25rem', lineHeight: 1.2 }}>
+                      <Box sx={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontWeight: 800,
+                            color: 'var(--text-primary)',
+                            fontSize: { xs: '1.1rem', sm: '1.25rem' },
+                            lineHeight: 1.25,
+                            wordBreak: 'break-word',
+                            overflowWrap: 'break-word'
+                          }}
+                        >
                           {selectedTech.name}
                         </Typography>
-                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.76rem' }}>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: 'var(--text-muted)',
+                            fontFamily: 'JetBrains Mono, monospace',
+                            fontSize: '0.76rem',
+                            display: 'block',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}
+                        >
                           {selectedTech.domain}
                         </Typography>
                       </Box>
                     </Box>
 
                     {/* Tier Chip */}
-                    <Box sx={{ mb: 2.2, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    <Box sx={{ mb: 2.2, display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%' }}>
                       <Chip
                         label={selectedTech.tier}
                         size="small"
@@ -466,7 +550,7 @@ const Skills = () => {
                           color: tierColors[selectedTech.tier] || '#38bdf8',
                           border: `1px solid ${tierColors[selectedTech.tier] || '#38bdf8'}40`,
                           fontFamily: 'JetBrains Mono, monospace',
-                          fontSize: '0.72rem',
+                          fontSize: { xs: '0.68rem', sm: '0.72rem' },
                           fontWeight: 700
                         }}
                       />
@@ -478,29 +562,41 @@ const Skills = () => {
                           color: 'var(--text-secondary)',
                           border: '1px solid var(--card-border)',
                           fontFamily: 'JetBrains Mono, monospace',
-                          fontSize: '0.72rem'
+                          fontSize: { xs: '0.68rem', sm: '0.72rem' }
                         }}
                       />
                     </Box>
 
                     {/* Production Implementation Detail */}
-                    <Box sx={{ p: 2, borderRadius: '12px', bgcolor: 'var(--subtle-chip-bg)', border: '1px solid var(--card-border)', mb: 2.5 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 700, color: selectedTech.brandColor, mb: 0.6, display: 'flex', alignItems: 'center', gap: 0.8, fontFamily: 'JetBrains Mono, monospace' }}>
-                        <Lightbulb sx={{ fontSize: 16 }} /> WHERE ASHISH APPLIED THIS:
+                    <Box sx={{ p: { xs: 1.5, sm: 2 }, borderRadius: '12px', bgcolor: 'var(--subtle-chip-bg)', border: '1px solid var(--card-border)', mb: 2.5, width: '100%', boxSizing: 'border-box' }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontWeight: 700,
+                          color: selectedTech.brandColor,
+                          mb: 0.6,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 0.8,
+                          fontFamily: 'JetBrains Mono, monospace',
+                          fontSize: { xs: '0.70rem', sm: '0.75rem' }
+                        }}
+                      >
+                        <Lightbulb sx={{ fontSize: 16, flexShrink: 0 }} /> WHERE ASHISH APPLIED THIS:
                       </Typography>
-                      <Typography variant="body2" sx={{ color: 'var(--text-secondary)', fontSize: '0.86rem', lineHeight: 1.6 }}>
+                      <Typography variant="body2" sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.82rem', sm: '0.86rem' }, lineHeight: 1.6, wordBreak: 'break-word' }}>
                         {selectedTech.productionUsage}
                       </Typography>
                     </Box>
 
                     {/* Key Architectural Capabilities */}
-                    <Box sx={{ mb: 2.5 }}>
+                    <Box sx={{ mb: 2.5, width: '100%' }}>
                       <Typography variant="caption" sx={{ fontWeight: 700, color: 'var(--text-primary)', mb: 1, display: 'flex', alignItems: 'center', gap: 0.8, fontFamily: 'JetBrains Mono, monospace' }}>
-                        <Memory sx={{ fontSize: 16, color: 'var(--accent-purple)' }} /> KEY CAPABILITIES:
+                        <Memory sx={{ fontSize: 16, color: 'var(--accent-purple)', flexShrink: 0 }} /> KEY CAPABILITIES:
                       </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, width: '100%' }}>
                         {selectedTech.capabilities.map((cap, idx) => (
-                          <span key={idx} className="code-badge" style={{ fontSize: '0.74rem', padding: '3px 8px' }}>
+                          <span key={idx} className="code-badge" style={{ fontSize: '0.74rem', padding: '3px 8px', maxWidth: '100%', wordBreak: 'break-word' }}>
                             {cap}
                           </span>
                         ))}
@@ -514,15 +610,19 @@ const Skills = () => {
                           pt: 2,
                           borderTop: '1px solid var(--card-border)',
                           display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between'
+                          flexDirection: { xs: 'column', sm: 'row' },
+                          alignItems: { xs: 'flex-start', sm: 'center' },
+                          justifyContent: 'space-between',
+                          gap: 1.5,
+                          width: '100%',
+                          boxSizing: 'border-box'
                         }}
                       >
-                        <Box>
+                        <Box sx={{ minWidth: 0, flex: 1 }}>
                           <Typography variant="caption" sx={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>
                             SHIPPED IN PRODUCTION:
                           </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 700, color: 'var(--primary-glow)', fontSize: '0.88rem' }}>
+                          <Typography variant="body2" sx={{ fontWeight: 700, color: 'var(--primary-glow)', fontSize: '0.88rem', wordBreak: 'break-word' }}>
                             {selectedTech.powersProject}
                           </Typography>
                         </Box>
@@ -539,6 +639,7 @@ const Skills = () => {
                             textTransform: 'none',
                             py: 0.6,
                             px: 1.5,
+                            width: { xs: '100%', sm: 'auto' },
                             '&:hover': {
                               bgcolor: 'rgba(0, 242, 254, 0.1)',
                               borderColor: 'var(--primary-glow)'

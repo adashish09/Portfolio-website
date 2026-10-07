@@ -533,6 +533,7 @@ h1, h2, h3, h4, h5, h6 {
     radial-gradient(circle at 15% 25%, var(--theme-halo) 0%, transparent 55%),
     radial-gradient(circle at 85% 75%, var(--theme-halo) 0%, transparent 55%);
   transition: background-image 0.5s ease;
+  overflow-x: clip;
 }
 
 /* Infinite Marquee Track */
@@ -562,6 +563,9 @@ h1, h2, h3, h4, h5, h6 {
 /* Modern Tech Badge Card */
 .tech-badge-card {
   position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 14px;
@@ -589,6 +593,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Tech Inspector HUD Panel */
 .tech-inspector-panel {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   background: var(--card-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -599,3 +607,14 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
 }
+
+@media (max-width: 600px) {
+  .tech-badge-card {
+    padding: 12px 10px;
+    border-radius: 12px;
+  }
+  .tech-inspector-panel {
+    border-radius: 16px;
+  }
+}
+

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Fab, Zoom, Tooltip } from '@mui/material';
+import { Box, Fab, Zoom, Tooltip } from '@mui/material';
 import { KeyboardArrowUp } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useThemeMode } from '../../context/ThemeContext';
@@ -30,13 +30,14 @@ const ScrollToTop = () => {
 
   return (
     <Zoom in={isVisible}>
-      <motion.div
+      <Box
+        component={motion.div}
         whileHover={{ scale: 1.12, y: -2 }}
         whileTap={{ scale: 0.92 }}
-        style={{
+        sx={{
           position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
+          bottom: { xs: '1.25rem', sm: '2rem' },
+          right: { xs: '1.25rem', sm: '2rem' },
           zIndex: 1000,
           borderRadius: '50%'
         }}
@@ -47,6 +48,9 @@ const ScrollToTop = () => {
             aria-label="scroll back to top" 
             onClick={scrollToTop}
             sx={{
+              width: { xs: 42, sm: 48 },
+              height: { xs: 42, sm: 48 },
+              minHeight: { xs: 42, sm: 48 },
               background: isDark ? 'rgba(9, 14, 28, 0.88)' : 'rgba(255, 255, 255, 0.95)',
               border: '1.5px solid',
               borderColor: isDark ? 'rgba(0, 242, 254, 0.45)' : 'rgba(2, 132, 199, 0.45)',
@@ -65,10 +69,10 @@ const ScrollToTop = () => {
               }
             }}
           >
-            <KeyboardArrowUp sx={{ fontSize: 26 }} />
+            <KeyboardArrowUp sx={{ fontSize: { xs: 22, sm: 26 } }} />
           </Fab>
         </Tooltip>
-      </motion.div>
+      </Box>
     </Zoom>
   );
 };
