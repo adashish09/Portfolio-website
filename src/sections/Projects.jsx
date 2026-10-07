@@ -4,6 +4,7 @@ import { GitHub, OpenInNew, Visibility, ContentCopy, Check, Star, Bolt, Terminal
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionHeader from '../components/ui/SectionHeader';
 import ProjectModal from '../components/ui/ProjectModal';
+import TiltCard from '../components/ui/TiltCard';
 import { projectsData } from '../data/projects';
 import { useThemeMode } from '../context/ThemeContext';
 
@@ -29,8 +30,9 @@ const ProjectCard = ({ project, onViewDetails }) => {
       transition={{ duration: 0.4 }}
       style={{ height: '100%' }}
     >
-      <Card
-        className="glass-container card-hover-lift"
+      <TiltCard maxTilt={5} scale={1.015} style={{ height: '100%' }}>
+        <Card
+          className="glass-container card-hover-lift"
         onClick={onViewDetails}
         sx={{
           display: 'flex',
@@ -214,6 +216,7 @@ const ProjectCard = ({ project, onViewDetails }) => {
           </Box>
         </CardContent>
       </Card>
+      </TiltCard>
     </motion.div>
   );
 };

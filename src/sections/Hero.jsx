@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Button, Stack, Container, Grid, IconButton, Chip, Tooltip } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Download, GitHub, LinkedIn, Email, ArrowForward, Search, ContentCopy, Check, Terminal, Bolt } from '@mui/icons-material';
+import { Download, GitHub, LinkedIn, Email, ArrowForward, Search, ContentCopy, Check, Terminal, Bolt, AutoAwesome } from '@mui/icons-material';
 import { personalInfo } from '../data/socialLinks';
 import DeveloperConsole from '../components/ui/DeveloperConsole';
 import { useThemeMode } from '../context/ThemeContext';
@@ -91,15 +91,22 @@ const Hero = ({ onOpenCommandPalette }) => {
                       4 Stacks in 12 Mos • Quick Learner
                     </Typography>
                   </Box>
+
+                  <Box sx={{ display: { xs: 'none', md: 'inline-flex' }, alignItems: 'center', gap: 0.8, px: 1.8, py: 0.7, borderRadius: '9999px', bgcolor: 'var(--subtle-chip-bg)', border: '1px solid var(--card-border)' }}>
+                    <AutoAwesome sx={{ color: 'var(--primary-glow)', fontSize: 15 }} />
+                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
+                      Interactive 3D Hologram & Multi-Universe
+                    </Typography>
+                  </Box>
                 </Box>
               </motion.div>
 
               {/* Developer Greeting & Name */}
               <motion.div variants={itemVariants}>
-                <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: '1rem', fontWeight: 600, mb: 1, letterSpacing: '0.04em' }}>
+                <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: { xs: '0.8rem', sm: '0.92rem', md: '1rem' }, fontWeight: 600, mb: 1, letterSpacing: '0.04em', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                   &gt; const engineer = new AdaptiveDeveloper();
                 </Typography>
-                <Typography variant="h1" sx={{ fontSize: { xs: '2.5rem', sm: '3.6rem', md: '4.5rem' }, fontWeight: 800, lineHeight: 1.08, mb: 2, letterSpacing: '-0.025em' }}>
+                <Typography variant="h1" sx={{ color: 'var(--text-primary)', fontSize: { xs: '2.15rem', sm: '3.2rem', md: '4.5rem' }, fontWeight: 800, lineHeight: 1.1, mb: 2, letterSpacing: '-0.025em', wordBreak: 'break-word' }}>
                   I'm <span className="text-gradient">{personalInfo.name}</span>
                 </Typography>
               </motion.div>
@@ -107,7 +114,7 @@ const Hero = ({ onOpenCommandPalette }) => {
               {/* Typewriter Role */}
               <motion.div variants={itemVariants}>
                 <Box sx={{ minHeight: '44px', display: 'flex', alignItems: 'center', mb: 2.5 }}>
-                  <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: { xs: '1.15rem', sm: '1.45rem', md: '1.8rem' }, color: 'var(--text-primary)', fontWeight: 700 }}>
+                  <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: { xs: '1.05rem', sm: '1.35rem', md: '1.8rem' }, color: 'var(--text-primary)', fontWeight: 700 }}>
                     <TypewriterText words={personalInfo.roles} />
                   </Typography>
                 </Box>
@@ -115,7 +122,7 @@ const Hero = ({ onOpenCommandPalette }) => {
 
               {/* Bio & Education highlight */}
               <motion.div variants={itemVariants}>
-                <Typography variant="body1" sx={{ fontSize: { xs: '0.96rem', md: '1.08rem' }, color: 'var(--text-secondary)', mb: 2.5, maxWidth: '580px', lineHeight: 1.75 }}>
+                <Typography variant="body1" sx={{ fontSize: { xs: '0.92rem', md: '1.08rem' }, color: 'var(--text-secondary)', mb: 2.5, maxWidth: '580px', lineHeight: 1.75 }}>
                   {personalInfo.summary}
                 </Typography>
 

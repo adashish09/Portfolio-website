@@ -12,6 +12,7 @@ import GithubStats from './sections/GithubStats';
 import Resume from './sections/Resume';
 import Contact from './sections/Contact';
 import ParticleBackground from './components/3d/ParticleBackground';
+import ThemeWarpTransition from './components/ui/ThemeWarpTransition';
 import ScrollToTop from './components/ui/ScrollToTop';
 import CommandPalette from './components/ui/CommandPalette';
 
@@ -48,6 +49,7 @@ function App() {
     <Router>
       <div style={{ position: 'relative', zIndex: 0, minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
         <ParticleBackground />
+        <ThemeWarpTransition />
         
         <Navbar onOpenCommandPalette={() => setCmdPaletteOpen(true)} />
         

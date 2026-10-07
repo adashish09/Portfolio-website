@@ -133,7 +133,9 @@ const Skills = () => {
                   <Box
                     key={idx}
                     onClick={() => {
-                      const found = skillsList.find((s) => s.iconKey === item.iconKey || s.name.toLowerCase().includes(item.name.toLowerCase()));
+                      // Exact match first (prevent "java" matching "javascript" substring)
+                      const exact = skillsList.find((s) => s.iconKey === item.iconKey || s.id === item.iconKey || s.name.toLowerCase() === item.name.toLowerCase());
+                      const found = exact || skillsList.find((s) => s.name.toLowerCase().startsWith(item.name.toLowerCase())) || skillsList.find((s) => s.name.toLowerCase().includes(item.name.toLowerCase()));
                       if (found) handleCardClick(found);
                     }}
                     sx={{

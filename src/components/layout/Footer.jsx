@@ -1,11 +1,8 @@
 import { Box, Container, Typography, IconButton, Stack, Chip } from '@mui/material';
-import { GitHub, LinkedIn, Email, KeyboardArrowUp } from '@mui/icons-material';
+import { GitHub, LinkedIn, Email } from '@mui/icons-material';
 import { personalInfo } from '../../data/socialLinks';
 
 const Footer = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <Box component="footer" sx={{ bgcolor: 'var(--bg-primary)', borderTop: '1px solid var(--card-border)', py: 6, position: 'relative', transition: 'background-color 0.3s ease, border-color 0.3s ease' }}>
@@ -70,17 +67,6 @@ const Footer = () => {
               }}
             >
               <Email fontSize="small" />
-            </IconButton>
-            <IconButton
-              onClick={scrollToTop}
-              sx={{
-                color: 'var(--text-secondary)',
-                bgcolor: 'var(--card-bg)',
-                border: '1px solid var(--card-border)',
-                '&:hover': { color: 'var(--text-primary)', borderColor: 'var(--primary-glow)', bgcolor: 'rgba(56,189,248,0.1)' }
-              }}
-            >
-              <KeyboardArrowUp fontSize="small" />
             </IconButton>
           </Stack>
         </Box>

@@ -277,20 +277,34 @@ const Contact = () => {
                 <Box
                   sx={{
                     mt: 3,
-                    p: 2,
+                    p: { xs: 1.6, sm: 2 },
                     borderRadius: '12px',
-                    bgcolor: isDark ? 'rgba(4, 8, 20, 0.8)' : 'rgba(241, 245, 249, 0.95)',
+                    bgcolor: isDark ? 'rgba(4, 8, 20, 0.85)' : 'rgba(241, 245, 249, 0.95)',
                     border: '1px solid',
                     borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(203, 213, 225, 0.85)',
                     display: 'flex',
-                    alignItems: 'center',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'stretch', sm: 'center' },
                     justifyContent: 'space-between',
-                    transition: 'all 0.2s ease'
+                    gap: { xs: 1.4, sm: 1.5 },
+                    transition: 'all 0.2s ease',
+                    boxSizing: 'border-box',
+                    width: '100%'
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
-                    <Terminal sx={{ color: 'var(--primary-glow)', fontSize: 18 }} />
-                    <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', color: isDark ? '#94a3b8' : '#475569' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, minWidth: 0, flex: 1 }}>
+                    <Terminal sx={{ color: 'var(--primary-glow)', fontSize: 18, flexShrink: 0 }} />
+                    <Typography
+                      sx={{
+                        fontFamily: 'JetBrains Mono, monospace',
+                        fontSize: { xs: '0.74rem', sm: '0.8rem' },
+                        color: isDark ? '#94a3b8' : '#475569',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        minWidth: 0
+                      }}
+                    >
                       mailto:{personalInfo.email}
                     </Typography>
                   </Box>
@@ -302,19 +316,22 @@ const Contact = () => {
                         color: copiedCli ? '#10b981' : (isDark ? 'var(--primary-glow)' : '#0284c7'),
                         fontFamily: 'JetBrains Mono, monospace',
                         fontSize: '0.74rem',
+                        fontWeight: 600,
                         textTransform: 'none',
-                        px: 1.5,
-                        py: 0.4,
+                        px: 1.8,
+                        py: { xs: 0.8, sm: 0.5 },
                         borderRadius: '6px',
-                        bgcolor: isDark ? 'transparent' : 'rgba(2, 132, 199, 0.08)',
+                        bgcolor: isDark ? 'rgba(0, 242, 254, 0.06)' : 'rgba(2, 132, 199, 0.08)',
                         border: '1px solid',
-                        borderColor: isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.3)',
+                        borderColor: copiedCli ? '#10b981' : (isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.3)'),
+                        flexShrink: 0,
+                        width: { xs: '100%', sm: 'auto' },
                         '&:hover': {
-                          bgcolor: isDark ? 'rgba(0, 242, 254, 0.12)' : 'rgba(2, 132, 199, 0.16)'
+                          bgcolor: isDark ? 'rgba(0, 242, 254, 0.14)' : 'rgba(2, 132, 199, 0.16)'
                         }
                       }}
                     >
-                      {copiedCli ? "Copied" : "Copy"}
+                      {copiedCli ? "Copied ✓" : "Copy Mail"}
                     </Button>
                   </Tooltip>
                 </Box>

@@ -15,6 +15,7 @@ import {
   ArrowForward
 } from '@mui/icons-material';
 import SectionHeader from '../components/ui/SectionHeader';
+import TiltCard from '../components/ui/TiltCard';
 import { adaptabilityPrinciples } from '../data/skills';
 import { personalInfo } from '../data/socialLinks';
 
@@ -312,8 +313,9 @@ const About = () => {
                 transition={{ delay: idx * 0.1 }}
                 style={{ width: '100%', display: 'flex' }}
               >
-                <Box
-                  className="card-hover-lift"
+                <TiltCard maxTilt={5} scale={1.015} style={{ width: '100%', height: '100%', display: 'flex' }}>
+                  <Box
+                    className="card-hover-lift"
                   sx={{
                     p: 2.8,
                     width: '100%',
@@ -405,7 +407,8 @@ const About = () => {
                     </Typography>
                   </Box>
                 </Box>
-              </motion.div>
+              </TiltCard>
+            </motion.div>
             ))}
           </Box>
         </Box>

@@ -55,7 +55,7 @@ const CommandPalette = ({ open, onClose, onSelectProject }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [copiedNotification, setCopiedNotification] = useState('');
   const listRef = useRef(null);
-  const { mode, toggleTheme, isDark } = useThemeMode();
+  const { mode, toggleTheme, setThemeMode, themes, currentTheme, isDark } = useThemeMode();
 
   // Reset state on open/close
   useEffect(() => {
@@ -70,16 +70,52 @@ const CommandPalette = ({ open, onClose, onSelectProject }) => {
   const items = useMemo(() => {
     const actions = [
       {
-        id: 'action-theme',
+        id: 'action-theme-cosmic',
         category: 'ACTIONS',
-        title: mode === 'dark' ? 'Switch to Daylight Light Mode' : 'Switch to Cyber Dark Mode',
-        subtitle: `Currently active: ${mode === 'dark' ? 'Obsidian Dark' : 'Porcelain Light'}`,
-        badge: 'Theme',
-        icon: mode === 'dark' ? <LightMode sx={{ fontSize: 18, color: '#f59e0b' }} /> : <DarkMode sx={{ fontSize: 18, color: '#38bdf8' }} />,
-        color: mode === 'dark' ? '#f59e0b' : '#38bdf8',
-        shortcut: '↵ Toggle',
-        actionType: 'theme',
-        payload: null
+        title: 'Universe: Cosmic Cyber 🌌',
+        subtitle: 'Deep space obsidian, cyan glow & 3D stellar constellation',
+        badge: 'Universe',
+        icon: <Box sx={{ fontSize: 16 }}>🌌</Box>,
+        color: '#00f2fe',
+        shortcut: '↵ Switch',
+        actionType: 'set-theme',
+        payload: 'dark'
+      },
+      {
+        id: 'action-theme-synthwave',
+        category: 'ACTIONS',
+        title: 'Universe: Neon Synthwave 🌆',
+        subtitle: 'Outrun retro-future, hot pink magenta & 3D wireframe grid',
+        badge: 'Universe',
+        icon: <Box sx={{ fontSize: 16 }}>🌆</Box>,
+        color: '#ff2a85',
+        shortcut: '↵ Switch',
+        actionType: 'set-theme',
+        payload: 'synthwave'
+      },
+      {
+        id: 'action-theme-matrix',
+        category: 'ACTIONS',
+        title: 'Universe: Matrix Terminal 💻',
+        subtitle: 'Encrypted cyber, hacker emerald & 3D data code streams',
+        badge: 'Universe',
+        icon: <Box sx={{ fontSize: 16 }}>💻</Box>,
+        color: '#00ff88',
+        shortcut: '↵ Switch',
+        actionType: 'set-theme',
+        payload: 'matrix'
+      },
+      {
+        id: 'action-theme-frost',
+        category: 'ACTIONS',
+        title: 'Universe: Nordic Frost ❄️',
+        subtitle: 'Glacier pearl, electric cobalt & 3D floating glass spheres',
+        badge: 'Universe',
+        icon: <Box sx={{ fontSize: 16 }}>❄️</Box>,
+        color: '#0284c7',
+        shortcut: '↵ Switch',
+        actionType: 'set-theme',
+        payload: 'light'
       },
       {
         id: 'action-resume',
@@ -231,6 +267,9 @@ const CommandPalette = ({ open, onClose, onSelectProject }) => {
     } else if (item.actionType === 'resume') {
       onClose();
       setTimeout(() => scrollToTarget('resume'), 150);
+    } else if (item.actionType === 'set-theme') {
+      setThemeMode(item.payload);
+      onClose();
     } else if (item.actionType === 'theme') {
       toggleTheme();
     } else if (item.actionType === 'external') {
@@ -241,7 +280,7 @@ const CommandPalette = ({ open, onClose, onSelectProject }) => {
       setCopiedNotification(`Copied: ${item.payload}`);
       setTimeout(() => setCopiedNotification(''), 2200);
     }
-  }, [onClose, onSelectProject, scrollToTarget, toggleTheme]);
+  }, [onClose, onSelectProject, scrollToTarget, setThemeMode, toggleTheme]);
 
   // Keyboard navigation
   useEffect(() => {

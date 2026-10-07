@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
-import { Box, Typography, Tabs, Tab, Chip } from '@mui/material';
-import { Terminal, Code, Hub, FiberManualRecord } from '@mui/icons-material';
+import { Box, Typography, Tabs, Tab, Chip, Button } from '@mui/material';
+import { Terminal, Code, Hub, FiberManualRecord, AutoAwesome } from '@mui/icons-material';
 import { personalInfo } from '../../data/socialLinks';
 import { useThemeMode } from '../../context/ThemeContext';
+import HolographicCore from '../3d/HolographicCore';
 
 const DeveloperConsole = () => {
-  const { mode, toggleTheme, setThemeMode, isDark } = useThemeMode();
+  const { mode, toggleTheme, setThemeMode, isDark, themes, currentTheme } = useThemeMode();
   const [activeTab, setActiveTab] = useState(0);
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState([
     { type: 'system', text: 'Welcome to Ashish Kumar\'s interactive developer environment.' },
-    { type: 'system', text: 'Type "help" to view commands, or click any command chip below.' }
+    { type: 'system', text: 'Type "help" to view commands, or click any command chip below. Try "hologram" to inspect 3D core!' }
   ]);
   const [currentTime, setCurrentTime] = useState('');
   const terminalLogsRef = useRef(null);
@@ -42,35 +43,69 @@ const DeveloperConsole = () => {
         newHistory.push({
           type: 'output',
           text: `Available commands:
-  • about     - Who is Ashish Kumar?
-  • projects  - List 4 featured engineering projects
-  • skills    - View core technical stack
-  • stack     - Polyglot & adaptability breakdown
-  • timeline  - Education & experience overview
-  • theme     - Toggle or set visual theme (light / dark)
-  • contact   - Direct email and professional links
-  • resume    - Download verified PDF resume
-  • clear     - Clear terminal screen`
+  • hologram    - Open interactive 3D Holographic Architecture Core
+  • theme       - List all 4 themes & active preset
+  • theme <id>  - Switch theme: cosmic, synthwave, matrix, frost
+  • about       - Who is Ashish Kumar?
+  • projects    - List 4 featured engineering projects
+  • skills      - View core technical stack
+  • stack       - Polyglot & adaptability breakdown
+  • timeline    - Education & experience overview
+  • contact     - Direct email and professional links
+  • resume      - Download verified PDF resume
+  • clear       - Clear terminal screen`
+        });
+        break;
+
+      case 'hologram':
+      case '3d':
+      case 'core':
+        setActiveTab(1);
+        newHistory.push({
+          type: 'output',
+          text: `Switched to 3D Holographic Architecture Core tab. Click & drag to inspect 360° orbital satellites!`
         });
         break;
 
       case 'theme':
-      case 'toggle-theme':
-        toggleTheme();
+      case 'themes':
         newHistory.push({
           type: 'output',
-          text: `Theme toggled to: ${mode === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}`
+          text: `Active Theme: [${currentTheme.name}] (${currentTheme.tagline})
+Available Presets:
+  1. cosmic    - Cosmic Cyber (Deep space obsidian & cyan glow)
+  2. synthwave - Neon Synthwave (Outrun & magenta sunset)
+  3. matrix    - Matrix Terminal (Encrypted emerald & cyber teal)
+  4. frost     - Nordic Frost (Glacier pearl & cobalt blue)
+Type "theme <name>" or use the top navbar switcher to morph universe.`
         });
         break;
 
-      case 'theme light':
-        setThemeMode('light');
-        newHistory.push({ type: 'output', text: `Theme switched to LIGHT MODE.` });
-        break;
-
+      case 'theme cosmic':
       case 'theme dark':
         setThemeMode('dark');
-        newHistory.push({ type: 'output', text: `Theme switched to DARK MODE.` });
+        newHistory.push({ type: 'output', text: `Universe warped to: COSMIC CYBER [Deep Space]` });
+        break;
+
+      case 'theme synthwave':
+      case 'theme outrun':
+      case 'theme neon':
+        setThemeMode('synthwave');
+        newHistory.push({ type: 'output', text: `Universe warped to: NEON SYNTHWAVE [Outrun Sunset]` });
+        break;
+
+      case 'theme matrix':
+      case 'theme hacker':
+      case 'theme terminal':
+        setThemeMode('matrix');
+        newHistory.push({ type: 'output', text: `Universe warped to: MATRIX TERMINAL [Hacker Emerald]` });
+        break;
+
+      case 'theme frost':
+      case 'theme light':
+      case 'theme glacier':
+        setThemeMode('light');
+        newHistory.push({ type: 'output', text: `Universe warped to: NORDIC FROST [Glacier Pearl]` });
         break;
 
       case 'about':
@@ -120,45 +155,42 @@ Run 'stack' to see how these architectures connect, or click any project card.`
         break;
 
       case 'timeline':
+      case 'education':
+      case 'experience':
         newHistory.push({
           type: 'output',
-          text: `Engineering Milestones:
-• 2024 – 2026: MCA @ Chandigarh University (CGPA: 8.24/10)
-• Apr 2026 – May 2026: AI Resume Interviewer Platform (RAG & Ollama)
-• Jan 2026 – Mar 2026: NetSentinel Linux NIDS Suite
-• Sept 2025 – Nov 2025: FlipLearn (Cross-platform Flutter App)
-• Jan 2024 – May 2024: ESquare Native Android App (Netrom Services / Google Play)
-• 2021 – 2024: BCA @ IGNOU (Score: 70.11%)`
+          text: `Chronology:
+• 2024 - 2026: Master of Computer Applications (MCA) @ Chandigarh University (CGPA: 8.24)
+• 2021 - 2024: Bachelor of Computer Applications (BCA) @ Arka Jain University (CGPA: 8.42)
+• 2024: Full Stack Developer Trainee @ Cognifyz Technologies (Responsive UI & RESTful APIs)`
         });
         break;
 
       case 'contact':
+      case 'email':
         newHistory.push({
           type: 'output',
-          text: `Direct Contact Channels:
-• Email:    ${personalInfo.email} (Primary • Replies < 12h)
+          text: `Connect with Ashish:
+• Direct Email: ${personalInfo.email}
 • LinkedIn: ${personalInfo.linkedin}
-• GitHub:   ${personalInfo.github}
-• Portfolio: ${personalInfo.portfolioUrl}
-• Location: ${personalInfo.location}`
+• GitHub: ${personalInfo.github}`
         });
         break;
 
       case 'resume':
-      case 'cat resume.txt': {
+      case 'cv':
+        window.open('/Ashish_Kumar_Resume.pdf', '_blank');
         newHistory.push({
           type: 'output',
-          text: `Downloading Ashish_Kumar_Resume.pdf... (Initiated)`
+          text: `Opening Ashish Kumar's verified Resume (PDF) in a new tab...`
         });
-        const link = document.createElement('a');
-        link.href = '/assets/resume/Ashish_Kumar_Resume.pdf';
-        link.download = 'Ashish_Kumar_Resume.pdf';
-        link.click();
         break;
-      }
 
       case 'clear':
-        setHistory([]);
+      case 'cls':
+        setHistory([
+          { type: 'system', text: 'Terminal cleared. Type "help" or click any command chip below.' }
+        ]);
         setInputVal('');
         return;
 
@@ -183,7 +215,7 @@ Run 'stack' to see how these architectures connect, or click any project card.`
   };
 
   return (
-    <Box className="terminal-window" sx={{ width: '100%', maxWidth: '620px', margin: '0 auto' }}>
+    <Box className="terminal-window" sx={{ width: '100%', maxWidth: '640px', margin: '0 auto' }}>
       {/* Header bar */}
       <Box className="terminal-header">
         <Box className="terminal-dots">
@@ -196,16 +228,21 @@ Run 'stack' to see how these architectures connect, or click any project card.`
         <Tabs
           value={activeTab}
           onChange={(e, val) => setActiveTab(val)}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
           sx={{
             minHeight: 28,
+            maxWidth: { xs: 'calc(100% - 60px)', sm: 'auto' },
             '& .MuiTab-root': {
               minHeight: 28,
               py: 0.5,
-              px: 1.5,
-              fontSize: '0.75rem',
+              px: { xs: 0.8, sm: 1.2 },
+              fontSize: { xs: '0.68rem', sm: '0.74rem' },
               fontFamily: 'JetBrains Mono, monospace',
               color: 'var(--text-secondary)',
               textTransform: 'none',
+              minWidth: 'auto',
               '&.Mui-selected': {
                 color: 'var(--primary-glow)',
                 fontWeight: 600
@@ -217,15 +254,16 @@ Run 'stack' to see how these architectures connect, or click any project card.`
             }
           }}
         >
-          <Tab icon={<Terminal sx={{ fontSize: 14 }} />} iconPosition="start" label="terminal.sh" />
-          <Tab icon={<Code sx={{ fontSize: 14 }} />} iconPosition="start" label="ashish.config.ts" />
-          <Tab icon={<Hub sx={{ fontSize: 14 }} />} iconPosition="start" label="telemetry.json" />
+          <Tab icon={<Terminal sx={{ fontSize: 13 }} />} iconPosition="start" label="terminal.sh" />
+          <Tab icon={<AutoAwesome sx={{ fontSize: 13, color: 'var(--primary-glow)' }} />} iconPosition="start" label="hologram.3d" />
+          <Tab icon={<Code sx={{ fontSize: 13 }} />} iconPosition="start" label="ashish.config.ts" />
+          <Tab icon={<Hub sx={{ fontSize: 13 }} />} iconPosition="start" label="telemetry.json" />
         </Tabs>
 
         <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 0.8 }}>
-          <FiberManualRecord sx={{ fontSize: 10, color: '#10b981' }} />
-          <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: '#10b981', fontSize: '0.7rem' }}>
-            ONLINE
+          <FiberManualRecord sx={{ fontSize: 10, color: currentTheme.primaryColor }} />
+          <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: '0.7rem' }}>
+            {currentTheme.name.toUpperCase()}
           </Typography>
         </Box>
       </Box>
@@ -252,7 +290,7 @@ Run 'stack' to see how these architectures connect, or click any project card.`
                   </Typography>
                 )}
                 {item.type === 'error' && (
-                  <Typography sx={{ color: '#f87171', fontFamily: 'inherit', fontSize: 'inherit' }}>
+                  <Typography sx={{ color: '#ef4444', fontFamily: 'inherit', fontSize: 'inherit' }}>
                     {item.text}
                   </Typography>
                 )}
@@ -260,9 +298,9 @@ Run 'stack' to see how these architectures connect, or click any project card.`
             ))}
           </Box>
 
-          {/* Prompt line */}
-          <Box sx={{ display: 'flex', alignItems: 'center', pt: 1.2, borderTop: '1px solid var(--card-border)' }}>
-            <Typography sx={{ color: 'var(--primary-glow)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', mr: 1, whiteSpace: 'nowrap', fontWeight: 700 }}>
+          {/* Terminal Input Line */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, pt: 1.5, borderTop: '1px solid var(--card-border)' }}>
+            <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontSize: '0.84rem', fontWeight: 700, whiteSpace: 'nowrap' }}>
               ashish@portfolio:~$
             </Typography>
             <input
@@ -272,7 +310,7 @@ Run 'stack' to see how these architectures connect, or click any project card.`
               onKeyDown={handleKeyDown}
               placeholder="type 'help' or click a chip below..."
               style={{
-                width: '100%',
+                flexGrow: 1,
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
@@ -280,30 +318,43 @@ Run 'stack' to see how these architectures connect, or click any project card.`
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: '0.84rem'
               }}
+              autoComplete="off"
+              spellCheck="false"
             />
           </Box>
 
-          {/* Quick command buttons */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mt: 1.5 }}>
-            {['help', 'about', 'projects', 'stack', 'skills', 'timeline', 'theme', 'contact', 'clear'].map((cmd) => (
+          {/* Quick Clickable Command Chips */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, pt: 1.5 }}>
+            {[
+              { label: 'help', cmd: 'help' },
+              { label: '✨ 3d hologram', cmd: 'hologram' },
+              { label: 'about', cmd: 'about' },
+              { label: 'projects', cmd: 'projects' },
+              { label: 'stack', cmd: 'stack' },
+              { label: '🌌 cosmic', cmd: 'theme cosmic' },
+              { label: '🌆 synthwave', cmd: 'theme synthwave' },
+              { label: '💻 matrix', cmd: 'theme matrix' },
+              { label: '❄️ frost', cmd: 'theme frost' },
+              { label: 'clear', cmd: 'clear' }
+            ].map((chip, idx) => (
               <Chip
-                key={cmd}
-                label={cmd}
+                key={idx}
+                label={chip.label}
                 size="small"
-                onClick={() => executeCommand(cmd)}
+                onClick={() => executeCommand(chip.cmd)}
                 sx={{
                   fontFamily: 'JetBrains Mono, monospace',
-                  fontSize: '0.72rem',
+                  fontSize: '0.70rem',
                   height: 24,
-                  bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : 'rgba(2, 132, 199, 0.08)',
-                  border: '1px solid',
-                  borderColor: isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.25)',
-                  color: isDark ? 'var(--secondary-glow)' : '#0284c7',
+                  bgcolor: 'var(--subtle-chip-bg)',
+                  border: '1px solid var(--card-border)',
+                  color: 'var(--text-secondary)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   '&:hover': {
-                    bgcolor: isDark ? 'rgba(0, 242, 254, 0.2)' : 'rgba(2, 132, 199, 0.16)',
-                    borderColor: 'var(--primary-glow)'
+                    bgcolor: 'var(--theme-halo)',
+                    borderColor: 'var(--primary-glow)',
+                    color: 'var(--text-primary)'
                   }
                 }}
               />
@@ -312,9 +363,40 @@ Run 'stack' to see how these architectures connect, or click any project card.`
         </Box>
       )}
 
-      {/* Tab 1: TypeScript Config */}
+      {/* Tab 1: Interactive 3D Holographic Core */}
       {activeTab === 1 && (
+        <Box sx={{ height: { xs: '380px', sm: '460px', md: '500px' }, bgcolor: 'var(--code-bg)' }}>
+          <HolographicCore onBackToTerminal={() => setActiveTab(0)} />
+        </Box>
+      )}
+
+      {/* Tab 2: TypeScript Config */}
+      {activeTab === 2 && (
         <Box sx={{ p: 2.5, height: { xs: '380px', sm: '460px', md: '500px' }, overflowY: 'auto', bgcolor: 'var(--code-bg)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', lineHeight: 1.65 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: '1px solid var(--card-border)' }}>
+            <Typography variant="caption" sx={{ color: 'var(--primary-glow)', fontFamily: 'inherit', fontWeight: 700 }}>
+              // ashish.config.ts
+            </Typography>
+            <Button
+              size="small"
+              onClick={() => setActiveTab(0)}
+              startIcon={<Terminal sx={{ fontSize: 13 }} />}
+              sx={{
+                color: 'var(--primary-glow)',
+                fontFamily: 'inherit',
+                fontSize: '0.72rem',
+                textTransform: 'none',
+                py: 0.3,
+                px: 1.2,
+                borderRadius: '6px',
+                bgcolor: 'var(--subtle-chip-bg)',
+                border: '1px solid var(--card-border)',
+                '&:hover': { bgcolor: 'var(--theme-halo)' }
+              }}
+            >
+              ← Back to Terminal
+            </Button>
+          </Box>
           <Typography component="pre" sx={{ fontFamily: 'inherit', fontSize: 'inherit', color: 'var(--text-secondary)' }}>
             <span className="code-syntax-keyword">import</span> &#123; DeveloperProfile &#125; <span className="code-syntax-keyword">from</span> <span className="code-syntax-string">'@ashish/core'</span>;{'\n\n'}
             <span className="code-syntax-keyword">export const</span> <span className="code-syntax-variable">ashishKumar</span>: DeveloperProfile = &#123;{'\n'}
@@ -340,12 +422,37 @@ Run 'stack' to see how these architectures connect, or click any project card.`
         </Box>
       )}
 
-      {/* Tab 2: Telemetry JSON */}
-      {activeTab === 2 && (
+      {/* Tab 3: Telemetry JSON */}
+      {activeTab === 3 && (
         <Box sx={{ p: 2.5, height: { xs: '380px', sm: '460px', md: '500px' }, overflowY: 'auto', bgcolor: 'var(--code-bg)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.84rem', lineHeight: 1.65 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: '1px solid var(--card-border)' }}>
+            <Typography variant="caption" sx={{ color: 'var(--primary-glow)', fontFamily: 'inherit', fontWeight: 700 }}>
+              // telemetry.json
+            </Typography>
+            <Button
+              size="small"
+              onClick={() => setActiveTab(0)}
+              startIcon={<Terminal sx={{ fontSize: 13 }} />}
+              sx={{
+                color: 'var(--primary-glow)',
+                fontFamily: 'inherit',
+                fontSize: '0.72rem',
+                textTransform: 'none',
+                py: 0.3,
+                px: 1.2,
+                borderRadius: '6px',
+                bgcolor: 'var(--subtle-chip-bg)',
+                border: '1px solid var(--card-border)',
+                '&:hover': { bgcolor: 'var(--theme-halo)' }
+              }}
+            >
+              ← Back to Terminal
+            </Button>
+          </Box>
           <Typography component="pre" sx={{ fontFamily: 'inherit', fontSize: 'inherit', color: 'var(--text-secondary)' }}>
             &#123;{'\n'}
             {'  '}<span className="code-syntax-variable">"nodeEnv"</span>: <span className="code-syntax-string">"production"</span>,{'\n'}
+            {'  '}<span className="code-syntax-variable">"activeUniverse"</span>: <span className="code-syntax-string">"{currentTheme.name}"</span>,{'\n'}
             {'  '}<span className="code-syntax-variable">"serverStatus"</span>: <span className="code-syntax-string">"HEALTHY_200_OK"</span>,{'\n'}
             {'  '}<span className="code-syntax-variable">"localTimeIST"</span>: <span className="code-syntax-string">"{currentTime}"</span>,{'\n'}
             {'  '}<span className="code-syntax-variable">"gitBranch"</span>: <span className="code-syntax-string">"main"</span>,{'\n'}

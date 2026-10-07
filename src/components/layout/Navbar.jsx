@@ -1,23 +1,38 @@
 import { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Box, Tooltip } from '@mui/material';
-import { Menu as MenuIcon, Close as CloseIcon, Search, Download, LightMode, DarkMode } from '@mui/icons-material';
+import { 
+  Menu as MenuIcon, 
+  Close as CloseIcon, 
+  Search, 
+  Download, 
+  Person,
+  Bolt,
+  Layers,
+  Timeline,
+  WorkspacePremium,
+  GitHub as GitHubIcon,
+  Email,
+  ChevronRight,
+  AutoAwesome
+} from '@mui/icons-material';
 import { personalInfo } from '../../data/socialLinks';
 import { useThemeMode } from '../../context/ThemeContext';
+import ThemeSelector from '../ui/ThemeSelector';
 
 const navLinks = [
-  { title: 'About', id: 'about' },
-  { title: 'Skills', id: 'skills' },
-  { title: 'Projects', id: 'projects' },
-  { title: 'Journey', id: 'experience' },
-  { title: 'Certs', id: 'certifications' },
-  { title: 'GitHub', id: 'github' },
-  { title: 'Contact', id: 'contact' },
+  { title: 'About', id: 'about', subtitle: 'Profile & Philosophy', icon: <Person sx={{ fontSize: 18 }} /> },
+  { title: 'Skills', id: 'skills', subtitle: 'Tools & Architecture', icon: <Bolt sx={{ fontSize: 18 }} /> },
+  { title: 'Projects', id: 'projects', subtitle: 'Production Systems', icon: <Layers sx={{ fontSize: 18 }} /> },
+  { title: 'Journey', id: 'experience', subtitle: 'Education & Roles', icon: <Timeline sx={{ fontSize: 18 }} /> },
+  { title: 'Certs', id: 'certifications', subtitle: 'Verified Credentials', icon: <WorkspacePremium sx={{ fontSize: 18 }} /> },
+  { title: 'GitHub', id: 'github', subtitle: 'Repositories & Stats', icon: <GitHubIcon sx={{ fontSize: 18 }} /> },
+  { title: 'Contact', id: 'contact', subtitle: 'Direct Communication', icon: <Email sx={{ fontSize: 18 }} /> },
 ];
 
 const Navbar = ({ onOpenCommandPalette }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { mode, toggleTheme, isDark } = useThemeMode();
+  const { mode, toggleTheme, setThemeMode, themes, currentTheme, isDark } = useThemeMode();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,26 +129,8 @@ const Navbar = ({ onOpenCommandPalette }) => {
 
         {/* Right Actions: Theme Toggle + Search + Resume */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
-          {/* Light / Dark Mode Toggle */}
-          <Tooltip title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}>
-            <IconButton
-              onClick={toggleTheme}
-              aria-label="Toggle theme mode"
-              sx={{
-                color: isDark ? 'var(--primary-glow)' : '#f59e0b',
-                bgcolor: isDark ? 'rgba(0, 242, 254, 0.08)' : 'rgba(245, 158, 11, 0.12)',
-                border: '1px solid',
-                borderColor: isDark ? 'rgba(0, 242, 254, 0.3)' : 'rgba(245, 158, 11, 0.35)',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                '&:hover': {
-                  transform: 'rotate(20deg) scale(1.08)',
-                  bgcolor: isDark ? 'rgba(0, 242, 254, 0.2)' : 'rgba(245, 158, 11, 0.25)'
-                }
-              }}
-            >
-              {isDark ? <LightMode sx={{ fontSize: 18 }} /> : <DarkMode sx={{ fontSize: 18 }} />}
-            </IconButton>
-          </Tooltip>
+          {/* Multi-Universe 3D Theme Selector */}
+          <ThemeSelector />
 
           {/* Command Palette Trigger */}
           <Button
@@ -213,81 +210,243 @@ const Navbar = ({ onOpenCommandPalette }) => {
         onClose={() => setMobileOpen(false)}
         PaperProps={{
           sx: {
-            width: 280,
-            background: 'var(--card-bg)',
-            backdropFilter: 'blur(20px)',
-            borderLeft: '1px solid var(--card-border)',
-            p: 2.5
+            width: { xs: '100%', sm: 380 },
+            maxWidth: '100vw',
+            background: isDark ? 'rgba(7, 10, 22, 0.96)' : 'rgba(248, 250, 252, 0.98)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderLeft: { sm: '1px solid var(--card-border)' },
+            p: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            overflow: 'hidden'
           }
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 700, color: 'var(--primary-glow)' }}>
-            Navigation
-          </Typography>
-          <IconButton onClick={() => setMobileOpen(false)} sx={{ color: 'var(--text-primary)' }}>
-            <CloseIcon />
+        {/* Header HUD */}
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            px: 2.5, 
+            py: 2, 
+            borderBottom: '1px solid var(--card-border)',
+            bgcolor: 'var(--navbar-bg)'
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box
+              sx={{
+                width: 38,
+                height: 38,
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, rgba(0,242,254,0.15) 0%, rgba(168,85,247,0.15) 100%)',
+                border: '1px solid var(--card-border-hover)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 12px var(--theme-halo)'
+              }}
+            >
+              <Typography sx={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, color: 'var(--primary-glow)', fontSize: '0.95rem' }}>
+                AK
+              </Typography>
+            </Box>
+            <Box>
+              <Typography sx={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem', lineHeight: 1.2, display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                {personalInfo.name}
+                <Box component="span" sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+              </Typography>
+              <Typography sx={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem' }}>
+                Software Engineer • Portfolio
+              </Typography>
+            </Box>
+          </Box>
+
+          <IconButton 
+            onClick={() => setMobileOpen(false)} 
+            sx={{ 
+              color: 'var(--text-primary)',
+              bgcolor: 'var(--subtle-chip-bg)',
+              border: '1px solid var(--card-border)',
+              p: 0.8,
+              '&:hover': {
+                bgcolor: 'var(--theme-halo)',
+                borderColor: 'var(--primary-glow)'
+              }
+            }}
+          >
+            <CloseIcon fontSize="small" />
           </IconButton>
         </Box>
 
-        {/* Mobile Theme Toggle Button */}
-        <Box sx={{ mb: 2, pb: 2, borderBottom: '1px solid var(--card-border)' }}>
-          <Button
-            fullWidth
-            onClick={toggleTheme}
-            startIcon={isDark ? <LightMode sx={{ color: '#f59e0b' }} /> : <DarkMode sx={{ color: '#0284c7' }} />}
-            sx={{
-              justifyContent: 'flex-start',
-              px: 2,
-              py: 1.2,
-              borderRadius: '8px',
-              color: 'var(--text-primary)',
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.85rem',
-              bgcolor: 'var(--subtle-chip-bg)',
-              border: '1px solid var(--card-border)'
-            }}
-          >
-            {isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          </Button>
+        {/* Scrollable Body */}
+        <Box sx={{ flex: 1, overflowY: 'auto', px: 2.5, py: 2, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+          
+          {/* 1. 3D Universe Theme Bar */}
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.2 }}>
+              <AutoAwesome sx={{ color: 'var(--primary-glow)', fontSize: 14 }} />
+              <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--primary-glow)', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.06em' }}>
+                // 3D UNIVERSE THEME
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1 }}>
+              {themes.map((t) => {
+                const isSelected = t.id === mode;
+                return (
+                  <Box
+                    key={t.id}
+                    onClick={(e) => {
+                      setThemeMode(t.id, e);
+                    }}
+                    sx={{
+                      cursor: 'pointer',
+                      p: 1.2,
+                      borderRadius: '10px',
+                      bgcolor: isSelected ? 'var(--theme-halo)' : 'var(--subtle-chip-bg)',
+                      border: '1.5px solid',
+                      borderColor: isSelected ? t.primaryColor : 'var(--card-border)',
+                      boxShadow: isSelected ? `0 0 16px ${t.primaryColor}30` : 'none',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      '&:hover': {
+                        borderColor: t.primaryColor,
+                        bgcolor: 'var(--theme-halo)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ fontSize: '1.1rem', lineHeight: 1 }}>{t.icon}</Box>
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontFamily: 'JetBrains Mono, monospace',
+                          fontSize: '0.74rem',
+                          fontWeight: isSelected ? 800 : 600,
+                          color: isSelected ? t.primaryColor : 'var(--text-primary)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          lineHeight: 1.2
+                        }}
+                      >
+                        {t.name}
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, mt: 0.3 }}>
+                        <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: t.primaryColor }} />
+                        <Typography sx={{ fontSize: '0.62rem', color: isSelected ? 'var(--text-primary)' : 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+                          {isSelected ? 'ACTIVE' : 'SELECT'}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+
+          {/* 2. Navigation Items (Card Tiles) */}
+          <Box>
+            <Typography variant="caption" sx={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--text-muted)', fontSize: '0.72rem', display: 'block', mb: 1, letterSpacing: '0.06em' }}>
+              // DIRECT NAVIGATION
+            </Typography>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              {navLinks.map((link) => (
+                <Box
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    p: 1.2,
+                    borderRadius: '12px',
+                    bgcolor: 'var(--card-bg)',
+                    border: '1px solid var(--card-border)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      bgcolor: 'rgba(56, 189, 248, 0.08)',
+                      borderColor: 'var(--primary-glow)',
+                      transform: 'translateX(3px)'
+                    }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 34,
+                        height: 34,
+                        borderRadius: '8px',
+                        bgcolor: 'var(--subtle-chip-bg)',
+                        border: '1px solid var(--card-border)',
+                        color: 'var(--primary-glow)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      {link.icon}
+                    </Box>
+                    <Box>
+                      <Typography sx={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.92rem', lineHeight: 1.2 }}>
+                        {link.title}
+                      </Typography>
+                      <Typography sx={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontFamily: 'JetBrains Mono, monospace' }}>
+                        {link.subtitle}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <ChevronRight sx={{ color: 'var(--text-muted)', fontSize: 18 }} />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+
         </Box>
 
-        <List>
-          {navLinks.map((link) => (
-            <ListItem key={link.id} disablePadding sx={{ mb: 1 }}>
-              <ListItemButton
-                onClick={() => scrollToSection(link.id)}
-                sx={{
-                  borderRadius: '8px',
-                  '&:hover': { bgcolor: 'rgba(56, 189, 248, 0.1)' }
-                }}
-              >
-                <ListItemText
-                  primary={link.title}
-                  primaryTypographyProps={{
-                    sx: { color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem' }
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid var(--card-border)', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+        {/* 3. Bottom Pinned Actions with Safe-Area Padding */}
+        <Box 
+          sx={{ 
+            p: 2.5, 
+            pt: 2, 
+            pb: 'calc(24px + env(safe-area-inset-bottom))', 
+            borderTop: '1px solid var(--card-border)', 
+            bgcolor: 'var(--navbar-bg)',
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 1.2 
+          }}
+        >
           <Button
             fullWidth
             href="/assets/resume/Ashish_Kumar_Resume.pdf"
             download="Ashish_Kumar_Resume.pdf"
-            variant="outlined"
+            variant="contained"
             startIcon={<Download />}
             sx={{
-              borderColor: 'var(--primary-glow)',
-              color: 'var(--primary-glow)',
+              bgcolor: 'var(--primary-glow)',
+              color: isDark ? '#050814' : '#ffffff',
+              fontWeight: 700,
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.85rem'
+              fontSize: '0.84rem',
+              py: 1.2,
+              borderRadius: '10px',
+              textTransform: 'none',
+              boxShadow: '0 0 20px var(--theme-halo)',
+              '&:hover': {
+                bgcolor: 'var(--secondary-glow)'
+              }
             }}
           >
-            Download Resume
+            Download Resume (PDF)
           </Button>
 
           <Button
@@ -296,16 +455,24 @@ const Navbar = ({ onOpenCommandPalette }) => {
               setMobileOpen(false);
               onOpenCommandPalette();
             }}
-            variant="contained"
+            variant="outlined"
             startIcon={<Search />}
             sx={{
-              bgcolor: isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.2)',
+              borderColor: 'var(--card-border)',
+              bgcolor: 'var(--subtle-chip-bg)',
               color: 'var(--text-primary)',
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.85rem'
+              fontSize: '0.82rem',
+              py: 1,
+              borderRadius: '10px',
+              textTransform: 'none',
+              '&:hover': {
+                borderColor: 'var(--primary-glow)',
+                color: 'var(--primary-glow)'
+              }
             }}
           >
-            Command Palette
+            Command Palette <span className="kbd-badge" style={{ marginLeft: 8 }}>⌘K</span>
           </Button>
         </Box>
       </Drawer>
