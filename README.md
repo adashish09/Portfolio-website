@@ -60,9 +60,9 @@ The background is driven by a custom Three.js engine (`ParticleBackground.jsx`) 
 
 | Universe Preset | Visual World & Mechanics |
 | --- | --- |
-| **🌌 Cosmic Cyber** | Deep-space starfield with mouse gravitational vortex, cursor constellation tethering, and traveling photon pulses. |
+| **🌌 Cosmic Cyber** | Deep-space multi-layer starfield with subtle celestial nebula glow and organic drift (engineered without intersecting lines to maximize reading clarity). |
 | **🌆 Neon Synthwave** | 3D cyber warp tunnel featuring glowing octagonal gates, infinite horizon grid, and luminous laser rails. |
-| **💻 Matrix Terminal** | 3D encrypted digital code rain columns, falling binary glyph streamers, and cursor wake repulsion. |
+| **💻 Matrix Terminal** | Authentic cascading digital binary rain of glowing emerald `0`s and `1`s with column velocity variation and cursor wake repulsion. |
 | **❄️ Nordic Frost** | Minimalist glacier light theme with floating crystalline spheres, ambient frost particles, and icy specular highlights. |
 
 All scenes feature smooth pointer interpolation, spring easing, and delta-time clamping to maintain silky-smooth 60/120 FPS performance across all devices.

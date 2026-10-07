@@ -5,10 +5,10 @@ import { useThemeMode } from '../../context/ThemeContext';
 /**
  * ParticleBackground: Multi-Dimensional 3D WebGL Background Engine
  * Enhanced with:
- * 1. Deep 3D Mouse Interactivity (Cursor Gravitational Vortex, Constellation Tethering, Steering)
- * 2. Brand-New Neon Synthwave 3D Cyber Warp Tunnel & Laser Rails (Replaces old flat wireframe grid)
- * 3. Fade-Away & Roll-In 3D Dimensional Transitions (Smooth scale & position roll-in)
- * 4. Silky-Smooth 60/120fps hardware acceleration with delta clamping
+ * 1. Matrix Terminal: Authentic falling digital binary rain (0s and 1s glyphs)
+ * 2. Cosmic Cyber: Clean, deep celestial starfield with radiant nebula aura (Zero text-interfering lines or vortex)
+ * 3. Mobile & Tablet Touch Protection: Click ripples completely disabled on touch devices to prevent scroll interference
+ * 4. Silky-Smooth 60/120fps hardware acceleration with performance.now() delta timing
  */
 const ParticleBackground = () => {
   const containerRef = useRef(null);
@@ -22,6 +22,16 @@ const ParticleBackground = () => {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Helper: Check if current device is mobile, tablet, or touch-first
+    const isTouchOrMobile = () => {
+      return (
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.innerWidth < 1024
+      );
+    };
 
     // --- 1. Scene, Camera, Renderer Setup ---
     const scene = new THREE.Scene();
@@ -62,8 +72,12 @@ const ParticleBackground = () => {
       mouse.targetY = newTargetY;
     };
 
-    const handlePointerDown = () => {
+    const handlePointerDown = (e) => {
       mouse.isDown = true;
+      // Disable click animation on mobile & tablet devices so scrolling is never interrupted
+      if (e.pointerType === 'touch' || e.pointerType === 'pen' || isTouchOrMobile()) {
+        return;
+      }
       triggerClickRipple();
     };
 
@@ -99,42 +113,94 @@ const ParticleBackground = () => {
       grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 64, 64);
-      return new THREE.CanvasTexture(canvas);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
+    };
+
+    // Soft Glowing Cosmic Nebula Cloud Texture Generator
+    const createNebulaTexture = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 128;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, 'rgba(0, 242, 254, 0.35)');
+      grad.addColorStop(0.35, 'rgba(56, 189, 248, 0.15)');
+      grad.addColorStop(0.7, 'rgba(168, 85, 247, 0.05)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 128, 128);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
+    };
+
+    // Matrix Binary Glyphs Texture Generator (0 and 1)
+    const createBinaryTexture = (char) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 64, 64);
+
+      ctx.font = 'bold 44px "JetBrains Mono", Consolas, "Courier New", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Neon emerald green glow
+      ctx.shadowColor = '#00ff88';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#a7f3d0';
+      ctx.fillText(char, 32, 32);
+
+      // Sharp core
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#00ff88';
+      ctx.fillText(char, 32, 32);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      return texture;
     };
 
     const particleTexture = createParticleTexture();
+    const nebulaTexture = createNebulaTexture();
+    const zeroTexture = createBinaryTexture('0');
+    const oneTexture = createBinaryTexture('1');
 
     // =========================================================================
-    // UNIVERSE 1: COSMIC CYBER (Interactive Starfield & Cursor Constellation)
+    // UNIVERSE 1: COSMIC CYBER (Clean Deep Starfield & Subtle Celestial Nebula)
+    // Removed all criss-crossing lines and distracting vortex to ensure clear reading
     // =========================================================================
     const cosmicGroup = new THREE.Group();
     scene.add(cosmicGroup);
 
-    const cosmicCount = 420;
-    const cosmicPositions = new Float32Array(cosmicCount * 3);
-    const cosmicVelocities = [];
-    const cosmicOriginalPos = [];
+    // Primary Cyan Stars
+    const cosmicCyanCount = 280;
+    const cosmicCyanPositions = new Float32Array(cosmicCyanCount * 3);
+    const cosmicCyanVelocities = [];
 
-    for (let i = 0; i < cosmicCount; i++) {
-      const px = (Math.random() - 0.5) * 950;
-      const py = (Math.random() - 0.5) * 750;
+    for (let i = 0; i < cosmicCyanCount; i++) {
+      const px = (Math.random() - 0.5) * 1100;
+      const py = (Math.random() - 0.5) * 850;
       const pz = (Math.random() - 0.5) * 600;
-      cosmicPositions[i * 3] = px;
-      cosmicPositions[i * 3 + 1] = py;
-      cosmicPositions[i * 3 + 2] = pz;
-      cosmicOriginalPos.push(new THREE.Vector3(px, py, pz));
-      cosmicVelocities.push({
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        vz: (Math.random() - 0.5) * 0.2
+      cosmicCyanPositions[i * 3] = px;
+      cosmicCyanPositions[i * 3 + 1] = py;
+      cosmicCyanPositions[i * 3 + 2] = pz;
+      cosmicCyanVelocities.push({
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        phase: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.6 + Math.random() * 1.2
       });
     }
 
-    const cosmicGeometry = new THREE.BufferGeometry();
-    cosmicGeometry.setAttribute('position', new THREE.BufferAttribute(cosmicPositions, 3));
+    const cosmicCyanGeometry = new THREE.BufferGeometry();
+    cosmicCyanGeometry.setAttribute('position', new THREE.BufferAttribute(cosmicCyanPositions, 3));
 
-    const cosmicMaterial = new THREE.PointsMaterial({
-      size: 4.5,
+    const cosmicCyanMaterial = new THREE.PointsMaterial({
+      size: 4.2,
       map: particleTexture,
       transparent: true,
       opacity: 0.85,
@@ -143,38 +209,78 @@ const ParticleBackground = () => {
       depthWrite: false
     });
 
-    const cosmicPoints = new THREE.Points(cosmicGeometry, cosmicMaterial);
-    cosmicGroup.add(cosmicPoints);
+    const cosmicCyanPoints = new THREE.Points(cosmicCyanGeometry, cosmicCyanMaterial);
+    cosmicGroup.add(cosmicCyanPoints);
 
-    // Dynamic Constellation Connecting Lines (linking nearby stars AND linking to cursor!)
-    const maxLines = 260;
-    const linePositions = new Float32Array(maxLines * 6);
-    const lineGeometry = new THREE.BufferGeometry();
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    // Secondary Soft Violet / Indigo Stars (Deeper Layer)
+    const cosmicPurpleCount = 180;
+    const cosmicPurplePositions = new Float32Array(cosmicPurpleCount * 3);
+    const cosmicPurpleVelocities = [];
 
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x00f2fe,
+    for (let i = 0; i < cosmicPurpleCount; i++) {
+      const px = (Math.random() - 0.5) * 1200;
+      const py = (Math.random() - 0.5) * 900;
+      const pz = (Math.random() - 0.5) * 700 - 100;
+      cosmicPurplePositions[i * 3] = px;
+      cosmicPurplePositions[i * 3 + 1] = py;
+      cosmicPurplePositions[i * 3 + 2] = pz;
+      cosmicPurpleVelocities.push({
+        vx: (Math.random() - 0.5) * 0.1,
+        vy: (Math.random() - 0.5) * 0.1,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+
+    const cosmicPurpleGeometry = new THREE.BufferGeometry();
+    cosmicPurpleGeometry.setAttribute('position', new THREE.BufferAttribute(cosmicPurplePositions, 3));
+
+    const cosmicPurpleMaterial = new THREE.PointsMaterial({
+      size: 3.5,
+      map: particleTexture,
       transparent: true,
-      opacity: 0.28,
-      blending: THREE.AdditiveBlending
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+      color: 0xa855f7,
+      depthWrite: false
     });
 
-    const cosmicLines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    cosmicGroup.add(cosmicLines);
+    const cosmicPurplePoints = new THREE.Points(cosmicPurpleGeometry, cosmicPurpleMaterial);
+    cosmicGroup.add(cosmicPurplePoints);
+
+    // Deep Subtle Nebula Clouds (Very soft, zero text interference)
+    const nebulaCount = 5;
+    const nebulaPositions = new Float32Array(nebulaCount * 3);
+    for (let i = 0; i < nebulaCount; i++) {
+      nebulaPositions[i * 3] = (Math.random() - 0.5) * 800;
+      nebulaPositions[i * 3 + 1] = (Math.random() - 0.5) * 600;
+      nebulaPositions[i * 3 + 2] = -350 - Math.random() * 200;
+    }
+    const nebulaGeometry = new THREE.BufferGeometry();
+    nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
+
+    const nebulaMaterial = new THREE.PointsMaterial({
+      size: 220,
+      map: nebulaTexture,
+      transparent: true,
+      opacity: 0.08,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const nebulaPoints = new THREE.Points(nebulaGeometry, nebulaMaterial);
+    cosmicGroup.add(nebulaPoints);
 
     // =========================================================================
     // UNIVERSE 2: NEON SYNTHWAVE (3D Cyber Warp Tunnel & Laser Rails)
-    // REPLACING the old flat wireframe grid with a high-speed Cyber Tunnel!
     // =========================================================================
     const synthwaveGroup = new THREE.Group();
     scene.add(synthwaveGroup);
 
-    // 16 Concentric Neon Octagonal Gate Rings aligned along Z
+    // 18 Concentric Neon Octagonal Gate Rings aligned along Z
     const tunnelRings = [];
     const ringCount = 18;
     const tunnelSpacing = 90;
 
-    // Create Octagonal Gate Geometry
     const createOctagonGeometry = (radius) => {
       const points = [];
       const sides = 8;
@@ -247,7 +353,7 @@ const ParticleBackground = () => {
     const laserLines = new THREE.LineSegments(laserGeometry, laserMaterial);
     synthwaveGroup.add(laserLines);
 
-    // Distant Synthwave Cyber Sun / Pulsar at the end of tunnel
+    // Distant Synthwave Cyber Sun / Pulsar at end of tunnel
     const sunGeom = new THREE.RingGeometry(35, 42, 32);
     const sunMat = new THREE.MeshBasicMaterial({
       color: 0xffb800,
@@ -261,66 +367,75 @@ const ParticleBackground = () => {
     synthwaveGroup.add(synthSun);
 
     // =========================================================================
-    // UNIVERSE 3: MATRIX TERMINAL (3D Digital Rain & Interactive Telemetry)
+    // UNIVERSE 3: MATRIX TERMINAL (Authentic Cascading 0s and 1s Binary Rain)
+    // Limited density, slow gentle drift, zero snowflakes or wireframe rings
     // =========================================================================
     const matrixGroup = new THREE.Group();
     scene.add(matrixGroup);
 
-    const matrixCount = 500;
-    const matrixPositions = new Float32Array(matrixCount * 3);
-    const matrixVelocities = [];
+    // Falling '0' Glyphs (Clean, limited density)
+    const matrixCount0 = 55;
+    const matrixPositions0 = new Float32Array(matrixCount0 * 3);
+    const matrixVelocities0 = [];
 
-    for (let i = 0; i < matrixCount; i++) {
-      matrixPositions[i * 3] = (Math.random() - 0.5) * 1050;
-      matrixPositions[i * 3 + 1] = (Math.random() - 0.5) * 850;
-      matrixPositions[i * 3 + 2] = (Math.random() - 0.5) * 550;
-      matrixVelocities.push({
-        fallSpeed: 1.5 + Math.random() * 2.5,
-        resetY: 480 + Math.random() * 150,
-        originalX: matrixPositions[i * 3]
+    for (let i = 0; i < matrixCount0; i++) {
+      matrixPositions0[i * 3] = (Math.random() - 0.5) * 1250;
+      matrixPositions0[i * 3 + 1] = (Math.random() - 0.5) * 950;
+      matrixPositions0[i * 3 + 2] = (Math.random() - 0.5) * 450;
+      matrixVelocities0.push({
+        fallSpeed: 18 + Math.random() * 22, // Units per second (calm, cinematic drift)
+        resetY: 480 + Math.random() * 120,
+        originalX: matrixPositions0[i * 3]
       });
     }
 
-    const matrixGeometry = new THREE.BufferGeometry();
-    matrixGeometry.setAttribute('position', new THREE.BufferAttribute(matrixPositions, 3));
+    const matrixGeometry0 = new THREE.BufferGeometry();
+    matrixGeometry0.setAttribute('position', new THREE.BufferAttribute(matrixPositions0, 3));
 
-    const matrixMaterial = new THREE.PointsMaterial({
-      size: 5.5,
-      map: particleTexture,
+    const matrixMaterial0 = new THREE.PointsMaterial({
+      size: 16.5,
+      map: zeroTexture,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.88,
       blending: THREE.AdditiveBlending,
       color: 0x00ff88,
       depthWrite: false
     });
 
-    const matrixPoints = new THREE.Points(matrixGeometry, matrixMaterial);
-    matrixGroup.add(matrixPoints);
+    const matrixPoints0 = new THREE.Points(matrixGeometry0, matrixMaterial0);
+    matrixGroup.add(matrixPoints0);
 
-    // 3D Hexagonal / Quantum Telemetry Rings that face the mouse
-    const ringGeometry = new THREE.RingGeometry(24, 26, 6);
-    const ringMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00f5d4,
-      wireframe: true,
+    // Falling '1' Glyphs (Clean, limited density)
+    const matrixCount1 = 55;
+    const matrixPositions1 = new Float32Array(matrixCount1 * 3);
+    const matrixVelocities1 = [];
+
+    for (let i = 0; i < matrixCount1; i++) {
+      matrixPositions1[i * 3] = (Math.random() - 0.5) * 1250;
+      matrixPositions1[i * 3 + 1] = (Math.random() - 0.5) * 950;
+      matrixPositions1[i * 3 + 2] = (Math.random() - 0.5) * 450;
+      matrixVelocities1.push({
+        fallSpeed: 18 + Math.random() * 22, // Units per second (calm, cinematic drift)
+        resetY: 480 + Math.random() * 120,
+        originalX: matrixPositions1[i * 3]
+      });
+    }
+
+    const matrixGeometry1 = new THREE.BufferGeometry();
+    matrixGeometry1.setAttribute('position', new THREE.BufferAttribute(matrixPositions1, 3));
+
+    const matrixMaterial1 = new THREE.PointsMaterial({
+      size: 16.5,
+      map: oneTexture,
       transparent: true,
-      opacity: 0.35,
-      side: THREE.DoubleSide
+      opacity: 0.88,
+      blending: THREE.AdditiveBlending,
+      color: 0x34d399,
+      depthWrite: false
     });
 
-    const matrixRings = [];
-    for (let i = 0; i < 6; i++) {
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.position.set(
-        (Math.random() - 0.5) * 750,
-        (Math.random() - 0.5) * 550,
-        (Math.random() - 0.5) * 350
-      );
-      ring.userData = {
-        baseSpin: (Math.random() - 0.5) * 0.015
-      };
-      matrixGroup.add(ring);
-      matrixRings.push(ring);
-    }
+    const matrixPoints1 = new THREE.Points(matrixGeometry1, matrixMaterial1);
+    matrixGroup.add(matrixPoints1);
 
     // =========================================================================
     // UNIVERSE 4: NORDIC FROST (3D Floating Glass Spheres & Prismatic Dust)
@@ -378,13 +493,20 @@ const ParticleBackground = () => {
     frostGroup.add(frostPoints);
 
     // =========================================================================
-    // INTERACTIVE CLICK RIPPLE WAVE SHOCKWAVE
+    // INTERACTIVE CLICK RIPPLE WAVE SHOCKWAVE (Desktop Mouse Only)
     // =========================================================================
     const clickRipples = [];
     const triggerClickRipple = () => {
       const ripGeom = new THREE.RingGeometry(5, 7, 32);
       const ripMat = new THREE.MeshBasicMaterial({
-        color: modeRef.current === 'synthwave' ? 0xff2a85 : modeRef.current === 'matrix' ? 0x00ff88 : modeRef.current === 'light' ? 0x0284c7 : 0x00f2fe,
+        color:
+          modeRef.current === 'synthwave'
+            ? 0xff2a85
+            : modeRef.current === 'matrix'
+            ? 0x00ff88
+            : modeRef.current === 'light'
+            ? 0x0284c7
+            : 0x00f2fe,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.85
@@ -405,7 +527,6 @@ const ParticleBackground = () => {
       light: modeRef.current === 'light' ? 1.0 : 0.0
     };
 
-    // Each universe has roll offset (y offset and scale roll-in)
     const rollStates = {
       dark: { rollY: 0, scale: 1 },
       synthwave: { rollY: 0, scale: 1 },
@@ -441,7 +562,7 @@ const ParticleBackground = () => {
     // MAIN 60FPS / 120FPS HARDWARE-ACCELERATED ANIMATION LOOP
     // =========================================================================
     let animationFrameId;
-    let clock = new THREE.Clock();
+    let lastTime = performance.now();
     let previousMode = modeRef.current;
 
     const animate = () => {
@@ -449,8 +570,10 @@ const ParticleBackground = () => {
 
       if (document.hidden) return;
 
-      const delta = Math.min(clock.getDelta(), 0.05); // Clamp delta to avoid frame spikes
-      const elapsedTime = clock.getElapsedTime();
+      const now = performance.now();
+      const delta = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      const elapsedTime = now / 1000;
 
       // Smooth mouse spring interpolation
       mouse.x += (mouse.targetX - mouse.x) * 0.06;
@@ -459,30 +582,26 @@ const ParticleBackground = () => {
       // Project mouse into 3D world space
       mouse.worldPos.set(mouse.x * 320, mouse.y * 220, 0);
 
-      // --- DEEP 3D MOUSE PARALLAX & PERSPECTIVE TILT ---
-      camera.position.x = mouse.x * 110;
-      camera.position.y = mouse.y * 85;
-      scene.rotation.y = mouse.x * 0.16;
-      scene.rotation.x = -mouse.y * 0.12;
+      // --- DEEP 3D MOUSE PARALLAX (Subtle & Clean) ---
+      camera.position.x = mouse.x * 70;
+      camera.position.y = mouse.y * 55;
+      scene.rotation.y = mouse.x * 0.08;
+      scene.rotation.x = -mouse.y * 0.06;
 
       // --- FADE-AWAY & ROLL-IN THEME INTERPOLATION ---
       const activeMode = modeRef.current;
 
-      // Detect theme switch trigger
       if (activeMode !== previousMode) {
-        // Reset incoming roll state: starts scaled slightly and offset
         rollStates[activeMode].scale = 0.90;
         rollStates[activeMode].rollY = -35;
         previousMode = activeMode;
       }
 
-      // Smooth roll-in progress towards target
       ['dark', 'synthwave', 'matrix', 'light'].forEach((key) => {
         const isActive = activeMode === key;
         const targetWeight = isActive ? 1.0 : 0.0;
         weights[key] += (targetWeight - weights[key]) * 0.085;
 
-        // Roll in physics: scale up to 1.0 and roll position to 0
         rollStates[key].scale += (1.0 - rollStates[key].scale) * 0.08;
         rollStates[key].rollY += (0.0 - rollStates[key].rollY) * 0.08;
       });
@@ -492,94 +611,52 @@ const ParticleBackground = () => {
       applyGroupWeightAndRoll(matrixGroup, weights.matrix, 'matrix');
       applyGroupWeightAndRoll(frostGroup, weights.light, 'light');
 
-      // --- ANIMATE UNIVERSE 1: COSMIC CYBER (Starfield + Cursor Constellations) ---
+      // --- ANIMATE UNIVERSE 1: COSMIC CYBER (Clean Starfield & Subtle Nebula Drift) ---
+      // Distraction-free, zero lines cutting across text
       if (cosmicGroup.visible) {
-        const positions = cosmicGeometry.attributes.position.array;
-        let lineIdx = 0;
-        const linePos = lineGeometry.attributes.position.array;
-
-        // 1. Particle motion & Cursor Magnetic Field
-        for (let i = 0; i < cosmicCount; i++) {
+        // 1. Primary Cyan Stars Drift
+        const cyanPos = cosmicCyanGeometry.attributes.position.array;
+        for (let i = 0; i < cosmicCyanCount; i++) {
           const idx = i * 3;
-          positions[idx] += cosmicVelocities[i].vx;
-          positions[idx + 1] += cosmicVelocities[i].vy;
-          positions[idx + 2] += cosmicVelocities[i].vz;
+          cyanPos[idx] += cosmicCyanVelocities[i].vx;
+          cyanPos[idx + 1] += cosmicCyanVelocities[i].vy;
 
-          // Boundaries bounce
-          if (Math.abs(positions[idx]) > 470) cosmicVelocities[i].vx *= -1;
-          if (Math.abs(positions[idx + 1]) > 370) cosmicVelocities[i].vy *= -1;
-          if (Math.abs(positions[idx + 2]) > 300) cosmicVelocities[i].vz *= -1;
-
-          // Interactive 3D Cursor Gravitational Vortex
-          const dx = positions[idx] - mouse.worldPos.x;
-          const dy = positions[idx + 1] - mouse.worldPos.y;
-          const distSq = dx * dx + dy * dy;
-
-          if (distSq < 22000 && distSq > 40) {
-            const force = (1 - distSq / 22000) * 1.5;
-            positions[idx] += (dx / Math.sqrt(distSq)) * force;
-            positions[idx + 1] += (dy / Math.sqrt(distSq)) * force;
-          }
-
-          // 2. Inter-Star Constellation Lines
-          if (i < 80 && lineIdx < (maxLines - 12) * 6) {
-            for (let j = i + 1; j < 80; j++) {
-              const jdx = j * 3;
-              const dX = positions[idx] - positions[jdx];
-              const dY = positions[idx + 1] - positions[jdx + 1];
-              const dZ = positions[idx + 2] - positions[jdx + 2];
-              const d = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
-
-              if (d < 62 && lineIdx < (maxLines - 12) * 6) {
-                linePos[lineIdx++] = positions[idx];
-                linePos[lineIdx++] = positions[idx + 1];
-                linePos[lineIdx++] = positions[idx + 2];
-                linePos[lineIdx++] = positions[jdx];
-                linePos[lineIdx++] = positions[jdx + 1];
-                linePos[lineIdx++] = positions[jdx + 2];
-              }
-            }
-          }
-
-          // 3. CURSOR CONSTELLATION TETHER: Connect cursor directly to nearest stars!
-          if (i < 8 && lineIdx < maxLines * 6) {
-            linePos[lineIdx++] = mouse.worldPos.x;
-            linePos[lineIdx++] = mouse.worldPos.y;
-            linePos[lineIdx++] = 10;
-            linePos[lineIdx++] = positions[idx];
-            linePos[lineIdx++] = positions[idx + 1];
-            linePos[lineIdx++] = positions[idx + 2];
-          }
+          if (Math.abs(cyanPos[idx]) > 550) cosmicCyanVelocities[i].vx *= -1;
+          if (Math.abs(cyanPos[idx + 1]) > 425) cosmicCyanVelocities[i].vy *= -1;
         }
+        cosmicCyanGeometry.attributes.position.needsUpdate = true;
 
-        // Fill remaining lines with zeroes
-        for (let k = lineIdx; k < maxLines * 6; k++) {
-          linePos[k] = 0;
+        // 2. Secondary Violet Stars Drift
+        const purpPos = cosmicPurpleGeometry.attributes.position.array;
+        for (let i = 0; i < cosmicPurpleCount; i++) {
+          const idx = i * 3;
+          purpPos[idx] += cosmicPurpleVelocities[i].vx;
+          purpPos[idx + 1] += cosmicPurpleVelocities[i].vy;
+
+          if (Math.abs(purpPos[idx]) > 600) cosmicPurpleVelocities[i].vx *= -1;
+          if (Math.abs(purpPos[idx + 1]) > 450) cosmicPurpleVelocities[i].vy *= -1;
         }
+        cosmicPurpleGeometry.attributes.position.needsUpdate = true;
 
-        cosmicGeometry.attributes.position.needsUpdate = true;
-        lineGeometry.attributes.position.needsUpdate = true;
-        cosmicGroup.rotation.y = elapsedTime * 0.015;
+        // Gentle celestial drift
+        cosmicGroup.rotation.y = elapsedTime * 0.012;
+        nebulaPoints.rotation.z = elapsedTime * 0.006;
       }
 
       // --- ANIMATE UNIVERSE 2: NEON SYNTHWAVE (3D Cyber Warp Tunnel & Steering) ---
       if (synthwaveGroup.visible) {
-        // Steer tunnel dynamically through space with mouse coordinates
         tunnelRings.forEach((ringItem, idx) => {
           ringItem.mesh.position.z += 2.2;
-          // Wrap around for infinite seamless tunnel
           if (ringItem.mesh.position.z > 350) {
             ringItem.mesh.position.z = -ringCount * tunnelSpacing + 350;
           }
 
-          // Dynamic 3D Steering Curve: the further down the tunnel, the more it swoops with mouse!
-          const depthFactor = (idx / ringCount);
+          const depthFactor = idx / ringCount;
           ringItem.mesh.position.x = mouse.x * (depthFactor * 120) + Math.sin(elapsedTime * 1.5 + idx * 0.3) * 6;
           ringItem.mesh.position.y = mouse.y * (depthFactor * 90) + Math.cos(elapsedTime * 1.5 + idx * 0.3) * 5;
           ringItem.mesh.rotation.z = elapsedTime * 0.2 + idx * 0.05;
         });
 
-        // Animate high-speed laser rails
         const laserPos = laserGeometry.attributes.position.array;
         for (let i = 0; i < laserCount; i++) {
           const idx = i * 6;
@@ -587,14 +664,12 @@ const ParticleBackground = () => {
           laserPos[idx + 2] += vel.speed;
           laserPos[idx + 5] += vel.speed;
 
-          // Wrap back to distant horizon
           if (laserPos[idx + 2] > 380) {
             const z = -1200 - Math.random() * 300;
             laserPos[idx + 2] = z;
             laserPos[idx + 5] = z + 65;
           }
 
-          // Steer lasers with mouse
           laserPos[idx] = Math.cos(vel.baseAngle) * vel.baseR + mouse.x * 40;
           laserPos[idx + 1] = Math.sin(vel.baseAngle) * (vel.baseR * 0.7) + mouse.y * 30;
           laserPos[idx + 3] = laserPos[idx];
@@ -602,51 +677,65 @@ const ParticleBackground = () => {
         }
         laserGeometry.attributes.position.needsUpdate = true;
 
-        // Synthwave Sun rotation & vanishing point tracking
         synthSun.position.x = mouse.x * 60;
         synthSun.position.y = mouse.y * 45;
         synthSun.rotation.z = elapsedTime * 0.3;
       }
 
-      // --- ANIMATE UNIVERSE 3: MATRIX TERMINAL (Digital Rain & Wake Ripple) ---
+      // --- ANIMATE UNIVERSE 3: MATRIX TERMINAL (Cascading 0s and 1s Binary Rain) ---
       if (matrixGroup.visible) {
-        const matrixPos = matrixGeometry.attributes.position.array;
-        for (let i = 0; i < matrixCount; i++) {
+        // Animate '0's (Gentle delta-timed drift)
+        const pos0 = matrixGeometry0.attributes.position.array;
+        for (let i = 0; i < matrixCount0; i++) {
           const idx = i * 3;
-          matrixPos[idx + 1] -= matrixVelocities[i].fallSpeed;
+          pos0[idx + 1] -= matrixVelocities0[i].fallSpeed * delta;
 
-          // Cursor wake: push particles aside horizontally as mouse passes
-          const dx = matrixPos[idx] - mouse.worldPos.x;
-          const dy = matrixPos[idx + 1] - mouse.worldPos.y;
+          // Subtle cursor wake: push binary numerals aside horizontally
+          const dx = pos0[idx] - mouse.worldPos.x;
+          const dy = pos0[idx + 1] - mouse.worldPos.y;
           const distSq = dx * dx + dy * dy;
 
-          if (distSq < 16000 && distSq > 30) {
-            const push = (1 - distSq / 16000) * 2.2;
-            matrixPos[idx] += (dx / Math.sqrt(distSq)) * push;
+          if (distSq < 15000 && distSq > 30) {
+            const push = (1 - distSq / 15000) * 1.5;
+            pos0[idx] += (dx / Math.sqrt(distSq)) * push;
           }
 
-          if (matrixPos[idx + 1] < -460) {
-            matrixPos[idx + 1] = matrixVelocities[i].resetY;
-            matrixPos[idx] = matrixVelocities[i].originalX;
+          if (pos0[idx + 1] < -470) {
+            pos0[idx + 1] = matrixVelocities0[i].resetY;
+            pos0[idx] = matrixVelocities0[i].originalX;
           }
         }
-        matrixGeometry.attributes.position.needsUpdate = true;
+        matrixGeometry0.attributes.position.needsUpdate = true;
 
-        // Telemetry rings orient and face the mouse
-        matrixRings.forEach((ring) => {
-          ring.rotation.z += ring.userData.baseSpin;
-          ring.rotation.x = -mouse.y * 0.4;
-          ring.rotation.y = mouse.x * 0.4;
-        });
+        // Animate '1's (Gentle delta-timed drift)
+        const pos1 = matrixGeometry1.attributes.position.array;
+        for (let i = 0; i < matrixCount1; i++) {
+          const idx = i * 3;
+          pos1[idx + 1] -= matrixVelocities1[i].fallSpeed * delta;
+
+          const dx = pos1[idx] - mouse.worldPos.x;
+          const dy = pos1[idx + 1] - mouse.worldPos.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < 15000 && distSq > 30) {
+            const push = (1 - distSq / 15000) * 1.5;
+            pos1[idx] += (dx / Math.sqrt(distSq)) * push;
+          }
+
+          if (pos1[idx + 1] < -470) {
+            pos1[idx + 1] = matrixVelocities1[i].resetY;
+            pos1[idx] = matrixVelocities1[i].originalX;
+          }
+        }
+        matrixGeometry1.attributes.position.needsUpdate = true;
       }
 
-      // --- ANIMATE UNIVERSE 4: NORDIC FROST (Glass Orbs & Swirling Crystalline Dust) ---
+      // --- ANIMATE UNIVERSE 4: NORDIC FROST (Glass Orbs & Crystalline Dust) ---
       if (frostGroup.visible) {
         frostSpheres.forEach((sphere) => {
           sphere.rotation.x += sphere.userData.rotSpeed;
           sphere.rotation.y += sphere.userData.rotSpeed * 1.2;
 
-          // Gentle mouse repulsion
           const dx = sphere.position.x - mouse.worldPos.x;
           const dy = sphere.position.y - mouse.worldPos.y;
           const distSq = dx * dx + dy * dy;
@@ -659,7 +748,6 @@ const ParticleBackground = () => {
           sphere.position.y += Math.cos(elapsedTime * 0.6) * 0.2;
         });
 
-        // Prismatic dust swirl around cursor
         const frostPos = frostGeometry.attributes.position.array;
         for (let i = 0; i < frostCount; i++) {
           const idx = i * 3;
@@ -673,7 +761,7 @@ const ParticleBackground = () => {
         frostGeometry.attributes.position.needsUpdate = true;
       }
 
-      // --- ANIMATE CLICK RIPPLES ---
+      // --- ANIMATE CLICK RIPPLES (Desktop Mouse Only) ---
       for (let i = clickRipples.length - 1; i >= 0; i--) {
         const rip = clickRipples[i];
         rip.scale += 2.5;
@@ -704,10 +792,17 @@ const ParticleBackground = () => {
         container.removeChild(renderer.domElement);
       }
       renderer.dispose();
-      cosmicGeometry.dispose();
-      cosmicMaterial.dispose();
-      lineGeometry.dispose();
-      lineMaterial.dispose();
+
+      // Dispose Cosmic assets
+      cosmicCyanGeometry.dispose();
+      cosmicCyanMaterial.dispose();
+      cosmicPurpleGeometry.dispose();
+      cosmicPurpleMaterial.dispose();
+      nebulaGeometry.dispose();
+      nebulaMaterial.dispose();
+      nebulaTexture.dispose();
+
+      // Dispose Synthwave assets
       tunnelRings.forEach((r) => {
         r.mesh.geometry.dispose();
         r.mesh.material.dispose();
@@ -716,10 +811,20 @@ const ParticleBackground = () => {
       laserMaterial.dispose();
       sunGeom.dispose();
       sunMat.dispose();
-      matrixGeometry.dispose();
-      matrixMaterial.dispose();
-      ringGeometry.dispose();
-      ringMaterial.dispose();
+
+      // Dispose Matrix assets
+      matrixGeometry0.dispose();
+      matrixMaterial0.dispose();
+      matrixGeometry1.dispose();
+      matrixMaterial1.dispose();
+      zeroTexture.dispose();
+      oneTexture.dispose();
+
+      // Dispose Frost assets
+      frostSpheres.forEach((s) => {
+        s.geometry.dispose();
+        s.material.dispose();
+      });
       frostGeometry.dispose();
       frostMaterial.dispose();
       particleTexture.dispose();
@@ -745,3 +850,4 @@ const ParticleBackground = () => {
 };
 
 export default ParticleBackground;
+
